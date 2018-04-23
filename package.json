@@ -10,8 +10,10 @@
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
-    "android:run:dev": "gulp dev && npm cordova run android",
-    "android:run:test": "gulp test && npm cordova run android"
+    "run:dev": "gulp dev && ionic serve",
+    "run:test": "gulp test && ionic serve",
+    "android:run:dev": "gulp dev && ionic cordova run android",
+    "android:run:test": "gulp test && ionic cordova run android"
   },
   "dependencies": {
     "@angular/animations": "5.2.10",
