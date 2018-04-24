@@ -9,6 +9,6 @@ gulp.task('dev', function(){
 
 gulp.task('test', function(){
     return gulp.src(['src/env/env.json'])
-    .pipe(replace("http://localhost:4000/Concentration_pm", "http://192.168.2.108/Concentration_pm"))
+    .pipe(replace("http://localhost:32769/Concentration_pm", "http://192.168.2.108/Concentration_pm"))
     .pipe(gulp.dest('src/env'));
 });
