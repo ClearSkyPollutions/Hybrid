@@ -1,17 +1,32 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Home</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="showLastMesure()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+<ion-content>
+<ion-card>
+  <ion-card-header>
+    Air Quality
+  </ion-card-header>
+
+  <ion-card-content  *ngFor="let m of mesures">
+    <ion-item>
+     Date : {{m?.date_mesure}}
+    </ion-item>
+    <ion-item>
+     PM 10 : {{m?.pm10}} <ion-badge item-end>µg/m³</ion-badge>
+    </ion-item>
+    <ion-item>
+     PM 25 : {{m?.pm2_5}} <ion-badge item-end>µg/m³</ion-badge>
+    </ion-item>
+  </ion-card-content>
+</ion-card>
+
+
 </ion-content>
