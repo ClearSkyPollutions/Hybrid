@@ -11,33 +11,33 @@ export class PolluantProvider {
     let polluantsInfo = [
       {
         "name": "PM2.5",
-        "image": "assets/imgs/polluants/1.jpg",
-        "desc": "Burt is a Bear."
+        "image": "assets/imgs/polluants/pm25.jpg",
+        "desc": "Primary sources: Habitation (coal fire, kitchen, etc) \nHealth effects :  Asthma, lung cancer, cardio-respiratory diseases, adverse pregnancy outcomes. It corresponds to thoracic particles which reach bronchi."
       },
       {
         "name": "PM10",
-        "image": "assets/imgs/polluants/4.jpg",
-        "desc": "Charlie is a Cheetah."
+        "image": "assets/imgs/polluants/pm10.jpg",
+        "desc": "Primary sources: Habitation, industry, farming, road traffic. \nHealth effects : Asthma, lung cancer, cardio-respiratory diseases, adverse pregnancy outcomes. It corresponds to inhalable particle that doesn't reach the lungs and thoracic particles which are not filtered by the cilia."
       },
       {
-        "name": "Monoxyde de carbone",
-        "image": "assets/imgs/polluants/2.jpg",
-        "desc": "Donald is a Duck."
+        "name": "Nitrogne oxide",
+        "image": "assets/imgs/polluants/nox.jpg",
+        "desc": "Primary sources Road traffic. \nHealth effects : Respiratory diseases, bronchial irritation, increased asthmatic reactions in children."
       },
       {
-        "name": "Dioxyde de carbone",
-        "image": "assets/imgs/polluants/3.jpg",
-        "desc": "Eva is an Eagle."
+        "name": "Sulfur dioxide",
+        "image": "assets/imgs/polluants/so2.jpg",
+        "desc": "Primary sources: Industry. \nHealth effects : Breathing difficulties, increased asmathic sensitivity, gastric irritations, itches, hot flashes, death in case of strong intoxication."
       },
       {
-        "name": "Oxyde d'Azote",
-        "image": "assets/imgs/polluants/5.jpg",
-        "desc": "Ellie is an Elephant."
+        "name": "Carbon monoxide",
+        "image": "assets/imgs/polluants/pm25.jpg",
+        "desc": "Primary sources: Habitation, industry. \nHealth effects :  It has no taste or smell and cannot be seen but can be lethal for human. It reduces the amount of oxygen transported to vital organs leading to headaches, clumsyness,  loss of consciousness and eventually death."
       },
       {
-        "name": "Ozone",
-        "image": "assets/imgs/polluants/4.jpg",
-        "desc": "Paul is a Puppy."
+        "name": "Noise",
+        "image": "assets/imgs/polluants/noise.jpg",
+        "desc": "Primary sources: Depends mostly on the location. \nHealth effects : hearing loss, sleep disturbances, high blood pressure, heart attack, strokes."
       }
     ];
 
