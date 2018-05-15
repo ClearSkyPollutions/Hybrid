@@ -1,29 +1,31 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-title>Home</ion-title>
-    <ion-buttons end>
+    <!-- <ion-buttons end>
       <button ion-button icon-only (click)="showLastMesure()">
         <ion-icon name="refresh"></ion-icon>
       </button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-<ion-card>
+<ion-card  *ngFor="let m of mesures">
   <ion-card-header>
     Air Quality
+    <p>{{m?.date_mesure}}</p>
   </ion-card-header>
-
-  <ion-card-content  *ngFor="let m of mesures">
+  <ion-fab right top>
+    <button ion-fab mini (click)="showLastMesure()">
+      <ion-icon name='refresh'></ion-icon>
+    </button>
+  </ion-fab>
+  <ion-card-content >
     <ion-item>
-     Date : {{m?.date_mesure}}
+      <ion-badge>PM 10&nbsp;</ion-badge> <span style="margin-left: 30%"> {{m?.pm10}}  µg/m³ </span>
     </ion-item>
-    <ion-item>
-     PM 10 : {{m?.pm10}} <ion-badge item-end>µg/m³</ion-badge>
-    </ion-item>
-    <ion-item>
-     PM 25 : {{m?.pm2_5}} <ion-badge item-end>µg/m³</ion-badge>
+    <ion-item >
+      <ion-badge>PM 2.5</ion-badge><span style="margin-left: 30%"> {{m?.pm2_5}}  µg/m³ </span> 
     </ion-item>
   </ion-card-content>
 </ion-card>

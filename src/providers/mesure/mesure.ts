@@ -7,7 +7,7 @@ import { Mesure } from '../../models/mesure';
 export class MesureProvider {
  
   // TODO : get url from env.json file  
-  RaspServerUrl: string = 'http://192.168.2.108:4002';
+  RaspServerUrl: string = 'http://192.168.2.69:8000';
   
   constructor(public http: HttpClient) {
     console.log('Hello MesureProvider Provider');
