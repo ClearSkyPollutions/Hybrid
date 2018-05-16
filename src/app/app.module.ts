@@ -6,14 +6,13 @@ import { MyApp } from './app.component';
 
 
 /* Providers */
-import { MesureProvider } from '../providers/mesure/mesure';
 import { PolluantProvider } from '../mocks/providers/polluant';
-import { AlertProvider } from '../providers/alert/alert';
+
+import { DataProvider } from '../providers/data/data.service';
+import { AlertProvider } from '../providers/alert/alert.service';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-
 
 @NgModule({
   declarations: [
@@ -32,7 +31,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    MesureProvider,
+    DataProvider,
     PolluantProvider,
     AlertProvider
   ]

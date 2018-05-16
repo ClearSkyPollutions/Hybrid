@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController, IonicPage } from 'ionic-angular';
 
-import { Mesure } from '../../models/mesure';
-import { MesureProvider } from '../../providers/mesure/mesure';
+import { Data } from '../../models/data.interface';
+import { DataProvider } from '../../providers/data/data.service';
+
+
 
 @IonicPage()
 @Component({
@@ -11,18 +13,22 @@ import { MesureProvider } from '../../providers/mesure/mesure';
 })
 export class HomePage {
 
-  mesures: Mesure[];
+  data : Data;
   
-  constructor(public navCtrl: NavController,
-              private mesureProvider : MesureProvider) {
-
-        this.showLastMesure();
+  constructor(
+    public navCtrl: NavController,
+    private dataProvider : DataProvider
+  ) {
+    this.showLastMesure();
   }
 
   showLastMesure(){
-    this.mesureProvider.getLastMesure().subscribe(
-      data => {
-        this.mesures = data['Concentration_pm'];
+    this.dataProvider.getLastMesure().subscribe(
+      lastdata => {
+        this.data = {
+          pm : lastdata.pm['Concentration_pm'][0],
+          temphum : lastdata.temphum['DHT22'][0]
+        };
       }
     );        
   }
