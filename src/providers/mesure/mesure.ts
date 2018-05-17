@@ -19,4 +19,10 @@ export class MesureProvider {
     return this.http.get<Mesure[]>(this.RaspServerUrl + '/' + request); 
   }
 
+  getAllMesure(){
+    let request = 'Concentration_pm?transform=1'; 
+   
+    return this.http.get<Mesure[]>(this.RaspServerUrl + '/' + request); 
+  }
+
 }

@@ -1,6 +1,6 @@
 export interface Mesure{
     id: string;
-    date_mesure: string;
+    date: string;
     pm10: number;
-    pm2_5: number;
+    pm25: number;
 } 

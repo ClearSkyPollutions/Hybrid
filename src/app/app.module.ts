@@ -4,14 +4,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-
 /* Providers */
 import { MesureProvider } from '../providers/mesure/mesure';
 import { PolluantProvider } from '../mocks/providers/polluant';
 import { AlertProvider } from '../providers/alert/alert';
+import { ChartProvider } from '../providers/chart/chart.service';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
 
 
 
@@ -34,7 +35,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     MesureProvider,
     PolluantProvider,
-    AlertProvider
+    AlertProvider,
+    ChartProvider
   ]
 })
 export class AppModule {}
