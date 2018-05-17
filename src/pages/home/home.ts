@@ -3,7 +3,7 @@ import { NavController, IonicPage } from 'ionic-angular';
 
 import { Data } from '../../models/data.interface';
 import { DataProvider } from '../../providers/data/data.service';
-
+import { TranslateService } from '@ngx-translate/core';
 
 
 @IonicPage()
@@ -17,7 +17,8 @@ export class HomePage {
   
   constructor(
     public navCtrl: NavController,
-    private dataProvider : DataProvider
+    private dataProvider : DataProvider,
+    public translate: TranslateService
   ) {
     this.showLastMesure();
   }

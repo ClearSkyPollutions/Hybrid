@@ -12,7 +12,7 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
-      Air Quality
+      {{ 'airquality' | translate }}
       <p>{{data?.pm.date}}</p>
     </ion-card-header>
     <ion-fab right top>
@@ -22,16 +22,16 @@
     </ion-fab>
     <ion-card-content >
       <ion-item>
-        <ion-badge>PM 10&nbsp;</ion-badge> <span style="margin-left: 30%"> {{data?.pm.pm10}}  µg/m³ </span>
+        <ion-badge item-start>{{ 'pm10' | translate }}&nbsp;</ion-badge> <span item-end> {{data?.pm.pm10}}  µg/m³ </span>
       </ion-item>
       <ion-item >
-        <ion-badge>PM 2.5</ion-badge><span style="margin-left: 30%"> {{data?.pm.pm25}}  µg/m³ </span> 
+        <ion-badge item-start>{{ 'pm25' | translate }}</ion-badge><span item-end> {{data?.pm.pm25}}  µg/m³ </span> 
       </ion-item>
       <ion-item >
-        <ion-badge>Temper</ion-badge><span style="margin-left: 30%"> {{data?.temphum.temperature}}  °C </span> 
+        <ion-badge item-start>{{ 'temp' | translate }}</ion-badge><span item-end> {{data?.temphum.temperature}}  °C </span> 
       </ion-item>
       <ion-item >
-        <ion-badge>Humidi</ion-badge><span style="margin-left: 30%"> {{data?.temphum.humidity}}  °C </span> 
+        <ion-badge item-start>{{ 'hum' | translate }}</ion-badge><span item-end> {{data?.temphum.humidity}}  °C </span> 
       </ion-item>
     </ion-card-content>
   </ion-card>
