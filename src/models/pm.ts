@@ -1,4 +1,4 @@
-export interface Mesure{
+export interface PM{
     id: string;
     date: string;
     pm10: number;

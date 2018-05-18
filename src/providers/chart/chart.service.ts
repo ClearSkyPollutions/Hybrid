@@ -18,9 +18,9 @@ export class ChartProvider {
             datasets: [{
                 label                 : '',
                 data                  : chartValues,
-                duration              : 2000,
+                duration              : 1000,
                 easing                : 'easeInQuart',
-                backgroundColor       : '#ff6384',
+                backgroundColor       : '#36a2eb',
                 hoverBackgroundColor  : '',
                 fill 				   : false
             }]
@@ -37,7 +37,7 @@ export class ChartProvider {
                 yAxes: [{
                   ticks: {
                       beginAtZero:true,
-                      stepSize: 5,
+                      stepSize: 2,
                       //max : 100
                   }
                 }],

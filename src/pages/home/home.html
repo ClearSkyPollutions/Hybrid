@@ -1,34 +1,35 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-title>Home</ion-title>
-    <!-- <ion-buttons end>
-      <button ion-button icon-only (click)="showLastMesure()">
-        <ion-icon name="refresh"></ion-icon>
-      </button>
-    </ion-buttons> -->
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-<ion-card  *ngFor="let m of mesures">
-  <ion-card-header>
-    Air Quality
-    <p>{{m?.date}}</p>
-  </ion-card-header>
-  <ion-fab right top>
-    <button ion-fab mini (click)="showLastMesure()">
-      <ion-icon name='refresh'></ion-icon>
-    </button>
-  </ion-fab>
-  <ion-card-content >
-    <ion-item>
-      <ion-badge>PM 10&nbsp;</ion-badge> <span style="margin-left: 30%"> {{m?.pm10}}  µg/m³ </span>
-    </ion-item>
-    <ion-item >
-      <ion-badge>PM 2.5</ion-badge><span style="margin-left: 30%"> {{m?.pm25}}  µg/m³ </span> 
-    </ion-item>
-  </ion-card-content>
-</ion-card>
+  <ion-card>
+    <ion-card-header>
+      {{ 'airquality' | translate }}
+      <p>{{data?.pm.date}}</p>
+    </ion-card-header>
+    <ion-fab right top>
+      <button ion-fab mini (click)="showLastMesure()">
+        <ion-icon name='refresh'></ion-icon>
+      </button>
+    </ion-fab>
+    <ion-card-content >
+      <ion-item>
+        <ion-badge item-start>{{ 'pm10' | translate }}&nbsp;</ion-badge> <span item-end> {{data?.pm.pm10}}  µg/m³ </span>
+      </ion-item>
+      <ion-item >
+        <ion-badge item-start>{{ 'pm25' | translate }}</ion-badge><span item-end> {{data?.pm.pm25}}  µg/m³ </span> 
+      </ion-item>
+      <ion-item >
+        <ion-badge item-start>{{ 'temp' | translate }}</ion-badge><span item-end> {{data?.temphum.temperature}}  °C </span> 
+      </ion-item>
+      <ion-item >
+        <ion-badge item-start>{{ 'hum' | translate }}</ion-badge><span item-end> {{data?.temphum.humidity}}  °C </span> 
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 
 
 <ion-segment mode="ios" [(ngModel)]="selectedTab" style="padding: 10px 40px" >
@@ -40,13 +41,20 @@
   </ion-segment-button>
 </ion-segment>
 
-<section style="padding: 10px" >
-  <canvas #lineChart></canvas>
-</section>
 
-
+<!-- 
+<div [ngSwitch]="selectedTab">
+    <section *ngSwitchCase="'segment1'" style="padding: 10px" >
+        <canvas #lineChart></canvas>
+    </section>
+  <ion-list >
+  </ion-list>
+  <section *ngSwitchCase="'segment2'" style="padding: 10px" >
+      <canvas #barChart></canvas>
+    </section>
+</div> -->
 <section style="padding: 10px" >
-  <canvas #barChart></canvas>
+    <canvas #lineChart></canvas>
 </section>
 
 </ion-content>
