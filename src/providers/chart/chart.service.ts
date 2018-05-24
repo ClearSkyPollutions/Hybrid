@@ -4,94 +4,69 @@ import { Chart } from 'chart.js';
 @Injectable()
 export class ChartProvider {
 
-
+  chart: Chart;
   constructor() {}
 
 
-
-  public createLineChart (htmlElement: any, chartLabels: any, chartValues: any){
-    return new Chart(htmlElement.nativeElement,
-      {
-          type: 'line',
-          data: {
-            labels: chartLabels,
-            datasets: [{
-                label                 : '',
-                data                  : chartValues,
-                duration              : 1000,
-                easing                : 'easeInQuart',
-                backgroundColor       : '#36a2eb',
-                hoverBackgroundColor  : '',
-                fill 				   : false
-            }]
-          },
-          options : {
-            maintainAspectRatio: false,
-            legend         : {
-                display     : false,
-                boxWidth    : 80,
-                fontSize    : 15,
-                padding     : 0
-            },
-            scales: {
-                yAxes: [{
-                  ticks: {
-                      beginAtZero:true,
-                      stepSize: 2,
-                      //max : 100
-                  }
-                }],
-                xAxes: [{
-                  ticks: {
-                      autoSkip: true,
-                      maxTicksLimit: 3
-                  }
+  public initChart (htmlElement: any){
+    return this.chart = new Chart(htmlElement.nativeElement,
+        {
+            type : 'line',
+            data : {
+                datasets: [{
+                    label               : '',
+                    duration            : 1000,
+                    easing              : 'easeInQuart',
+                    borderColor         : '#36a2eb',
+                    //backgroundColor     : '#36a2eb',
+                    hoverBackgroundColor: '',
+                    fill 			    : false
                 }]
+              },
+            options : {
+                maintainAspectRatio: false,
+               legend         : {
+                 display     : false
+                },
+                scales: {
+                    yAxes              : [{
+                        scaleLabel     : {
+                              display    : true
+                          },                
+                        ticks            : {
+                            beginAtZero  : false,
+                            //stepSize     : 5,
+                        }, 
+                        gridLines        : {
+                          display        : false
+                      }
+                      }],
+                      xAxes: [{
+                        scaleLabel     : {
+                              display    : true
+                          },
+                        ticks: {
+                            maxRotation: 0, // angle in degrees,
+                            autoSkip: true,
+                            maxTicksLimit: 4
+                        },
+                        gridLines: {
+                          display:false
+                      }
+                      }]
+                }
             }
-          }
-      });
-      }
+        });
+    }
+  
+  public updateLineChart (chartLabels: any, chartValues: any, yAxesUnit: string){
 
-  public createBarChart(htmlElement: any, chartLabels: any, chartValues: any){
-    return new Chart(htmlElement.nativeElement,
-      {
-         type: 'bar',
-         data: {
-            labels: chartLabels,
-            datasets: [{
-               label                 : 'Air Quality bar chart',
-               data                  : chartValues,
-               duration              : 2000,
-               easing                : 'easeInQuart',
-               backgroundColor       : '#36a2eb',
-               hoverBackgroundColor  : '#ffce56'
-            }]
-         },
-         options : {
-            maintainAspectRatio: false,
-            legend         : {
-               display     : false,
-               boxWidth    : 80,
-               fontSize    : 15,
-               padding     : 0
-            },
-            //showXLabels: 2,
-            scales: {
-               yAxes: [{
-                  ticks: {
-                     beginAtZero: true,
-                     stepSize: 5,
-                     //max : 100
-                  }
-               }],
-               xAxes: [{
-                  ticks: {
-                     autoSkip:true,
-                     maxTicksLimit: 3
-                  }
-               }]
-            }
-         }
-      });
+    this.chart.data.labels= chartLabels;
+    this.chart.data.datasets[0].data= chartValues;
+    this.chart.options.scales.yAxes[0].scaleLabel.labelString= yAxesUnit;
+  
+    this.chart.update();
   }
+
+ 
 }

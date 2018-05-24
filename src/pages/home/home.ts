@@ -16,67 +16,98 @@ export class HomePage {
 
 
   @ViewChild('lineChart') lineChart;
-  @ViewChild('barChart') barChart;
+ 
 
-  data : Data;
-  selectedTab : string = 'Segment1';
+  data         : Data;
 
-  private dataForTest = [{"id":1,"date":"2018-04-20 14:50:00","pm2_5":"12.00","pm10":"24.00"}, {"id":1,"date":"2018-04-21 15:50:00","pm2_5":"125.00","pm10":"25.00"}, {"id":1,"date":"2018-04-22 14:50:00","pm2_5":"130.00","pm10":"22.00"}, {"id":1,"date":"2018-04-23 14:50:00","pm2_5":"140.00","pm10":"20.00"}, {"id":1,"date":"2018-04-20 14:50:00","pm2_5":"12.00","pm10":"18.00"}]
-  private chartLabels  : any  = [];
-  private chartValues  : any  = [];
+  scale        : string;
+  pollutantType: string;
+  pollutantUnit: string;
+
+  private chartLabels: any = [];
+  private chartValues: any = [];
   
   constructor(
-    public navCtrl: NavController,
+    public navCtrl       : NavController,
     private dataProvider : DataProvider,
-    public translate: TranslateService,
-    private chartProvider: ChartProvider) {
+    public translate     : TranslateService,
+    private chartProvider: ChartProvider
+  ){
+    this.scale         = 'AVG_HOUR';
+    this.pollutantType = 'pm10';
+    this.pollutantUnit = 'µg/m³';
       this.showLastMesure();
-
   }
 
   ionViewDidLoad() { 
-     this.defineChartData('PM10');
-     //this.createLineChart(); //
-    // this.createBarChart(); //
-
+     this.chartProvider.initChart(this.lineChart)
+     this.drawLineChart();
   }
 
-  showLastMesure(){
+  private showLastMesure(){
     this.dataProvider.getLastMesure().subscribe(
       lastdata => {
         this.data = {
-          pm : lastdata.pm['Concentration_pm'][0],
-          temphum : lastdata.temphum['DHT22'][0]
+          pm     : lastdata.pm['AVG_HOUR'][0],
+          temphum: lastdata.temphum['DHT22'][0]
         };
       }
     );        
   }
 
-  defineChartData(pollutant : string)
-   {
-     this.dataProvider.getAllMesure().subscribe(
-       res => {
-        let allData = res['Concentration_pm'];
-        for (let data of allData) {
-          let date = new Date(data.date);
-          let time = date.getHours() + ':' + date.getMinutes();
-      
-          this.chartLabels.push(time);
-          this.chartValues.push(data.pm10);
-         }     
-        this.createLineChart();
-        //this.createBarChart();
-       }
-     )   
+
+   private dateForChartLabel(dateMesure: string){
+    let date = new Date(dateMesure);
+    switch(this.scale) { 
+      case 'AVG_HOUR': { 
+        return date.getHours() + ':' + (date.getMinutes()<10 ? '0' + date.getMinutes(): date.getMinutes());
+      } 
+      case 'AVG_DAY': { 
+        return date.getDate();
+      } 
+      case 'AVG_MONTH': { 
+        return date.getMonth() + 1;
+      } // AVG_YEAR
+      default: { 
+        return date.getFullYear();
+      } 
+    }
    }
-  
-  createLineChart(){
-    this.chartProvider.createLineChart(this.lineChart, this.chartLabels, this.chartValues)
+
+   private createLineChart(){
+    this.chartProvider.updateLineChart(
+      this.chartLabels,
+      this.chartValues, 
+      this.pollutantUnit
+    )
   }
 
-  createBarChart(){
-    this.chartProvider.createBarChart(this.barChart, this.chartLabels, this.chartValues)
+  chooseScale(scale: string){
+   this.scale= scale;
+   this.drawLineChart();
   }
 
+  shoosePollutant(pollutantType: string, pollutantUnit){
+    this.pollutantType= pollutantType;
+    this.pollutantUnit= pollutantUnit;
+    this.drawLineChart();
+  }
+
+
+  private drawLineChart(){
+    this.chartLabels = [];
+    this.chartValues = [];
+
+    this.dataProvider.defineDataForChart(this.scale, this.pollutantType).subscribe(res =>{
+     
+      // loop through res in reverse order
+      for (var i=res.length-1; i>=0; i--) {  
+       this.chartLabels.push(this.dateForChartLabel(res[i].date));
+       this.chartValues.push(res[i][this.pollutantType]);
+      }
+    
+     this.createLineChart();
+    });
+  }
 
 }

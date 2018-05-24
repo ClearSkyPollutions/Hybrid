@@ -31,30 +31,20 @@
     </ion-card-content>
   </ion-card>
 
+  <div text-center>
+    <button ion-button color="light" small round (click)="chooseScale('AVG_HOUR')">Hour</button>
+    <button ion-button color="light" small round (click)="chooseScale('AVG_DAY')">Day</button>
+    <button ion-button color="light" small round (click)="chooseScale('AVG_MONTH')">Month</button>
+  </div>
 
-<ion-segment mode="ios" [(ngModel)]="selectedTab" style="padding: 10px 40px" >
-  <ion-segment-button value="segment1">
-     Heure
-  </ion-segment-button>
-  <ion-segment-button value="segment2">
-    Jour
-  </ion-segment-button>
-</ion-segment>
-
-
-<!-- 
-<div [ngSwitch]="selectedTab">
-    <section *ngSwitchCase="'segment1'" style="padding: 10px" >
-        <canvas #lineChart></canvas>
-    </section>
-  <ion-list >
-  </ion-list>
-  <section *ngSwitchCase="'segment2'" style="padding: 10px" >
-      <canvas #barChart></canvas>
-    </section>
-</div> -->
-<section style="padding: 10px" >
+<section class="chart">
     <canvas #lineChart></canvas>
 </section>
+
+<div text-center>
+  <button ion-button color="light" small round (click)="shoosePollutant('pm10', 'µg/m³')">PM10</button>
+  <button ion-button color="light" small round (click)="shoosePollutant('pm25', 'µg/m³')">PM25</button>
+  <button ion-button color="light" small round (click)="shoosePollutant('humidity', '%')">Hum</button>
+</div>
 
 </ion-content>
