@@ -34,6 +34,7 @@ export class ChartProvider {
                               display    : true
                           },                
                         ticks            : {
+                            //display: false,
                             beginAtZero  : false,
                             //stepSize     : 5,
                         }, 
