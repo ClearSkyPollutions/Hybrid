@@ -27,7 +27,7 @@ export class HomePage {
     this.dataProvider.getLastMesure().subscribe(
       lastdata => {
         this.data = {
-          pm : lastdata.pm['Concentration_pm'][0],
+          pm : lastdata.pm['SDS011'][0],
           temphum : lastdata.temphum['DHT22'][0]
         };
       }

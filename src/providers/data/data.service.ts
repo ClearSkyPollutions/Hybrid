@@ -14,10 +14,10 @@ export class DataProvider {
   constructor(private http: HttpClient) {}
 
   public getLastMesure() {
-    let requestConcPM = 'Concentration_pm?order=id,desc&page=1,1&transform=1'; // 'Concentration_pm/1';
+    let requestConcPM = 'SDS011?order=date,desc&page=1,1&transform=1'; // 'Concentration_pm/1';
     // even if it's a unique value, the php api return an array with one value
 
-    let requestTempHum = 'DHT22?order=id,desc&page=1,1&transform=1'; // 'TempHum/1';
+    let requestTempHum = 'DHT22?order=date,desc&page=1,1&transform=1'; // 'TempHum/1';
     // even if it's a unique value, the php api return an array with one value
 
     return Observable.forkJoin([
