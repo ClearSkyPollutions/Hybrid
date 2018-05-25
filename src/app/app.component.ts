@@ -9,7 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = 'TabsPage';
+  rootPage:any = 'SlidesPage';
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,private translate : TranslateService) {
     platform.ready().then(() => {

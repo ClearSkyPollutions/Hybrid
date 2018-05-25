@@ -8,8 +8,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 /* Providers */
 import { PolluantProvider } from '../mocks/providers/polluant';
-
-
 import { DataProvider } from '../providers/data/data.service';
 import { AlertProvider } from '../providers/alert/alert.service';
 import { ChartProvider } from '../providers/chart/chart.service';
