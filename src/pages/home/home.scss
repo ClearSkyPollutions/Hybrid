@@ -1,4 +1,8 @@
 page-home {
+    ion-content {
+        background: #fcfdfc !important;
+    }
+
      canvas  {
         height: 300px;
         width: 100%;
@@ -7,4 +11,69 @@ page-home {
      .chart {
         padding: 5px;
      }
+
+
+     .city-header{
+        position  : relative;
+        //text-align: center;
+        max-width    : 100%;
+      }
+
+     .about-header {
+        width     : 100%;
+        min-height: 120px;
+      }
+    
+      .info-card {
+          width        : 70%;
+          position     : absolute;
+          bottom       : -25%;
+          left         : 0; 
+          right        : 0; 
+          margin-left  : auto; 
+          margin-right : auto;
+          border-radius: 5% !important;
+      }
+
+      .card-title {
+        font-size  : 2.0em;
+        width      : 100%;
+        font-weight: bold;
+        color      : #6A6B6A;
+      }
+      
+      .about-info{
+          margin-top: 40px;
+      }
+      .about-info p {
+        color: #697072;
+        text-align: left;
+      }
+      
+      .about-info ion-icon {
+        color: #6A6B6A;
+        width: 30px;
+      }
+
+      .card-pollution-info span {
+        display: inline-block;
+        width: 90px;
+     }
+
+    .circle-button{
+       display         : inline-block;
+       height          : 50px;
+       width           : 50px;
+       border-radius   : 50%;
+       background-color: white;
+       margin-left     : 4%;
+
+    }
+
+    .chart-card {
+
+    }
+    
+      
+    
 }

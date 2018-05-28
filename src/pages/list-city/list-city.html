@@ -1,0 +1,11 @@
+<ion-content>
+
+    <ion-card  class="card-overlay" *ngFor="let city of cities" (click)="goToCityDetail(city)">
+      <div class="card-aqi">{{city.AQI}}</div>
+      <img [src]="city.image"/>
+      <div class="card-title">{{city.city}}</div>
+      <div class="card-subtitle">{{city.country}}</div>
+   
+    </ion-card>
+  
+</ion-content>

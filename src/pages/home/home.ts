@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, IonicPage } from 'ionic-angular';
+import { NavController, IonicPage, NavParams } from 'ionic-angular';
 
 import { Data } from '../../models/data.interface';
 import { DataProvider } from '../../providers/data/data.service';
@@ -17,22 +17,24 @@ export class HomePage {
 
   @ViewChild('lineChart') lineChart;
  
-
+  location     : any;
   data         : Data;
 
   scale        : string;
   pollutantType: string;
-  pollutantUnit: string;
+  pollutantUnit:  string;
 
   private chartLabels: any = [];
   private chartValues: any = [];
   
   constructor(
     public navCtrl       : NavController,
+    public navParams     : NavParams,
     private dataProvider : DataProvider,
     public translate     : TranslateService,
     private chartProvider: ChartProvider
   ){
+    this.location      = this.navParams.get('location');
     this.scale         = 'AVG_HOUR';
     this.pollutantType = 'pm10';
     this.pollutantUnit = 'µg/m³';
