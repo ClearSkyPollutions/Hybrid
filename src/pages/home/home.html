@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content color="primary">
+<ion-content >
   
   <div class="city-header">
     <div class="about-header">
@@ -14,10 +14,11 @@
     <ion-card class="info-card">
       <ion-card-content>  
           <div class="card-title">{{location.city}}</div>
+          {{data?.pm.date}}
           <div class="card-pollution-info">
             <span>Good</span>
-            <span>Good</span>
-            <span>Good</span>
+            <span>{{data?.pm.pm10}} AQI</span>
+            <span>{{data?.temphum.temperature}} C°</span>
           </div>
       </ion-card-content>    
     </ion-card>
@@ -34,17 +35,17 @@
 
     </div>
 
-
+<!-- 
     <ion-card>
         <ion-card-header>
           {{ 'airquality' | translate }}
           <p>{{data?.pm.date}}</p>
         </ion-card-header>
-        <!-- <ion-fab right top>
+        <ion-fab right top>
           <button ion-fab mini (click)="showLastMesure()">
             <ion-icon name='refresh'></ion-icon>
           </button>
-        </ion-fab> -->
+        </ion-fab> 
         <ion-card-content >
           <ion-item>
             <ion-badge item-start>{{ 'pm10' | translate }}&nbsp;</ion-badge> <span item-end> {{data?.pm.pm10}}  µg/m³ </span>
@@ -59,23 +60,26 @@
             <ion-badge item-start>{{ 'hum' | translate }}</ion-badge><span item-end> {{data?.temphum.humidity}}  °C </span> 
           </ion-item>
         </ion-card-content>
-      </ion-card>
+      </ion-card> -->
     
-      <div text-center>
-        <button ion-button color="light" small class="circle-button" (click)="chooseScale('AVG_HOUR')">Hour</button>
-        <button ion-button color="light" small class="circle-button" (click)="chooseScale('AVG_DAY')">Day</button>
-        <button ion-button color="light" small class="circle-button" (click)="chooseScale('AVG_MONTH')">Month</button>
-      </div>
     
-    <section class="chart">
-        <canvas #lineChart></canvas>
-    </section>
-    
-    <div text-center>
-      <button ion-button color="light" small round (click)="shoosePollutant('pm10', 'µg/m³')">PM10</button>
-      <button ion-button color="light" small round (click)="shoosePollutant('pm25', 'µg/m³')">PM25</button>
-      <button ion-button color="light" small round (click)="shoosePollutant('humidity', '%')">Hum</button>
+  <div class="chart-container">
+    <div class="chart-card">
+        <canvas #lineChartPm10></canvas>
     </div>
+
+    <div class="chart-card">
+        <canvas #lineChartPm25></canvas>
+    </div>
+
+    <div class="chart-card">
+        <canvas #lineChartHum></canvas>
+    </div>
+
+    <div class="chart-card">
+        <canvas #lineChartTemp></canvas>
+    </div>
+  </div>
     
   </ion-content>
 

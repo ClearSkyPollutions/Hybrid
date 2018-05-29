@@ -8,51 +8,54 @@ export class ChartProvider {
   constructor() {}
 
 
-  public initChart (htmlElement: any){
+  public createLineChart (htmlElement: any, chartLabels: any, chartValues: any, yAxesUnit: string, color: string){
     return this.chart = new Chart(htmlElement.nativeElement,
         {
             type : 'line',
             data : {
+                labels: chartLabels,
                 datasets: [{
-                    label               : '',
+                    data                : chartValues,
+                    label               : yAxesUnit,
                     duration            : 1000,
                     easing              : 'easeInQuart',
-                    borderColor         : '#36a2eb',
-                    //backgroundColor     : '#36a2eb',
+                    borderColor         : color,
+                    //backgroundColor   : '#36a2eb',
                     hoverBackgroundColor: '',
-                    fill 			    : false
+                    fill 			            : false
                 }]
               },
             options : {
                 maintainAspectRatio: false,
                legend         : {
-                 display     : false
+                 display     : true,
+                 position: 'bottom',
                 },
                 scales: {
-                    yAxes              : [{
-                        scaleLabel     : {
-                              display    : true
-                          },                
+                    yAxes : [{
+                        scaleLabel: {
+                            labelString: yAxesUnit
+                        } ,            
                         ticks            : {
-                            //display: false,
-                            beginAtZero  : false,
-                            //stepSize     : 5,
+                            display    : false,
+                            beginAtZero: false,
+                            //stepSize : 5,
                         }, 
                         gridLines        : {
-                          display        : false
+                          display   : false,
+                          drawBorder: false
                       }
                       }],
-                      xAxes: [{
-                        scaleLabel     : {
-                              display    : true
-                          },
+                    xAxes: [{
                         ticks: {
-                            maxRotation: 0, // angle in degrees,
-                            autoSkip: true,
+                            display      : false,
+                            maxRotation  : 0, // angle in degrees,
+                            autoSkip     : true,
                             maxTicksLimit: 4
                         },
                         gridLines: {
-                          display:false
+                          display   : false,
+                          drawBorder: false
                       }
                       }]
                 }

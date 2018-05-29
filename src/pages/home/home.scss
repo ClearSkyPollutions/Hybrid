@@ -3,29 +3,53 @@ page-home {
         background: #fcfdfc !important;
     }
 
-     canvas  {
-        height: 300px;
+    canvas {
+        height: 100px;
+        width: 85% !important;
+        margin: 0px 10px;
+    }
+     .chart-container {
         width: 100%;
+        text-align: center;
      }
-
-     .chart {
-        padding: 5px;
-     }
+     .chart-card {
+        display         : inline-block;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        width: 45%;
+        height: 100px;
+        //padding: 5px;
+        margin: 5px;
+        background-color: white;
+        border-radius: 5%;
+     
+    }
+    
+    .chart-card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
 
 
      .city-header{
         position  : relative;
-        //text-align: center;
+        text-align: center;
         max-width    : 100%;
+      
       }
 
      .about-header {
         width     : 100%;
         min-height: 120px;
       }
+      .about-header img {
+        width     : 100%;
+        height: 180px;
+        object-fit: cover;
+      }
     
       .info-card {
           width        : 70%;
+          height       : 120px;
           position     : absolute;
           bottom       : -25%;
           left         : 0; 
@@ -33,13 +57,14 @@ page-home {
           margin-left  : auto; 
           margin-right : auto;
           border-radius: 5% !important;
+          background   : linear-gradient(to bottom, rgba(255,255,255,0.5) 30% ,rgba(255,255,255,1) 70%);
       }
 
       .card-title {
         font-size  : 2.0em;
         width      : 100%;
         font-weight: bold;
-        color      : #6A6B6A;
+        //color      : #6A6B6A;
       }
       
       .about-info{
@@ -53,13 +78,18 @@ page-home {
       .about-info ion-icon {
         color: #6A6B6A;
         width: 30px;
+       
       }
 
       .card-pollution-info span {
         display: inline-block;
-        width: 90px;
+        width: 30%;
+
      }
 
+     .card-pollution-info {
+        margin-top: 20px;
+     }
     .circle-button{
        display         : inline-block;
        height          : 50px;
@@ -69,11 +99,5 @@ page-home {
        margin-left     : 4%;
 
     }
-
-    .chart-card {
-
-    }
-    
-      
     
 }
