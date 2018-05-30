@@ -8,9 +8,7 @@ import { AlertController } from 'ionic-angular';
 @Injectable()
 export class AlertProvider {
 
-  constructor(private alertCtrl: AlertController) {
-    console.log('Hello AlertProvider Provider');
-  }
+  constructor(private alertCtrl: AlertController) { }
 
   basicAlert(options: Alert){
     return this.alertCtrl.create({
