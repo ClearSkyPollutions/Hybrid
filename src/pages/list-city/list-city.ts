@@ -19,7 +19,7 @@ export class ListCityPage {
   constructor(public navCtrl: NavController) {
   }
   goToCityDetail(city: City) {
-    this.navCtrl.push('TabsPage',{ location: city });
+    this.navCtrl.push('HomePage',{ location: city });
   }
 
 }

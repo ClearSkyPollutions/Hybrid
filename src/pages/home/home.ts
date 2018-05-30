@@ -31,14 +31,8 @@ export class HomePage {
     public translate     : TranslateService,
     private chartProvider: ChartProvider
   ){
-      //this.location      = this.navParams.get('location');
-      this.location ={
-        city   : "Grenoble",
-        country: "France",
-        AQI    : "18",
-        image  : "assets/imgs/cities/greb.jpg"
-      }
-   
+      this.location      = this.navParams.get('location');
+      
       this.showLastMesure();
   }
 
@@ -97,7 +91,8 @@ export class HomePage {
       unit: unit,
       color: color
     }
-    this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions}, { cssClass: 'inset-modal'} )
+    this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions}, { cssClass: 'inset-modal',
+} )
                   .present();
   }
 
