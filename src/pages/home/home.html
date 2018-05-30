@@ -64,19 +64,23 @@
     
     
   <div class="chart-container">
-    <div class="chart-card">
+    <div class="chart-card" (click)="openChartModal('pm10','µg/m³', '#046bfe')">
+        <p>pm10</p>       
         <canvas #lineChartPm10></canvas>
     </div>
 
-    <div class="chart-card">
+    <div class="chart-card" (click)="openChartModal('pm25','µg/m³', '#02d935')">
+        <p>pm25</p>
         <canvas #lineChartPm25></canvas>
     </div>
 
-    <div class="chart-card">
+    <div class="chart-card" (click)="openChartModal('humidity','%', '#ff2039')">
+        <p>humidity</p>
         <canvas #lineChartHum></canvas>
     </div>
 
-    <div class="chart-card">
+    <div class="chart-card" (click)="openChartModal('temperature','C°', '#ffab00')">
+        <p>temperature</p>
         <canvas #lineChartTemp></canvas>
     </div>
   </div>

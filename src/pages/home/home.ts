@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, IonicPage, NavParams } from 'ionic-angular';
+import { ModalController, IonicPage, NavParams } from 'ionic-angular';
 
 import { Data } from '../../models/data.interface';
 import { DataProvider } from '../../providers/data/data.service';
@@ -25,13 +25,19 @@ export class HomePage {
   data         : Data;
 
   constructor(
-    public navCtrl       : NavController,
+    public modalCtrl     : ModalController,
     public navParams     : NavParams,
     private dataProvider : DataProvider,
     public translate     : TranslateService,
     private chartProvider: ChartProvider
   ){
-    this.location      = this.navParams.get('location');
+      //this.location      = this.navParams.get('location');
+      this.location ={
+        city   : "Grenoble",
+        country: "France",
+        AQI    : "18",
+        image  : "assets/imgs/cities/greb.jpg"
+      }
    
       this.showLastMesure();
   }
@@ -82,6 +88,17 @@ export class HomePage {
         color
       )
     });
+  }
+
+
+  openChartModal(pollutant: string, unit: string, color: string) {
+    let chartOptions= {
+      pollutant: pollutant,
+      unit: unit,
+      color: color
+    }
+    this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions}, { cssClass: 'inset-modal'} )
+                  .present();
   }
 
 }

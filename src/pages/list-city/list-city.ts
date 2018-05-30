@@ -3,6 +3,7 @@ import { NavController, IonicPage } from 'ionic-angular';
 
 import { TranslateService } from '@ngx-translate/core';
 import { CITIES } from '../../configs/cities.data';
+import { City } from '../../models/city.interface';
 
 
 
@@ -17,8 +18,8 @@ export class ListCityPage {
   
   constructor(public navCtrl: NavController) {
   }
-  goToCityDetail(city: any){
-    this.navCtrl.push('HomePage',{ location: city });
+  goToCityDetail(city: City) {
+    this.navCtrl.push('TabsPage',{ location: city });
   }
 
 }

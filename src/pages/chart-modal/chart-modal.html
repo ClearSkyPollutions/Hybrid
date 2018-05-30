@@ -1,0 +1,25 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{chartOptions.pollutant}} ( {{chartOptions.unit }} )</ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="closeModal()">
+            <ion-icon item-right name="ios-close-outline"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <div class="chart-card" >
+        <canvas #lineChart></canvas>
+    </div>
+    <div text-center>
+        <button ion-button color="light" small class="circle-button" (click)="chooseScale('AVG_HOUR')">Hour</button>
+         <button ion-button color="light" small class="circle-button" (click)="chooseScale('AVG_DAY')">Day</button>
+        <button ion-button color="light" small class="circle-button" (click)="chooseScale('AVG_MONTH')">Month</button>
+    </div>
+</ion-content>

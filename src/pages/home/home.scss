@@ -18,11 +18,15 @@ page-home {
         transition: 0.3s;
         width: 45%;
         height: 100px;
-        //padding: 5px;
+        padding: 5px 0px;
         margin: 5px;
         background-color: white;
         border-radius: 5%;
      
+    }
+
+    .chart-card p{
+        margin: 0;
     }
     
     .chart-card:hover {
@@ -101,3 +105,10 @@ page-home {
     }
     
 }
+
+ion-modal.inset-modal {
+    // transparent black background overlay
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    transition: opacity .25s ease-in-out;
+    padding: 27vh 10vw;
+    }

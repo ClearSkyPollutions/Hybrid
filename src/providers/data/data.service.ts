@@ -61,7 +61,7 @@ export class DataProvider {
       } 
    } 
     const request= tableName + '?columns=date,' + PollutantType + '&order=date,desc&page=1,' + range + '&transform=1';
-    console.log(request);
+    //console.log(request);
 
     return this.http.get(this.RaspServerUrl + '/' + request).map( res => {
      
