@@ -9,7 +9,7 @@ import { Data } from '../../models/data.interface';
 export class DataProvider {
  
   // TODO: get url from env.json file  
-  private RaspServerUrl: string = 'http://192.168.2.69:8000';
+  private RaspServerUrl: string = 'http://192.168.2.118:8000';
   
   constructor(private http: HttpClient) {}
 
