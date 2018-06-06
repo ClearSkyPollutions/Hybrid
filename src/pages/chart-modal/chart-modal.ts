@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { TranslateService } from '@ngx-translate/core'
 import { DataProvider } from '../../providers/data/data.service';
 import { ChartProvider } from '../../providers/chart/chart.service';
 
@@ -18,7 +19,7 @@ export class ChartModalPage {
   chartLabels = [];
   chartValues = [];
 
-  constructor(
+  constructor(public translate    : TranslateService,
      public navCtrl       : NavController,
      public navParams     : NavParams,
      private dataProvider : DataProvider,

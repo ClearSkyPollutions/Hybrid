@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { ChartModalPage } from './chart-modal';
+import { ParametersPage } from './parameters';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
-    ChartModalPage,
+    ParametersPage,
   ],
   imports: [
-    IonicPageModule.forChild(ChartModalPage),
+    IonicPageModule.forChild(ParametersPage),
     TranslateModule.forChild()
   ],
   exports: [
-    ChartModalPage
+    ParametersPage
   ]
 })
-export class ChartModalPageModule {}
+export class ParametersPageModule {}

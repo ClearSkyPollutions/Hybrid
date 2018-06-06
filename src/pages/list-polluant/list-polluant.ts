@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { TranslateService } from '@ngx-translate/core'
 
 import { Polluant } from '../../models/polluant';
 import { PolluantProvider } from '../../mocks/providers/polluant';
@@ -13,7 +14,7 @@ import { AlertProvider } from '../../providers/alert/alert.service';
 export class ListPolluantPage {
 
   polluants : Polluant[];
-  constructor(
+  constructor(public translate    : TranslateService,
     public navCtrl: NavController, 
     public navParams: NavParams,
     private alertProvider: AlertProvider,

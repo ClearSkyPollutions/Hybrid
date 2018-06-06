@@ -1,0 +1,48 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{'settings' | translate}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-list-header>
+      Frequency
+      <ion-badge item-end>{{settings.freq/60 | number:'2.1-2'}} mesures/min</ion-badge>
+    </ion-list-header>
+    <ion-item>
+      <ion-range min="0" max="1800" [(ngModel)]="settings.freq">
+        <ion-label range-left>0</ion-label>
+        <ion-label range-right>30</ion-label>
+      </ion-range>
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-list-header>Wifi</ion-list-header>
+    <ion-item>
+      <ion-label> SSID </ion-label>
+      <ion-input [(ngModel)]="settings.wifiSSID"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label> Password </ion-label>
+      <ion-input [(ngModel)]="settings.wifiPWD"></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-list-header>Sensors
+      <button ion-fab top right>
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-list-header>
+    <ion-item *ngFor="let sensor of settings.sensors">
+      <ion-label> {{sensor}} </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label> New Sensor </ion-label>
+      <ion-input (blur)="settings.sensors.push($event.target.value)"></ion-input>
+    </ion-item>
+    </ion-list>
+    <button ion-button block (click)="doConfirm()">OK</button>
+    </ion-content>

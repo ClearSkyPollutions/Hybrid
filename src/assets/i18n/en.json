@@ -3,5 +3,7 @@
     "pm10": "PM 10",
     "pm25": "PM 2.5",
     "temp": "Temperature",
-    "hum" : "Humidity"
+    "hum" : "Humidity",
+    "settings" : "Settings",
+    "cities" : "Cities"
 }
