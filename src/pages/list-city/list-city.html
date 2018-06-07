@@ -5,10 +5,9 @@
   </ion-header>
 <ion-content >
 
-    <ion-card *ngFor="let city of cities; let i=index"
+    <ion-card *ngFor="let city of cities[1]; let i=index"
      (click)="goToCityDetail(city)"
      [ngClass]="{
-      'card-overlay-first':i == 0,
       'card-overlay':i > 0
     }">
 

@@ -21,6 +21,8 @@ export class ParametersPage {
     sensors: ["SDS011", "DHT22"]
   };
 
+  tempInputSensor : string;
+
   constructor(
     public navCtrl      : NavController,
     public translate    : TranslateService,
@@ -33,6 +35,19 @@ export class ParametersPage {
        })
     }
   
+  removeSensor(oldSensor : string){
+    console.log("Added sensor " + oldSensor);
+    this.settings.sensors = this.settings.sensors.filter( elem => {
+      return (elem != oldSensor);
+    });
+  }
+
+  addSensor(){
+    if (this.tempInputSensor){
+      this.settings.sensors.push(this.tempInputSensor);
+    }
+    this.tempInputSensor = "";
+  }
 
   doConfirm() {
     this.alertProvider.confirmAlert({

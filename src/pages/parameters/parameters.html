@@ -31,18 +31,20 @@
     </ion-item>
   </ion-list>
   <ion-list>
-    <ion-list-header>Sensors
-      <button ion-fab top right>
-        <ion-icon name="add"></ion-icon>
-      </button>
-    </ion-list-header>
+    <ion-list-header>Sensors</ion-list-header>
     <ion-item *ngFor="let sensor of settings.sensors">
+      <button ion-button item-end color="danger" icon-only (click)="removeSensor(sensor)">
+        <ion-icon name='remove-circle'></ion-icon>
+      </button>
       <ion-label> {{sensor}} </ion-label>
     </ion-item>
     <ion-item>
       <ion-label> New Sensor </ion-label>
-      <ion-input (blur)="settings.sensors.push($event.target.value)"></ion-input>
+      <ion-input [(ngModel)]="tempInputSensor" (keyup.enter)="addSensor()"></ion-input>
+      <button ion-button item-end color="primary" icon-only (click)="addSensor()">
+        <ion-icon name='add-circle'></ion-icon>
+      </button>
     </ion-item>
-    </ion-list>
-    <button ion-button block (click)="doConfirm()">OK</button>
+  </ion-list>
+  <button ion-button block (click)="doConfirm()">OK</button>
     </ion-content>
