@@ -63,7 +63,7 @@ export class ChartProvider {
     }
 
   public createLineChart (htmlElement: any, chartLabels: any, chartValues: any, yAxesUnit: string, color: string){
-    let chart= new Chart(htmlElement.nativeElement,
+    let chart= new Chart(htmlElement,
         {
             type : 'line',
             data : {

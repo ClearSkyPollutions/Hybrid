@@ -4,90 +4,60 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content >
-  
+<ion-content>
+
   <div class="city-header">
     <div class="about-header">
       <img [src]="location.image" />
     </div>
 
     <ion-card class="info-card">
-      <ion-card-content>  
-          <div class="card-title">{{location.city}}</div>
-          {{data?.temphum.date}}
-          <div class="card-pollution-info">
-            <span>Good</span>
-            <span>{{data?.pm.pm10}} AQI</span>
-            <span>{{data?.temphum.temperature}} C°</span>
-          </div>
-      </ion-card-content>    
+      <ion-card-content>
+        <div class="card-title">{{location.city}}</div>
+        {{data?.temphum.date}}
+        <div class="card-pollution-info">
+          <span>Good</span>
+          <span>{{data?.pm.pm10}} AQI</span>
+          <span>{{data?.temphum.temperature}} C°</span>
+        </div>
+      </ion-card-content>
     </ion-card>
   </div>
 
 
-    <div padding class="about-info">
-     
-        <div text-center>
-            <button ion-button color="light" class="circle-button"><ion-icon name="home"></ion-icon></button>
-            <button ion-button color="light" class="circle-button"><ion-icon name="bicycle"></ion-icon></button>
-            <button ion-button color="light" class="circle-button"><ion-icon name="body"></ion-icon></button>
-        </div>
+  <div padding class="about-info">
 
+    <div text-center>
+      <button ion-button color="light" class="circle-button">
+        <ion-icon name="home"></ion-icon>
+      </button>
+      <button ion-button color="light" class="circle-button" (click)="showSettings()">
+        <ion-icon name="settings"></ion-icon>
+      </button>
+      <button ion-button color="light" class="circle-button">
+        <ion-icon name="body"></ion-icon>
+      </button>
     </div>
 
-<!-- 
-    <ion-card>
-        <ion-card-header>
-          {{ 'airquality' | translate }}
-          <p>{{data?.pm.date}}</p>
-        </ion-card-header>
-        <ion-fab right top>
-          <button ion-fab mini (click)="showLastMesure()">
-            <ion-icon name='refresh'></ion-icon>
-          </button>
-        </ion-fab> 
-        <ion-card-content >
-          <ion-item>
-            <ion-badge item-start>{{ 'pm10' | translate }}&nbsp;</ion-badge> <span item-end> {{data?.pm.pm10}}  µg/m³ </span>
-          </ion-item>
-          <ion-item >
-            <ion-badge item-start>{{ 'pm25' | translate }}</ion-badge><span item-end> {{data?.pm.pm25}}  µg/m³ </span> 
-          </ion-item>
-          <ion-item >
-            <ion-badge item-start>{{ 'temp' | translate }}</ion-badge><span item-end> {{data?.temphum.temperature}}  °C </span> 
-          </ion-item>
-          <ion-item >
-            <ion-badge item-start>{{ 'hum' | translate }}</ion-badge><span item-end> {{data?.temphum.humidity}}  °C </span> 
-          </ion-item>
-        </ion-card-content>
-      </ion-card> -->
-    
-    
-  <div class="chart-container">
-    <div class="chart-card" (click)="openChartModal('pm10','µg/m³', '#046bfe')">
-        <p>pm10</p>       
-        <canvas #lineChartPm10></canvas>
-    </div>
-
-    <div class="chart-card" (click)="openChartModal('pm25','µg/m³', '#02d935')">
-        <p>pm25</p>
-        <canvas #lineChartPm25></canvas>
-    </div>
-
-    <div class="chart-card" (click)="openChartModal('humidity','%', '#ff2039')">
-        <p>humidity</p>
-        <canvas #lineChartHum></canvas>
-    </div>
-
-    <div class="chart-card" (click)="openChartModal('temperature','C°', '#ffab00')">
-        <p>temperature</p>
-        <canvas #lineChartTemp></canvas>
-    </div>
   </div>
-    
-  </ion-content>
 
-
-
-  
-
+  <div #chartsContainer class="chart-container">
+    <div class="chart-card" *ngFor="let c of charts">
+      <p>{{c.type}}</p>
+      <canvas [style.display]="showParams ? 'none' : 'block'" #try (click)="openChartModal(c.type, c.unit, c.lineColor)"></canvas>
+      <div [style.display]="showParams ? 'block' : 'none'">
+        <button ion-button color="dark" item-start clear icon-only (click)="deleteCard(c)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+        <button ion-button color="yellow" item-start clear icon-only (click)="favoriteCard(c)">
+          <ion-icon name="star"></ion-icon>
+        </button>
+      </div>
+    </div>
+    </div>
+  <ion-fab bottom>
+    <button ion-fab [style.display]="showParams ? 'inline-block' : 'none'" icon-only (click)="openNewChartModal()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

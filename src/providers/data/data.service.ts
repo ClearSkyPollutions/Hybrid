@@ -11,7 +11,7 @@ import { PM } from '../../models/pm';
 export class DataProvider {
  
   //TODO: get url from env.json file  
-  private RaspServerUrl: string = 'http://192.168.2.118:8000';
+  private RaspServerUrl: string = 'http://192.168.2.118:7000';
   
   constructor(private http: HttpClient) {}
 
