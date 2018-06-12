@@ -15,6 +15,7 @@ import { ChartProvider } from '../providers/chart/chart.service';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { AirQualityIndexProvider } from '../providers/air-quality-index/air-quality-index.service';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -49,7 +50,8 @@ export function createTranslateLoader(http: HttpClient) {
     DataProvider,
     PolluantProvider,
     AlertProvider,
-    ChartProvider
+    ChartProvider,
+    AirQualityIndexProvider
   ]
 })
 

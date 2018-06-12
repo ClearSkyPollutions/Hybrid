@@ -8,16 +8,16 @@
   
   <div class="city-header">
     <div class="about-header">
-      <img [src]="location.image" />
+      <img [src]="city.image" />
     </div>
 
     <ion-card class="info-card">
       <ion-card-content>  
-          <div class="card-title">{{location.city}}</div>
+          <div class="card-title">{{city.city}}</div>
           {{data?.temphum.date}}
           <div class="card-pollution-info">
-            <span>Good</span>
-            <span>{{data?.pm.pm10}} AQI</span>
+            <span>{{aqIndex?.level}}</span>
+            <span>{{aqIndex?.index}} AQI</span>
             <span>{{data?.temphum.temperature}} C°</span>
           </div>
       </ion-card-content>    

@@ -38,7 +38,6 @@ export class ChartProvider {
                      display      : false,
                      maxRotation  : 0, // angle in degrees,
                      autoSkip     : true,
-                     //maxTicksLimit: 4
                  },
                  gridLines: {
                    display   : false,
@@ -83,13 +82,11 @@ export class ChartProvider {
     this.chart.data.labels= chartLabels;
     this.chart.data.datasets[0].data= chartValues;
     this.chart.data.datasets[0].borderColor= color;
-    this.chart.options.scales.xAxes[0].ticks.display= true; // NOT WORKING ! 
     this.chart.options.scales.xAxes[0] = {
         ticks: {
             display      : true,
             maxRotation  : 0, // angle in degrees,
             autoSkip     : true,
-            //maxTicksLimit: 4
         },
         gridLines: {
           display   : false,
@@ -98,7 +95,6 @@ export class ChartProvider {
     }
 
 
-  
     this.chart.update();
   }
 

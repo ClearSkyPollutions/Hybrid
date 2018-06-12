@@ -5,6 +5,8 @@ import { Data } from '../../models/data.interface';
 import { DataProvider } from '../../providers/data/data.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ChartProvider } from '../../providers/chart/chart.service';
+import { AirQualityIndexProvider } from '../../providers/air-quality-index/air-quality-index.service';
+import { AQI } from '../../models/aqi';
 
 
 @IonicPage()
@@ -20,19 +22,21 @@ export class HomePage {
   @ViewChild('lineChartHum') lineChartHum;
   @ViewChild('lineChartTemp') lineChartTemp;
   
- 
-  location     : any;
-  data         : Data;
+  
+  city   : any;
+  data   : Data;
+  aqIndex: AQI;
 
   constructor(
-    public modalCtrl     : ModalController,
-    public navParams     : NavParams,
-    private dataProvider : DataProvider,
-    public translate     : TranslateService,
-    private chartProvider: ChartProvider
+    public modalCtrl       : ModalController,
+    public navParams       : NavParams,
+    private dataProvider   : DataProvider,
+    public translate       : TranslateService,
+    private chartProvider  : ChartProvider,
+    private aqIndexProvider: AirQualityIndexProvider
   ){
-      this.location      = this.navParams.get('location');
-      
+      this.city      = this.navParams.get('location');
+      this.aqIndexProvider.getAQI().subscribe( res => this.aqIndex = res );
       this.showLastMesure();
   }
 
@@ -91,8 +95,7 @@ export class HomePage {
       unit: unit,
       color: color
     }
-    this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions}, { cssClass: 'inset-modal',
-} )
+    this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions}, { cssClass: 'inset-modal'} )
                   .present();
   }
 

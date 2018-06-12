@@ -3,15 +3,15 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { PM } from '../../models/pm';
+import { BASE_URL } from '../../env/env';
 
 
 
 
 @Injectable()
 export class DataProvider {
- 
-  //TODO: get url from env.json file  
-  private RaspServerUrl: string = 'http://192.168.2.118:8000';
+  
+  private RaspServerUrl: string = BASE_URL.url;
   
   constructor(private http: HttpClient) {}
 
@@ -61,13 +61,14 @@ export class DataProvider {
       } 
    } 
     const request= tableName + '?columns=date,' + PollutantType + '&order=date,desc&page=1,' + range + '&transform=1';
-    //console.log(request);
-
+  
     return this.http.get(this.RaspServerUrl + '/' + request).map( res => {
      
       return res[tableName];
     });
   }
+
+ 
 
 
 }
