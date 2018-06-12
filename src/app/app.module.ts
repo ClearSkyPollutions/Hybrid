@@ -11,6 +11,7 @@ import { PolluantProvider } from '../mocks/providers/polluant';
 import { DataProvider } from '../providers/data/data.service';
 import { AlertProvider } from '../providers/alert/alert.service';
 import { ChartProvider } from '../providers/chart/chart.service';
+import { SettingsProvider } from '../providers/settings/settings.service';
 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -51,7 +52,8 @@ export function createTranslateLoader(http: HttpClient) {
     PolluantProvider,
     AlertProvider,
     ChartProvider,
-    AirQualityIndexProvider
+    AirQualityIndexProvider,
+    SettingsProvider
   ]
 })
 

@@ -14,5 +14,3 @@ export interface PM25{
     date: string;
     pm25: number;
 } 
-
-
