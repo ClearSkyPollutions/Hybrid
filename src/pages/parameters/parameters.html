@@ -10,29 +10,37 @@
   <ion-list>
     <ion-list-header>
       Frequency
-      <ion-badge item-end>{{settings.freq/60 | number:'2.1-2'}} mesures/min</ion-badge>
+      <ion-badge item-end>{{settings.freq | number:'2.1-2'}} mesures/min</ion-badge>
     </ion-list-header>
     <ion-item>
-      <ion-range min="0" max="1800" [(ngModel)]="settings.freq">
-        <ion-label range-left>0</ion-label>
-        <ion-label range-right>30</ion-label>
-      </ion-range>
+      {{settings.freq}}
+        <ion-range min="0" max="30" [(ngModel)]="settings.Frequency">
+          <ion-label range-left>0</ion-label>
+          <ion-label range-right>30</ion-label>
+        </ion-range>
     </ion-item>
   </ion-list>
   <ion-list>
     <ion-list-header>Wifi</ion-list-header>
     <ion-item>
       <ion-label> SSID </ion-label>
-      <ion-input [(ngModel)]="settings.wifiSSID"></ion-input>
-    </ion-item>
+      <ion-input [(ngModel)]="settings.SSID"></ion-input>
+    </ion-item> 
+    <ion-item>
+    <ion-label>Security</ion-label>
+    <ion-select [(ngModel)]="settings.SecurityType">
+      <ion-option value="WEP">WEP</ion-option>
+      <ion-option value="WPA-PSK">WPA-PSK</ion-option>
+    </ion-select>
+  </ion-item>
     <ion-item>
       <ion-label> Password </ion-label>
-      <ion-input [(ngModel)]="settings.wifiPWD"></ion-input>
+      <ion-input [(ngModel)]="settings.Password"></ion-input>
     </ion-item>
   </ion-list>
   <ion-list>
     <ion-list-header>Sensors</ion-list-header>
-    <ion-item *ngFor="let sensor of settings.sensors">
+    <ion-item *ngFor="let sensor of settings.Sensors">
       <button ion-button item-end color="danger" icon-only (click)="removeSensor(sensor)">
         <ion-icon name='remove-circle'></ion-icon>
       </button>

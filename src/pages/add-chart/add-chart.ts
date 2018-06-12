@@ -5,10 +5,10 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 
 @IonicPage()
 @Component({
-  selector: 'page-new-chart-modal',
-  templateUrl: 'new-chart-modal.html',
+  selector: 'page-add-chart',
+  templateUrl: 'add-chart.html',
 })
-export class NewChartModalPage {
+export class AddChartPage {
 
   name: string;
   unit: string;
@@ -20,7 +20,7 @@ export class NewChartModalPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NewChartModalPage');
+    console.log('ionViewDidLoad AddChartPage');
   }
 
   cancelModal(){

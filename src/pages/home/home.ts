@@ -46,15 +46,18 @@ export class HomePage implements AfterViewInit {
       this.drawLineChart(this.charts[index]);
     })
     this.chartsC.changes.subscribe((c) => {
-      console.log("Change");
-      if (this.charts[this.charts.length - 1].chartView == null) {
-        this.charts[this.charts.length - 1].chartView = this.chartsC.last.nativeElement;
-        console.log(this.charts);
-        console.log(this.chartsC);
-        this.drawLineChart(this.charts[this.charts.length - 1]);
+      let last = this.charts.length - 1;
+      if (last >= 0 && this.charts[last].chartView == null) {
+        this.charts[last].chartView = this.chartsC.last.nativeElement;
+        this.drawLineChart(this.charts[last]);
       }
     });
   }
+
+private getRandomColor() {
+  let lineColors = ["#046bfe","#02d935","#ff2039","#ffab00"];
+  return lineColors[Math.floor(Math.random() * lineColors.length)]
+}
 
   private showLastMesure() {
     this.dataProvider.getLastMesure().subscribe(
@@ -120,8 +123,8 @@ export class HomePage implements AfterViewInit {
       .present();
   }
 
-  openNewChartModal() {
-    let newModal = this.modalCtrl.create('NewChartModalPage', null, {
+  openAddChart() {
+    let newModal = this.modalCtrl.create('AddChartPage', null, {
       cssClass: 'inset-modal',
     });
     newModal.onDidDismiss(data => {
@@ -129,7 +132,7 @@ export class HomePage implements AfterViewInit {
       if (!data) {
         return;
       }
-      this.charts.push({ type: data.name, unit: data.unit, lineColor: '#ffab00', chartView: null });
+      this.charts.push({ type: data.name, unit: data.unit, lineColor: this.getRandomColor(), chartView: null });
     });
     newModal.present();
   }
