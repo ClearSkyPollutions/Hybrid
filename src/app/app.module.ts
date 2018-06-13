@@ -12,14 +12,17 @@ import { DataProvider } from '../providers/data/data.service';
 import { AlertProvider } from '../providers/alert/alert.service';
 import { ChartProvider } from '../providers/chart/chart.service';
 import { SettingsProvider } from '../providers/settings/settings.service';
+import { AirQualityIndexProvider } from '../providers/air-quality-index/air-quality-index.service';
+import { SqliteProvider } from '../providers/sqlite/sqlite';
 
-
+/* Native components */
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { AirQualityIndexProvider } from '../providers/air-quality-index/air-quality-index.service';
+import { SQLite } from '@ionic-native/sqlite';
 
 
-export function createTranslateLoader(http: HttpClient) {
+
+export function createTranslateLoader(http: HttpClient) :TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -47,13 +50,15 @@ export function createTranslateLoader(http: HttpClient) {
   providers: [
     StatusBar,
     SplashScreen,
+    SQLite,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DataProvider,
     PolluantProvider,
     AlertProvider,
     ChartProvider,
     AirQualityIndexProvider,
-    SettingsProvider
+    SettingsProvider,
+    SqliteProvider
   ]
 })
 

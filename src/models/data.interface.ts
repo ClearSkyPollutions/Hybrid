@@ -1,7 +1,7 @@
-import {PM} from './pm'
-import {TempHum} from './temphum'
-
-export interface Data{
-    pm : PM;
-    temphum : TempHum;
+export interface Data {
+    date: string;
+    pm10: number;
+    pm25: number;
+    temperature: number;
+    humidity: number;
 }

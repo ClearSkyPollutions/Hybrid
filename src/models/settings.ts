@@ -1,4 +1,4 @@
-export interface Settings{
+export interface Settings {
     Frequency: number;
     SSID: string;
     Password: string;

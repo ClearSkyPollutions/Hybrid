@@ -22,7 +22,7 @@ export class HomePage implements AfterViewInit {
 
   charts      : ChartInfo[] = [];
   city        : City;
-  data        : Data;
+  data        : any;
   aqIndex     : AQI;
   showParams  : boolean = false;
 
@@ -38,11 +38,11 @@ export class HomePage implements AfterViewInit {
 
     this.aqIndexProvider.getAQI().subscribe( res => this.aqIndex = res );
 
-    //@TODO : load data from somewhere
-    this.charts.push({ type: "pm10", unit: "µg/m^3", lineColor: '#046bfe', chartView: "" })
-    this.charts.push({ type: "pm25", unit: "µg/m^3", lineColor: '#02d935', chartView: "" })
-    this.charts.push({ type: "temperature", unit: "°C", lineColor: '#ff2039', chartView: "" })
-    this.charts.push({ type: "humidity", unit: "µg/m^3", lineColor: '#ffab00', chartView: "" })
+    //@TODO: load data from somewhere
+    this.charts.push({ type: 'pm10', unit: 'µg/m^3', lineColor: '#046bfe', chartView: '' });
+    this.charts.push({ type: 'pm25', unit: 'µg/m^3', lineColor: '#02d935', chartView: '' });
+    this.charts.push({ type: 'temperature', unit: '°C', lineColor: '#ff2039', chartView: '' });
+    this.charts.push({ type: 'humidity', unit: 'µg/m^3', lineColor: '#ffab00', chartView: '' });
     this.showLastMesure();
 
   }
@@ -62,85 +62,72 @@ export class HomePage implements AfterViewInit {
   }
 
 private getRandomColor() {
-  let lineColors = ["#046bfe","#02d935","#ff2039","#ffab00"];
-  return lineColors[Math.floor(Math.random() * lineColors.length)]
+  let lineColors = ['#046bfe', '#02d935', '#ff2039', '#ffab00'];
+  return lineColors[Math.floor(Math.random() * lineColors.length)];
 }
 
-  private showLastMesure() {
-    this.dataProvider.getLastMesure().subscribe(
-      lastdata => {
-        this.data = {
-          pm: lastdata.pm['AVG_HOUR'][0],
-          temphum: lastdata.temphum['DHT22'][0]
-        };
-      }
-    );
-  }
-
-  private showSettings() {
-    if (this.showParams)
-      this.showParams = false;
-    else
-      this.showParams = true;
-  }
-
-  private deleteCard(oldSensor: ChartInfo) {
-    console.log("Removed data " + oldSensor.type);
-    this.charts = this.charts.filter(elem => {
-      return (elem.type != oldSensor.type);
-    });
-  }
-
-  private dateForChartLabel(dateMesure: string) {
-    let date = new Date(dateMesure);
-    return date.getHours() + ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
-  }
-
-  private drawLineChart(chart: ChartInfo) {
-    let chartLabels = [];
-    let chartValues = [];
-
-    this.dataProvider.defineDataForChart('AVG_HOUR', chart.type).subscribe(res => {
-
-      // loop through res in reverse order
-      for (var i = res.length - 1; i >= 0; i--) {
-        chartLabels.push(this.dateForChartLabel(res[i].date));
-        chartValues.push(res[i][chart.type]);
-      }
-
-      this.chartProvider.createLineChart(
-        chart.chartView,
-        chartLabels,
-        chartValues,
-        chart.type + ' (' + chart.unit + ')',
-        chart.lineColor
-      )
-    });
-  }
-
-  openChartModal(pollutant: string, unit: string, color: string) {
-    let chartOptions = {
-      pollutant: pollutant,
-      unit: unit,
-      color: color
+private showLastMesure() {
+  this.dataProvider.getLastMesure().subscribe(
+    lastdata => {
+      this.data = {
+        pm: lastdata.pm['AVG_HOUR'][0],
+        temphum: lastdata.temphum['DHT22'][0]
+      };
     }
-    this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions }, {
-      cssClass: 'inset-modal',
-    })
-      .present();
-  }
+  );
+}
 
-  openAddChart() {
-    let newModal = this.modalCtrl.create('AddChartPage', null, {
-      cssClass: 'inset-modal',
-    });
-    newModal.onDidDismiss(data => {
-      // If cancelled :
-      if (!data) {
-        return;
-      }
-      this.charts.push({ type: data.name, unit: data.unit, lineColor: this.getRandomColor(), chartView: null });
-    });
-    newModal.present();
+
+private dateForChartLabel(dateMesure: string) {
+  let date = new Date(dateMesure);
+  return date.getHours() + ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
+}
+
+private drawLineChart(chart: ChartInfo) {
+  let chartLabels = [];
+  let chartValues = [];
+
+  this.dataProvider.defineDataForChart('AVG_HOUR', chart.type).subscribe(res => {
+
+    // loop through res in reverse order
+    for (var i = res.length - 1; i >= 0; i--) {
+      chartLabels.push(this.dateForChartLabel(res[i].date));
+      chartValues.push(res[i][chart.type]);
+    }
+
+    this.chartProvider.createLineChart(
+      chart.chartView,
+      chartLabels,
+      chartValues,
+      chart.type + ' (' + chart.unit + ')',
+      chart.lineColor
+    )
+  });
+}
+
+openChartModal(pollutant: string, unit: string, color: string) {
+  let chartOptions = {
+    pollutant: pollutant,
+    unit: unit,
+    color: color
   }
+  this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions }, {
+    cssClass: 'inset-modal',
+  })
+    .present();
+}
+
+openAddChart() {
+  let newModal = this.modalCtrl.create('AddChartPage', null, {
+    cssClass: 'inset-modal',
+  });
+  newModal.onDidDismiss(data => {
+    // If cancelled :
+    if (!data) {
+      return;
+    }
+    this.charts.push({ type: data.name, unit: data.unit, lineColor: this.getRandomColor(), chartView: null });
+  });
+  newModal.present();
+}
 }
