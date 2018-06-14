@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { Data } from '../../models/data.interface';
+import { Storage } from '@ionic/storage';
+import { SQLITE_REQ } from '../../configs/sqlite.req';
+
 
 const DATABASE_FILE_NAME: string = 'data.db';
 
@@ -10,7 +14,7 @@ export class SqliteProvider {
 
   private sqliteDb: SQLiteObject;
 
-  constructor(public http: HttpClient, private sqlite: SQLite) {
+  constructor(public http: HttpClient, private sqlite: SQLite, public sqlitePorter: SQLitePorter, private storage: Storage) {
     console.log('sqlite provider loaded ');
     this.createSQLiteDatabase();
   }
@@ -21,68 +25,27 @@ export class SqliteProvider {
       location: 'default'
     })
       .then((db: SQLiteObject) => {
-        console.log('SQLite database created');
         this.sqliteDb = db;
-        this.createTables();
-
+        this.storage.get('tables_created').then(val => {
+          if (val) {
+            console.log('tables already created !');
+          } else {
+            this.createTables();
+          }
+        });
       })
       .catch(e => console.log(e));
   }
 
-  private createTables(): void {
-    //TODO: optimise creation of tables
-    this.sqliteDb.executeSql('CREATE TABLE TYPE (id integer PRIMARY KEY AUTOINCREMENT, name string,sensor string);', {})
-    .then(() => {
-      console.log('TYPE table created');
-      this.sqliteDb.executeSql('INSERT INTO TYPE(name,sensor) VALUES("pm25", "SDS011"),("pm10", "SDS011"),("temperature", "DHT22"),("humidity", "DHT22");', {})
-      .then(() => {
-        console.log('types inserted');
-        this.getDataForChart();
-      })
-      .catch(e => console.log(e));
-    })
-    .catch(e => console.log(e));
 
-    this.sqliteDb.executeSql('CREATE TABLE IF NOT EXISTS AVG_HOUR (date datetime, value float, type integer, FOREIGN KEY(type) REFERENCES Type(id), PRIMARY KEY (date, type));', {})
-    .then(() => console.log('AVG_HOUR table created'))
-    .catch(e => console.log(e));
-
-    this.sqliteDb.executeSql('CREATE TABLE IF NOT EXISTS AVG_DAY (date datetime, value float, type integer, FOREIGN KEY(type) REFERENCES Type(id), PRIMARY KEY (date, type));', {})
-    .then(() => console.log('AVG_DAY table created'))
-    .catch(e => console.log(e));
-
-    this.sqliteDb.executeSql('CREATE TABLE IF NOT EXISTS AVG_MONTH (date datetime, value float, type integer, FOREIGN KEY(type) REFERENCES Type(id), PRIMARY KEY (date, type));', {})
-    .then(() => console.log('AVG_MONTH table created'))
-    .catch(e => console.log(e));
-
-    this.sqliteDb.executeSql('CREATE TABLE IF NOT EXISTS AVG_YEAR (date datetime, value float, type integer, FOREIGN KEY(type) REFERENCES Type(id), PRIMARY KEY (date, type));', {})
-    .then(() => console.log('AVG_YEAR table created'))
-    .catch(e => console.log(e));
-    // this.sqliteDb.executeSql('CREATE TABLE IF NOT EXISTS AVG_HOUR (date datetime, value float, type integer, FOREIGN KEY(type) REFERENCES Type(id), PRIMARY KEY (date, type));', {})
-    // .then(() => {
-    //   console.log('Executed SQL');
-    //   this.sqliteDb.executeSql("INSERT INTO `AVG_HOUR`(date, value, type) VALUES ('2018-11-31 00:00:00','17.41', 3 )", {})
-    //     .then(() => {
-    //       console.log('PM10 data inserted !');
-    //       this.getDataForChart();
-    //     })
-    //     .catch(e => console.log(e));
-    // })
-    // .catch(e => console.log(e));
-  }
-
-  private getDataForChart(): void {
-   this.requestData('TYPE', '');
-  }
-
-  private requestData(tableName: string, PollutantType: string)  {
+  private requestDataForChart(tableName: string, PollutantType: string)  {
    const range = this.getRangeFromTableName(tableName);
-   const request = 'SELECT * FROM ' + tableName;
+   const request = 'SELECT t1.date, t1.value FROM ' + tableName + ' t1 INNER JOIN TYPE t2 ON t1.type=t2.id WHERE t2.name = "' + PollutantType + '" ORDER BY t1.date DESC LIMIT ' + range + ';';
    console.log(request);
    return this.sqliteDb.executeSql(request, {})
    .then((data) => {
-    console.log('trying to read data from database');
     if (data == null) {
+      console.log('no data !');
       return [];
     }
     if (data.rows.length > 0) {
@@ -91,8 +54,9 @@ export class SqliteProvider {
         mesures.push(data.rows.item(i));
       }
       console.log(mesures);
+      return mesures;
     }
-   });
+   }).catch(e => console.log(e));
   }
 
   private getRangeFromTableName(tableName: string) : number {
@@ -109,6 +73,21 @@ export class SqliteProvider {
   }
 
   private insertNewType():void {
+
+  }
+
+
+  private createTables(): void {
+  this.sqlitePorter.importSqlToDb(this.sqliteDb, SQLITE_REQ.sql)
+          .then(data => {
+            console.log('tables created successfully');
+            this.storage.set('tables_created', true);
+            this.requestDataForChart('AVG_HOUR', 'pm10');
+          })
+          .catch(e => console.error(e));
+  }
+
+  public synchroniseDatabase() :void {
 
   }
 

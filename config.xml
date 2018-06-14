@@ -82,6 +82,11 @@
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1" />
+    <plugin name="uk.co.workingedge.cordova.plugin.sqliteporter" spec="^1.0.2" />
+    <plugin name="cordova-plugin-googlemaps" spec="dummy">
+        <variable name="API_KEY_FOR_ANDROID" value="(API_KEY_FOR_ANDROID)" />
+        <variable name="API_KEY_FOR_IOS" value="(API_KEY_FOR_IOS)" />
+    </plugin>
     <engine name="android" spec="~7.0.0" />
     <plugin name="cordova-sqlite-storage" spec="^2.3.2" />
 </widget>

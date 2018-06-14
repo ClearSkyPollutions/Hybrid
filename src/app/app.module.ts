@@ -5,6 +5,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { IonicStorageModule } from '@ionic/storage';
 
 /* Providers */
 import { PolluantProvider } from '../mocks/providers/polluant';
@@ -19,6 +20,7 @@ import { SqliteProvider } from '../providers/sqlite/sqlite';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SQLite } from '@ionic-native/sqlite';
+import { SQLitePorter } from '@ionic-native/sqlite-porter';
 
 
 
@@ -35,6 +37,7 @@ export function createTranslateLoader(http: HttpClient) :TranslateHttpLoader {
     BrowserModule,
     HttpClientModule,
     IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -51,6 +54,7 @@ export function createTranslateLoader(http: HttpClient) :TranslateHttpLoader {
     StatusBar,
     SplashScreen,
     SQLite,
+    SQLitePorter,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DataProvider,
     PolluantProvider,
