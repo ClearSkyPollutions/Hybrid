@@ -10,13 +10,14 @@ import { AQI } from '../../models/aqi';
 
 import { ChartInfo } from '../../models/chartInfo.interface';
 import { City } from '../../models/city.interface';
+import { SqliteProvider } from '../../providers/sqlite/sqlite';
 
 @IonicPage()
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage implements AfterViewInit {
+export class HomePage  {
 
   @ViewChildren('ch') chartsC: QueryList<any>;
 
@@ -32,11 +33,13 @@ export class HomePage implements AfterViewInit {
     private dataProvider: DataProvider,
     public translate: TranslateService,
     private chartProvider: ChartProvider,
-    private aqIndexProvider: AirQualityIndexProvider
+    private aqIndexProvider: AirQualityIndexProvider,
+    private sqliteProvider: SqliteProvider
   ) {
     this.city = this.navParams.get('location');
 
     this.aqIndexProvider.getAQI().subscribe( res => this.aqIndex = res );
+
 
     //@TODO: load data from somewhere
     this.charts.push({ type: 'pm10', unit: 'µg/m^3', lineColor: '#046bfe', chartView: '' });
@@ -47,11 +50,11 @@ export class HomePage implements AfterViewInit {
 
   }
 
-  ngAfterViewInit() {
+  ionViewDidLoad() :void {
     this.chartsC.forEach((c, index) => {
       this.charts[index].chartView = c.nativeElement;
       this.drawLineChart(this.charts[index]);
-    })
+    });
     this.chartsC.changes.subscribe((c) => {
       let last = this.charts.length - 1;
       if (last >= 0 && this.charts[last].chartView == null) {
@@ -61,8 +64,12 @@ export class HomePage implements AfterViewInit {
     });
   }
 
-private getRandomColor() {
-  let lineColors = ['#046bfe', '#02d935', '#ff2039', '#ffab00'];
+  private showSettings() {
+      this.showParams = !this.showParams;
+  }
+
+private getRandomColor() : string {
+  const lineColors = ['#046bfe', '#02d935', '#ff2039', '#ffab00'];
   return lineColors[Math.floor(Math.random() * lineColors.length)];
 }
 
@@ -76,6 +83,14 @@ private showLastMesure() {
     }
   );
 }
+
+private deleteCard(oldSensor: ChartInfo) {
+  console.log("Removed data " + oldSensor.type);
+  this.charts = this.charts.filter(elem => {
+    return (elem.type != oldSensor.type);
+  });
+}
+
 
 
 private dateForChartLabel(dateMesure: string) {
