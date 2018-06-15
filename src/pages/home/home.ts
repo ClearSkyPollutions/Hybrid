@@ -40,7 +40,6 @@ export class HomePage  {
 
     this.aqIndexProvider.getAQI().subscribe( res => this.aqIndex = res );
 
-
     //@TODO: load data from somewhere
     this.charts.push({ type: 'pm10', unit: 'µg/m^3', lineColor: '#046bfe', chartView: '' });
     this.charts.push({ type: 'pm25', unit: 'µg/m^3', lineColor: '#02d935', chartView: '' });

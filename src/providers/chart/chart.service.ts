@@ -7,27 +7,25 @@ export class ChartProvider {
   chart   : Chart;
   options : any;
   datasets: any;
-  
   constructor() {
-      this.datasets= [{
+      this.datasets = [{
         duration            : 1000,
         //easing              : 'easeInExpo',
         fill 			    : false
     }];
 
-    this.options= {
-        
+    this.options = {
         maintainAspectRatio: false,
         legend         : {
           display     : false,
           position: 'bottom',
          },
          scales: {
-            yAxes : [{                      
+            yAxes : [{
                 ticks            : {
                     display    : false,
                     beginAtZero: false,
-                }, 
+                },
                 gridLines        : {
                 display   : false,
                 drawBorder: false
@@ -45,11 +43,11 @@ export class ChartProvider {
                }
                }]
          }
-     }
+     };
   }
 
-  public initChart (htmlElement: any){
-    return this.chart= new Chart(htmlElement.nativeElement,
+  public initChart (htmlElement: any) :Chart {
+    return this.chart = new Chart(htmlElement.nativeElement,
         {
             type : 'line',
             data : {
@@ -57,12 +55,10 @@ export class ChartProvider {
               },
             options : this.options
         });
-
-        
     }
 
-  public createLineChart (htmlElement: any, chartLabels: any, chartValues: any, yAxesUnit: string, color: string){
-    let chart= new Chart(htmlElement,
+  public createLineChart (htmlElement: any, chartLabels: any, chartValues: any, yAxesUnit: string, color: string) :void {
+    const chart = new Chart(htmlElement,
         {
             type : 'line',
             data : {
@@ -70,18 +66,17 @@ export class ChartProvider {
               },
             options : this.options
     });
-    chart.data.labels= chartLabels;
-    chart.data.datasets[0].data= chartValues;
-    chart.data.datasets[0].borderColor= color;
+    chart.data.labels = chartLabels;
+    chart.data.datasets[0].data = chartValues;
+    chart.data.datasets[0].borderColor = color;
 
     chart.update();
     }
-  
-  public updateLineChart (htmlElement: any, chartLabels: any, chartValues: any, color: string){
-   
-    this.chart.data.labels= chartLabels;
-    this.chart.data.datasets[0].data= chartValues;
-    this.chart.data.datasets[0].borderColor= color;
+
+  public updateLineChart (htmlElement: any, chartLabels: any, chartValues: any, color: string) :void {
+    this.chart.data.labels = chartLabels;
+    this.chart.data.datasets[0].data = chartValues;
+    this.chart.data.datasets[0].borderColor = color;
     this.chart.options.scales.xAxes[0] = {
         ticks: {
             display      : true,
@@ -92,11 +87,10 @@ export class ChartProvider {
           display   : false,
           drawBorder: false
       }
-    }
+    };
 
 
     this.chart.update();
   }
 
- 
 }

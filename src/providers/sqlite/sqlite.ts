@@ -5,6 +5,8 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { Data } from '../../models/data.interface';
 import { Storage } from '@ionic/storage';
 import { SQLITE_REQ } from '../../configs/sqlite.req';
+import { BASE_URL } from '../../env/env';
+
 
 
 const DATABASE_FILE_NAME: string = 'data.db';
@@ -13,6 +15,7 @@ const DATABASE_FILE_NAME: string = 'data.db';
 export class SqliteProvider {
 
   private sqliteDb: SQLiteObject;
+  private RaspServerUrl: string = BASE_URL.url;
 
   constructor(public http: HttpClient, private sqlite: SQLite, public sqlitePorter: SQLitePorter, private storage: Storage) {
     console.log('sqlite provider loaded ');
@@ -29,10 +32,12 @@ export class SqliteProvider {
         this.storage.get('tables_created').then(val => {
           if (val) {
             console.log('tables already created !');
+            this.synchroniseDatabase('AVG_HOUR');
           } else {
             this.createTables();
           }
         });
+
       })
       .catch(e => console.log(e));
   }
@@ -87,8 +92,35 @@ export class SqliteProvider {
           .catch(e => console.error(e));
   }
 
-  public synchroniseDatabase() :void {
-
+  public synchroniseDatabase(tableName: string) {
+     this.getLastDate(tableName).then((resp) => {
+       let date = resp.date;
+       console.log(date);
+        const request = tableName + '?filter=date,gt,' + date +  '&transform=1';
+        return this.http.get(this.RaspServerUrl + '/' + request).map( res => {
+          console.log(res);
+          console.log(res[tableName]);
+        });
+      });
   }
+
+  private getLastDate(tableName: string) {
+    const requestDate = 'SELECT date FROM ' + tableName + ' ORDER BY date DESC LIMIT 1';
+    return this.sqliteDb.executeSql(requestDate, {})
+    .then((data) => {
+     if (data == null) {
+       console.log('no data !');
+       return [];
+     }
+     if (data.rows.length > 0) {
+       const lastDate = [];
+       for (var i = 0; i < data.rows.length; i++) {
+         lastDate.push(data.rows.item(i));
+       }
+       return lastDate[0];
+     }
+  }).catch(e => console.log(e));
+}
+
 
 }

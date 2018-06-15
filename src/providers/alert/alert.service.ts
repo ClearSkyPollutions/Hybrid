@@ -10,7 +10,7 @@ export class AlertProvider {
 
   constructor(private alertCtrl: AlertController) { }
 
-  basicAlert(options: Alert){
+  basicAlert(options: Alert)  {
     return this.alertCtrl.create({
       title: options.title,
       subTitle: options.message,
@@ -18,7 +18,7 @@ export class AlertProvider {
     });
   }
 
-  confirmAlert(options: Alert){
+  confirmAlert(options: Alert) {
     return this.alertCtrl.create({
       title: options.title,
       message: options.message,
@@ -35,7 +35,7 @@ export class AlertProvider {
     });
   }
 
-  promptAlert(options: Alert){
+  promptAlert(options: Alert) {
     return this.alertCtrl.create({
       title: options.title,
       message: options.message,

@@ -19,15 +19,15 @@ export class AddChartPage {
     public viewCtrl: ViewController) {
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad() :void {
     console.log('ionViewDidLoad AddChartPage');
   }
 
-  cancelModal(){
+  cancelModal() :void {
     this.navCtrl.pop();
   }
 
-  closeModal() {
+  closeModal()  :void {
     this.viewCtrl.dismiss({name : this.name, unit: this.unit});
   }
 }

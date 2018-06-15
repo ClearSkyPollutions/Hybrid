@@ -5,7 +5,7 @@ export interface Alert {
     button_1?: AlertButton;
     button_2?: AlertButton;
  }
- 
+
  export interface AlertInput {
    name: string | number;
    type?: string;
@@ -18,4 +18,3 @@ export interface Alert {
    cssClass?: string;
    handler: (value: any) => boolean|void;
  }
- 

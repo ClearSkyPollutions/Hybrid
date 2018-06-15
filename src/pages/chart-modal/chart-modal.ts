@@ -13,7 +13,7 @@ import { ChartProvider } from '../../providers/chart/chart.service';
 })
 export class ChartModalPage {
 
-  @ViewChild('lineChart') lineChart;
+  @ViewChild('lineChart') lineChart :any;
   chartOptions: any;
   scale       : string;
   chartLabels : any[] = [];
@@ -37,7 +37,7 @@ export class ChartModalPage {
     this.chartLabels = [];
     this.chartValues = [];
 
-    this.dataProvider.defineDataForChart(this.scale, this.chartOptions.pollutant).subscribe(res =>{
+    this.dataProvider.defineDataForChart(this.scale, this.chartOptions.pollutant).subscribe(res => {
       // loop through res in reverse order
       for (var i: number = res.length - 1; i >= 0; i--) {
        this.chartLabels.push(this.dateForChartLabel(res[i].date));
@@ -57,7 +57,7 @@ export class ChartModalPage {
     const date = new Date(dateMesure);
     switch (this.scale) {
       case 'AVG_HOUR': {
-        return date.getHours() + 'h:' + (date.getMinutes()< 10 ? '0' + date.getMinutes() : date.getMinutes());
+        return date.getHours() + 'h:' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
       }
       case 'AVG_DAY': {
         return date.getDate()  + 'j';

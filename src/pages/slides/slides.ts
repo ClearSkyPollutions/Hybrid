@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core'
-
+import { TranslateService } from '@ngx-translate/core';
 import { SLIDES } from '../../configs/slides.data';
 
 
@@ -12,30 +11,16 @@ import { SLIDES } from '../../configs/slides.data';
 })
 export class SlidesPage {
 
-  slides= SLIDES;
+  slides = SLIDES;
   constructor(public translate    : TranslateService,
     public navCtrl: NavController, public navParams: NavParams) {
   }
 
-  ionViewDidLoad() {
-   
-  }
-
-  startApp() {
+  startApp() :void {
     this.navCtrl.setRoot('TabsPage', {}, {
       animate: true,
       direction: 'forward'
     });
   }
-  
-
-
-
-
- 
-
- 
-
-
 
 }

@@ -14,12 +14,11 @@ import { City } from '../../models/city.interface';
 })
 export class ListCityPage {
 
-  cities= CITIES;
-  
+  cities : City[] = CITIES;
   constructor(public navCtrl: NavController) {
   }
-  goToCityDetail(city: City) {
-    this.navCtrl.push('HomePage',{ location: city });
+  goToCityDetail(city: City) :void {
+    this.navCtrl.push('HomePage', { location: city });
   }
 
 }

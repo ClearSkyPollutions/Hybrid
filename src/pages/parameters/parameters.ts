@@ -25,36 +25,33 @@ export class ParametersPage {
     private settingsProvider: SettingsProvider
   ) {
     this.settings = {Frequency: 0,
-      SSID: "",
-      Password: "",
-      SecurityType: "WEP",
+      SSID: '',
+      Password: '',
+      SecurityType: 'WEP',
       Sensors:[]};
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad() :void {
     this.settingsProvider.getConfig().subscribe(cfg => {
       this.settings = cfg;
       console.log(cfg);
-      console.log(this.settings);
-    console.log(this.settings.Frequency);
-    })
-  }
-
-  removeSensor(oldSensor: string) {
-    console.log("Added sensor " + oldSensor);
-    this.settings.Sensors = this.settings.Sensors.filter(elem => {
-      return (elem != oldSensor);
     });
   }
 
-  addSensor() {
+  removeSensor(oldSensor: string) :void {
+    console.log('Removed sensor' + oldSensor);
+    this.settings.Sensors = this.settings.Sensors.filter(elem =>
+       (elem != oldSensor));
+  }
+
+  addSensor():void {
     if (this.tempInputSensor) {
       this.settings.Sensors.push(this.tempInputSensor);
     }
-    this.tempInputSensor = "";
+    this.tempInputSensor = '';
   }
 
-  doConfirm() {
+  doConfirm() :void {
     this.alertProvider.confirmAlert({
       title: 'Confirm these changes ?',
       message: 'Be careful when changing wifi configuration remotely, you may need to connect physically to the Raspberry Pi if an error occurs',
@@ -62,17 +59,19 @@ export class ParametersPage {
         {
           text: 'Cancel',
           handler: () => {
-            console.log('Cancelled configuration changes')
+            console.log('Cancelled configuration changes');
           }
         },
       button_2: {
         text: 'Accept',
         handler: () => {
-          console.log('Configuration changed')
-          this.settingsProvider.setConfig(this.settings);
+          console.log('Configuration changed');
+          this.settingsProvider.setConfig(this.settings).subscribe(cfg => {
+            console.log(cfg);
+          });
         }
       }
-    }).present()
+    }).present();
   }
 
 }
