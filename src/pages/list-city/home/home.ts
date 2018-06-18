@@ -1,14 +1,12 @@
-import { Component, ViewChildren, QueryList,  AfterViewInit } from '@angular/core';
-import { ModalController, IonicPage, NavParams } from 'ionic-angular';
-
-import { Data } from '../../models/data.interface';
+import { Component, ViewChildren, QueryList } from '@angular/core';
+import { ModalController, IonicPage, NavParams, Modal } from 'ionic-angular';
 import { DataProvider } from '../../providers/data/data.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ChartProvider } from '../../providers/chart/chart.service';
 import { AirQualityIndexProvider } from '../../providers/air-quality-index/air-quality-index.service';
 import { AQI } from '../../models/aqi';
 
-import { ChartInfo } from '../../models/chartInfo.interface';
+import { ChartInfo, ChartOptions } from '../../models/chartInfo.interface';
 import { City } from '../../models/city.interface';
 import { SqliteProvider } from '../../providers/sqlite/sqlite';
 
@@ -38,7 +36,7 @@ export class HomePage  {
   ) {
     this.city = this.navParams.get('location');
 
-    this.aqIndexProvider.getAQI().subscribe( res => this.aqIndex = res );
+    this.aqIndexProvider.getAQI().subscribe( (res : AQI) => this.aqIndex = res );
 
     //@TODO: load data from somewhere
     this.charts.push({ type: 'pm10', unit: 'µg/m^3', lineColor: '#046bfe', chartView: '' });
@@ -50,12 +48,12 @@ export class HomePage  {
   }
 
   ionViewDidLoad() :void {
-    this.chartsC.forEach((c, index) => {
+    this.chartsC.forEach((c:any, index :number) => {
       this.charts[index].chartView = c.nativeElement;
       this.drawLineChart(this.charts[index]);
     });
-    this.chartsC.changes.subscribe((c) => {
-      let last = this.charts.length - 1;
+    this.chartsC.changes.subscribe(() => {
+      const last = this.charts.length - 1;
       if (last >= 0 && this.charts[last].chartView == null) {
         this.charts[last].chartView = this.chartsC.last.nativeElement;
         this.drawLineChart(this.charts[last]);
@@ -63,7 +61,7 @@ export class HomePage  {
     });
   }
 
-  private showSettings() {
+  private showSettings() :void {
       this.showParams = !this.showParams;
   }
 
@@ -72,9 +70,9 @@ private getRandomColor() : string {
   return lineColors[Math.floor(Math.random() * lineColors.length)];
 }
 
-private showLastMesure() {
+private showLastMesure() :void {
   this.dataProvider.getLastMesure().subscribe(
-    lastdata => {
+    (lastdata : any) => {
       this.data = {
         pm: lastdata.pm['AVG_HOUR'][0],
         temphum: lastdata.temphum['DHT22'][0]
@@ -83,25 +81,23 @@ private showLastMesure() {
   );
 }
 
-private deleteCard(oldSensor: ChartInfo) {
-  console.log("Removed data " + oldSensor.type);
-  this.charts = this.charts.filter(elem => {
-    return (elem.type != oldSensor.type);
-  });
+private deleteCard(oldSensor: ChartInfo) :void {
+  console.log('Removed data ' + oldSensor.type);
+  this.charts = this.charts.filter((elem : ChartInfo) => (elem.type != oldSensor.type));
 }
 
 
 
-private dateForChartLabel(dateMesure: string) {
-  let date = new Date(dateMesure);
+private dateForChartLabel(dateMesure: string) :string {
+  const date = new Date(dateMesure);
   return date.getHours() + ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
 }
 
-private drawLineChart(chart: ChartInfo) {
-  let chartLabels = [];
-  let chartValues = [];
+private drawLineChart(chart: ChartInfo) :void {
+  const chartLabels :string[] = [];
+  const chartValues :string[] = [];
 
-  this.dataProvider.defineDataForChart('AVG_HOUR', chart.type).subscribe(res => {
+  this.dataProvider.defineDataForChart('AVG_HOUR', chart.type).subscribe((res :any) => {
 
     // loop through res in reverse order
     for (var i = res.length - 1; i >= 0; i--) {
@@ -115,27 +111,27 @@ private drawLineChart(chart: ChartInfo) {
       chartValues,
       chart.type + ' (' + chart.unit + ')',
       chart.lineColor
-    )
+    );
   });
 }
 
-openChartModal(pollutant: string, unit: string, color: string) {
-  let chartOptions = {
+openChartModal(pollutant: string, unit: string, color: string) :void {
+  const chartOptions : ChartOptions = {
     pollutant: pollutant,
     unit: unit,
     color: color
-  }
+  };
   this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions }, {
     cssClass: 'inset-modal',
   })
     .present();
 }
 
-openAddChart() {
-  let newModal = this.modalCtrl.create('AddChartPage', null, {
+openAddChart() :void {
+  const newModal : Modal = this.modalCtrl.create('AddChartPage', null, {
     cssClass: 'inset-modal',
   });
-  newModal.onDidDismiss(data => {
+  newModal.onDidDismiss((data :any) => {
     // If cancelled :
     if (!data) {
       return;

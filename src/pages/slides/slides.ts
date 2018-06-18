@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { SLIDES } from '../../configs/slides.data';
+import { SlideInfo } from '../../models/slideInfo';
 
 
 @IonicPage()
@@ -11,7 +12,7 @@ import { SLIDES } from '../../configs/slides.data';
 })
 export class SlidesPage {
 
-  slides = SLIDES;
+  slides :SlideInfo[] = SLIDES;
   constructor(public translate    : TranslateService,
     public navCtrl: NavController, public navParams: NavParams) {
   }

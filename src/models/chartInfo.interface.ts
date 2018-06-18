@@ -4,3 +4,8 @@ export interface ChartInfo {
     lineColor   : string;
     chartView   : any;
 }
+export interface ChartOptions {
+    pollutant: string;
+    unit: string;
+    color: string;
+}

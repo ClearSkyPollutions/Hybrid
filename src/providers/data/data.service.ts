@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs';
-import { PM } from '../../models/pm';
 import { BASE_URL } from '../../env/env';
 
 
@@ -13,7 +11,7 @@ export class DataProvider {
   private RaspServerUrl: string = BASE_URL.url;
   constructor(private http: HttpClient) {}
 
-  public getLastMesure() {
+  public getLastMesure() :Observable<any> {
     const requestConcPM = 'AVG_HOUR?order=date,desc&page=1,1&transform=1';
 
     const requestTempHum = 'DHT22?order=date,desc&page=1,1&transform=1';
@@ -22,21 +20,16 @@ export class DataProvider {
       this.http.get(this.RaspServerUrl + '/' + requestConcPM),
       this.http.get(this.RaspServerUrl + '/' + requestTempHum)
     ])
-    .map((data: any[]) => {
-      return {
+    .map((data: any) => ({
         pm : data[0],
         temphum : data[1]
-      };
-    });
-  }
-
-  public getAllMesure() : Observable<PM[]> {
-    const request = 'AVG_HOUR?transform=1';
-    return this.http.get<PM[]>(this.RaspServerUrl + '/' + request);
+      })
+    );
   }
 
 
-  public defineDataForChart(tableName: string, PollutantType: string ) {
+
+  public defineDataForChart(tableName: string, PollutantType: string) :Observable<any> {
     let range: number;
     switch (tableName) {
       case 'AVG_HOUR': {
@@ -57,7 +50,7 @@ export class DataProvider {
       }
    }
     const request = tableName + '?columns=date,' + PollutantType + '&order=date,desc&page=1,' + range + '&transform=1';
-    return this.http.get(this.RaspServerUrl + '/' + request).map( res =>
+    return this.http.get(this.RaspServerUrl + '/' + request).map( (res : Object) =>
       res[tableName]
     );
   }

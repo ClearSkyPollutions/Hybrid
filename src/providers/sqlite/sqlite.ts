@@ -49,8 +49,7 @@ export class SqliteProvider {
    console.log(request);
    return this.sqliteDb.executeSql(request, {})
    .then((data) => {
-    if (data == null) {
-      console.log('no data !');
+    if (!data) {
       return [];
     }
     if (data.rows.length > 0) {
@@ -92,7 +91,7 @@ export class SqliteProvider {
           .catch(e => console.error(e));
   }
 
-  public synchroniseDatabase(tableName: string) {
+  public synchroniseDatabase(tableName: string) :void {
      this.getLastDate(tableName).then((resp) => {
        let date = resp.date;
        console.log(date);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { AlertController, Alert } from 'ionic-angular';
+import { AlertDialog } from '../../models/alert';
 
-import { Alert } from '../../models/alert';
-import { AlertController } from 'ionic-angular';
 
 
 
@@ -10,7 +10,7 @@ export class AlertProvider {
 
   constructor(private alertCtrl: AlertController) { }
 
-  basicAlert(options: Alert)  {
+  basicAlert(options: AlertDialog) :Alert {
     return this.alertCtrl.create({
       title: options.title,
       subTitle: options.message,
@@ -18,7 +18,7 @@ export class AlertProvider {
     });
   }
 
-  confirmAlert(options: Alert) {
+  confirmAlert(options: AlertDialog) :Alert {
     return this.alertCtrl.create({
       title: options.title,
       message: options.message,
@@ -35,7 +35,7 @@ export class AlertProvider {
     });
   }
 
-  promptAlert(options: Alert) {
+  promptAlert(options: AlertDialog) :Alert {
     return this.alertCtrl.create({
       title: options.title,
       message: options.message,

@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, IonicPage } from 'ionic-angular';
-
-import { TranslateService } from '@ngx-translate/core';
 import { CITIES } from '../../configs/cities.data';
 import { City } from '../../models/city.interface';
 

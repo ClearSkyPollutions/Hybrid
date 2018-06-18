@@ -1,4 +1,4 @@
-export interface Alert {
+export interface AlertDialog {
     title: string;
     message: string;
     input? : AlertInput;

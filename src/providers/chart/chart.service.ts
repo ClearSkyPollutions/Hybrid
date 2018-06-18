@@ -88,8 +88,6 @@ export class ChartProvider {
           drawBorder: false
       }
     };
-
-
     this.chart.update();
   }
 

@@ -37,7 +37,7 @@ export class ChartModalPage {
     this.chartLabels = [];
     this.chartValues = [];
 
-    this.dataProvider.defineDataForChart(this.scale, this.chartOptions.pollutant).subscribe(res => {
+    this.dataProvider.defineDataForChart(this.scale, this.chartOptions.pollutant).subscribe((res :any) => {
       // loop through res in reverse order
       for (var i: number = res.length - 1; i >= 0; i--) {
        this.chartLabels.push(this.dateForChartLabel(res[i].date));

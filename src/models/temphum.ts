@@ -4,8 +4,6 @@ export interface TempHum {
     temperature: number;
     humidity: number;
 }
-
-
 export interface Humidity {
     date: string;
     humidity: number;

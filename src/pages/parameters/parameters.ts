@@ -32,7 +32,7 @@ export class ParametersPage {
   }
 
   ionViewDidLoad() :void {
-    this.settingsProvider.getConfig().subscribe(cfg => {
+    this.settingsProvider.getConfig().subscribe((cfg: Settings) => {
       this.settings = cfg;
       console.log(cfg);
     });
@@ -40,7 +40,7 @@ export class ParametersPage {
 
   removeSensor(oldSensor: string) :void {
     console.log('Removed sensor' + oldSensor);
-    this.settings.Sensors = this.settings.Sensors.filter(elem =>
+    this.settings.Sensors = this.settings.Sensors.filter((elem : string) =>
        (elem != oldSensor));
   }
 
@@ -58,15 +58,15 @@ export class ParametersPage {
       button_1:
         {
           text: 'Cancel',
-          handler: () => {
+          handler: () :void => {
             console.log('Cancelled configuration changes');
           }
         },
       button_2: {
         text: 'Accept',
-        handler: () => {
+        handler: () :void => {
           console.log('Configuration changed');
-          this.settingsProvider.setConfig(this.settings).subscribe(cfg => {
+          this.settingsProvider.setConfig(this.settings).subscribe((cfg : Object) => {
             console.log(cfg);
           });
         }
