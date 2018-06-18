@@ -1,14 +1,14 @@
 import { Component, ViewChildren, QueryList } from '@angular/core';
 import { ModalController, IonicPage, NavParams, Modal } from 'ionic-angular';
-import { DataProvider } from '../../providers/data/data.service';
+import { DataProvider } from '../../../providers/data/data.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ChartProvider } from '../../providers/chart/chart.service';
-import { AirQualityIndexProvider } from '../../providers/air-quality-index/air-quality-index.service';
-import { AQI } from '../../models/aqi';
+import { ChartProvider } from '../../../providers/chart/chart.service';
+import { AirQualityIndexProvider } from '../../../providers/air-quality-index/air-quality-index.service';
+import { AQI } from '../../../models/aqi';
 
-import { ChartInfo, ChartOptions } from '../../models/chartInfo.interface';
-import { City } from '../../models/city.interface';
-import { SqliteProvider } from '../../providers/sqlite/sqlite';
+import { ChartInfo, ChartOptions } from '../../../models/chartInfo.interface';
+import { City } from '../../../models/city.interface';
+import { SqliteProvider } from '../../../providers/sqlite/sqlite';
 
 @IonicPage()
 @Component({
