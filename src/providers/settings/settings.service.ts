@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -9,7 +9,7 @@ import { Settings } from '../../models/settings';
 export class SettingsProvider {
 
   //TODO: get url from env.json file  
-  private RaspServerUrl: string = 'http://192.168.2.118:9000';
+  private RaspServerUrl: string = 'http://192.168.2.118:7000';
   
   constructor(public http: HttpClient) {
   }
@@ -22,7 +22,8 @@ export class SettingsProvider {
 
   public setConfig(s : Settings){
     const request = 'config.php'
+    const headers = new HttpHeaders().set("Content-Type", "application/json");
 
-    return this.http.put(this.RaspServerUrl + '/' + request, JSON.stringify(s))
+    return this.http.put(this.RaspServerUrl + '/' + request, s, {headers});
   }
 }

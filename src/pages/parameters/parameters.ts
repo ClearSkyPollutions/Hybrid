@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, LoadingController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 
 import { Settings } from '../../models/settings';
@@ -13,31 +13,44 @@ import { SettingsProvider } from '../../providers/settings/settings.service';
   templateUrl: 'parameters.html',
 })
 export class ParametersPage {
-
   settings: Settings;
 
   tempInputSensor: string;
+
+  spinner: any;
 
   constructor(
     public navCtrl: NavController,
     public translate: TranslateService,
     private alertProvider: AlertProvider,
-    private settingsProvider: SettingsProvider
+    private settingsProvider: SettingsProvider,
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController
   ) {
-    this.settings = {Frequency: 0,
+    this.settings = {
+      Frequency: 0,
       SSID: "",
       Password: "",
-      SecurityType: "WEP",
-      Sensors:[]};
+      SecurityType: "WPA-PSK",
+      Sensors: []
+    };
+
   }
 
   ionViewDidLoad() {
-    this.settingsProvider.getConfig().subscribe(cfg => {
-      this.settings = cfg;
-      console.log(cfg);
-      console.log(this.settings);
-    console.log(this.settings.Frequency);
-    })
+    this.showSpinner();
+    this.settingsProvider.getConfig().subscribe(
+      (cfg: Settings) => {
+        this.settings = cfg;
+        console.log(cfg);
+        this.spinner.dismiss();
+      },
+      error => {
+        console.log("Couldn't fetch remote settings");
+        this.showToast("Couldn't connect to server");
+        this.spinner.dismiss();
+      }
+    )
   }
 
   removeSensor(oldSensor: string) {
@@ -54,22 +67,45 @@ export class ParametersPage {
     this.tempInputSensor = "";
   }
 
+  showToast(msg: string) {
+    const toast = this.toastCtrl.create({
+      position: "middle",
+      message: msg,
+      duration: 3000
+    })
+    toast.present();
+  }
+
+  showSpinner() {
+    this.spinner = this.loadingCtrl.create({
+      content: 'Connecting to server...'
+    })
+    this.spinner.present();
+  }
+
   doConfirm() {
     this.alertProvider.confirmAlert({
       title: 'Confirm these changes ?',
       message: 'Be careful when changing wifi configuration remotely, you may need to connect physically to the Raspberry Pi if an error occurs',
       button_1:
-        {
-          text: 'Cancel',
-          handler: () => {
-            console.log('Cancelled configuration changes')
-          }
-        },
+      {
+        text: 'Cancel',
+        handler: () => {
+          console.log('Cancelled configuration changes')
+        }
+      },
       button_2: {
         text: 'Accept',
         handler: () => {
           console.log('Configuration changed')
-          this.settingsProvider.setConfig(this.settings);
+          this.showSpinner();
+          this.settingsProvider.setConfig(this.settings).subscribe(
+            (cfg: Settings) => { this.spinner.dismiss(); },
+            error => {
+              this.showToast("Couldn't connect to system");
+              this.spinner.dismiss();
+            }
+          );
         }
       }
     }).present()
