@@ -14,7 +14,7 @@ import { AlertProvider } from '../providers/alert/alert.service';
 import { ChartProvider } from '../providers/chart/chart.service';
 import { SettingsProvider } from '../providers/settings/settings.service';
 import { AirQualityIndexProvider } from '../providers/air-quality-index/air-quality-index.service';
-import { SqliteProvider } from '../providers/sqlite/sqlite';
+import { SqliteProvider } from '../providers/sqlite/sqlite.service';
 
 /* Native components */
 import { StatusBar } from '@ionic-native/status-bar';
