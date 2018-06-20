@@ -5,5 +5,6 @@
     "temp": "Temperature",
     "hum" : "Humidity",
     "settings" : "Settings",
+    
     "cities" : "Cities"
 }

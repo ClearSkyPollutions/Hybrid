@@ -10,8 +10,9 @@ import { TranslateService } from '@ngx-translate/core';
 export class TabsPage {
 
   tab1Root :string = 'ListCityPage';
-  tab2Root :string = 'ParametersPage';
-  tab3Root :string = 'ListPolluantPage';
+  tab2Root :string = 'MapsPage';
+  tab3Root :string = 'ParametersPage';
+  tab4Root :string = 'ListPolluantPage';
 
   constructor(public translate    : TranslateService) {
 
