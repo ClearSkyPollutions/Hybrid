@@ -58,6 +58,7 @@ export class ChartProvider {
     }
 
   public createLineChart (htmlElement: any, chartLabels: any, chartValues: any, yAxesUnit: string, color: string) :void {
+    console.log('generating chart');
     const chart = new Chart(htmlElement,
         {
             type : 'line',

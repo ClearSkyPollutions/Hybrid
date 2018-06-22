@@ -7,11 +7,9 @@ import { Storage } from '@ionic/storage';
 
 // Interfaces
 import { Data } from '../../models/data.interface';
-import { Type } from '../../models/type.interface';
 
 // Config
 import { SQLITE_REQ } from '../../configs/sqlite.req';
-import { TYPES } from '../../configs/types.data';
 import { BASE_URL } from '../../env/env';
 
 
@@ -24,20 +22,17 @@ export class SqliteProvider {
   private sqliteDb: SQLiteObject;
   private RaspServerUrl: string = BASE_URL.url;
   private measurements : Data[] = [];
-  private  types : Type[] = TYPES;
+
 
   constructor(
     private http        : HttpClient,
     private sqlite      : SQLite,
     private sqlitePorter: SQLitePorter,
-    private storage     : Storage
-  ) {
-    console.log('sqlite provider loaded ');
-    this.createSQLiteDatabase();
-  }
+    private storage     : Storage) {
+    }
 
-  createSQLiteDatabase(): void {
-    this.sqlite.create({
+  public createSQLiteDatabase(): Promise<void> {
+    return this.sqlite.create({
       name: DATABASE_FILE_NAME, // if database file already exists -> db will be opened
       location: 'default'
     })
@@ -47,30 +42,86 @@ export class SqliteProvider {
         if (val) {
           console.log('tables already created !');
         } else {
-          this.createTables();
+          return this.createTables();
         }
       });
-
     })
     .catch((e :any) => console.log(e));
   }
 
 
-  private requestDataForChart(tableName: string, PollutantType: string): Promise<any> {
+  public requestDataForChart(tableName: string, PollutantType: string): Promise<any> {
    const range = this.getRangeFromTableName(tableName);
-   const request = 'SELECT t1.date, t1.value FROM ' + tableName + ' t1 INNER JOIN TYPE t2 ON t1.type=t2.id WHERE t2.name = "' + PollutantType + '" ORDER BY t1.date DESC LIMIT ' + range + ';';
+   const request = 'SELECT t1.date, t1.value FROM ' + tableName + ' t1 INNER JOIN POLLUTANT t2 ON t1.typeId=t2.id WHERE t2.name = "' + PollutantType + '" ORDER BY t1.date DESC LIMIT ' + range + ';';
    console.log(request);
    return this.sqliteDb.executeSql(request, {})
    .then((data:any) => {
+    this.measurements = []; // to fix bug
     if (data.rows.length > 0) {
       for (var i = 0; i < data.rows.length; i++) {
         this.measurements.push(data.rows.item(i));
       }
-      console.log(this.measurements);
+      console.log('req data for chart', this.measurements);
+      console.log('length ', this.measurements.length);
       return this.measurements;
     }
    })
    .catch((e:any) => console.log(e));
+  }
+
+
+  private createTables(): Promise<void> {
+  return this.sqlitePorter.importSqlToDb(this.sqliteDb, SQLITE_REQ.sql)
+    .then(() => {
+      console.log('tables created successfully');
+      this.storage.set('tables_created', true);
+    })
+    .catch((e: any) => console.error(e));
+  }
+
+  private synchroniseTable(tableName: string): Promise<any> {
+    return this.getLastDate(tableName).then((date:string) => {
+      console.log('date', date);
+      const request = tableName + '?filter=Date,gt,"' + date +  '"&transform=1';
+      console.log('url', this.RaspServerUrl + '/' + request);
+      return this.http.get(this.RaspServerUrl + '/' + request)
+      .map( (res :Object) => {
+        res = res[tableName];
+        console.log(res);
+        return this.insertNewValuesIntoDb(tableName, res);
+      }).toPromise().catch((err: any) => console.log('error', err));
+    });
+  }
+
+  private insertNewValuesIntoDb(tableName: string, data : any): Promise<any> {
+    let request = 'REPLACE INTO ' + tableName + ' (date, value, typeId) VALUES ';
+    console.log('length', data.length);
+    for (var i = 0; i < data.length - 1; i++) {
+       request = request + '("' + data[i].date + '", ' + data[i].value + ', ' + data[i].typeId + '), ';
+    }
+    request = request + '("' + data[i].date + '", ' + data[i].value + ', ' + data[i].typeId + ' ); ';
+
+    return this.sqliteDb.executeSql(request, {})
+    .then((res: any) => console.log(res))
+    .catch((e :any) =>  console.log(e));
+  }
+
+  private getLastDate(tableName: string): Promise<string> {
+    const requestDate = 'SELECT date FROM ' + tableName + ' ORDER BY date DESC LIMIT 1';
+    return this.sqliteDb.executeSql(requestDate, {})
+    .then((data:any) => (data.rows.length > 0) ? data.rows.item(0).date : '')
+    .catch((e :any) => console.log(e));
+  }
+
+  public synchroniseAllDatabase() :Promise<any> {
+    return Promise.all([
+      this.synchroniseTable('AVG_HOUR'),
+      this.synchroniseTable('AVG_MONTH'),
+      this.synchroniseTable('AVG_DAY'),
+      this.synchroniseTable('AVG_YEAR')
+    ]).then(() => {
+      console.log('test');
+    });
   }
 
   private getRangeFromTableName(tableName: string) : number {
@@ -86,65 +137,4 @@ export class SqliteProvider {
     }
   }
 
-  private createTables(): void {
-  this.sqlitePorter.importSqlToDb(this.sqliteDb, SQLITE_REQ.sql)
-    .then((data:any) => {
-      console.log('tables created successfully');
-      this.storage.set('tables_created', true);
-      //this.requestDataForChart('AVG_HOUR', 'pm10');
-    })
-    .catch((e: any) => console.error(e));
-  }
-
-  private synchroniseTable(tableName: string): void {
-    this.getLastDate(tableName).then((date:string) => {
-      const request = tableName + '?filter=Date,gt,"' + date +  '"&transform=1';
-      console.log('url', this.RaspServerUrl + '/' + request);
-      this.http.get(this.RaspServerUrl + '/' + request)
-      .map( (res :Object) => {
-        res = res[tableName];
-        console.log(res);
-        this.insertNewValuesIntoDb(tableName, res).then(res => console.log(res));
-      }).toPromise().catch((err: any) => {
-        console.log('error', err);
-      });
-    });
-  }
-
-  private insertNewValuesIntoDb(tableName: string, data : any) {
-    let request = 'INSERT INTO ' + tableName + ' (Date, Value, Type) VALUES ';
-    console.log('length', data.length);
-    for (var i = 0; i < data.length - 1; i++) {
-       request = request + '("' + data[i].Date + '", ' + data[i].Value + ', ' + data[i].Type + '), ';
-    }
-    request = request + '("' + data[i].Date + '", ' + data[i].Value + ', ' + data[i].Type + ' ); ';
-
-    return this.sqliteDb.executeSql(request, {})
-    .then((res: any) => {
-
-      console.log(res);
-      return res;
-    })
-    .catch((e :any) => {
-      console.log(e);
-    });
-  }
-
-  private getLastDate(tableName: string): Promise<string> {
-    const requestDate = 'SELECT date FROM ' + tableName + ' ORDER BY date DESC LIMIT 1';
-    return this.sqliteDb.executeSql(requestDate, {})
-    .then((data:any) => {
-     if (data.rows.length > 0) {
-      return data.rows.item(0).date;
-       }
-    })
-    .catch((e :any) => console.log(e));
-  } // return '' sinon
-
-  public synchroniseAllDatabase(): void {
-      this.synchroniseTable('AVG_HOUR');
-      // this.synchroniseTable('AVG_MONTH');
-      // this.synchroniseTable('AVG_DAY');
-      // this.synchroniseTable('AVG_YEAR');
-  }
 }
