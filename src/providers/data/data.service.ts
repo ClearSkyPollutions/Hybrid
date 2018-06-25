@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BASE_URL } from '../../env/env';
+import { URL } from '../../env/env';
 
 
 
 
 @Injectable()
 export class DataProvider {
-  private RaspServerUrl: string = BASE_URL.url;
+  private RaspServerUrl: string = URL.raspberryPi;
   constructor(private http: HttpClient) {}
 
   public getLastMesure() :Observable<any> {

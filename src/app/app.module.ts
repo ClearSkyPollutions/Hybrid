@@ -21,6 +21,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SQLite } from '@ionic-native/sqlite';
 import { SQLitePorter } from '@ionic-native/sqlite-porter';
+import { MapsProvider } from '../providers/maps/maps.service';
 
 
 
@@ -62,7 +63,8 @@ export function createTranslateLoader(http: HttpClient) :TranslateHttpLoader {
     ChartProvider,
     AirQualityIndexProvider,
     SettingsProvider,
-    SqliteProvider
+    SqliteProvider,
+    MapsProvider
   ]
 })
 

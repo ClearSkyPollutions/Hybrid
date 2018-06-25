@@ -13,35 +13,35 @@ import { ChartProvider } from '../../../providers/chart/chart.service';
 })
 export class ChartModalPage {
 
-  @ViewChild('lineChart') lineChart :any;
+  @ViewChild('lineChart') lineChart: any;
   chartOptions: any;
-  scale       : string;
-  chartLabels : any[] = [];
-  chartValues : any[] = [];
+  scale: string;
+  chartLabels: any[] = [];
+  chartValues: any[] = [];
 
-  constructor(public translate    : TranslateService,
-     public navCtrl       : NavController,
-     public navParams     : NavParams,
-     private dataProvider : DataProvider,
-     private chartProvider: ChartProvider) {
+  constructor(public translate: TranslateService,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private dataProvider: DataProvider,
+    private chartProvider: ChartProvider) {
     this.chartOptions = this.navParams.get('chartOptions');
-    this.scale        = 'AVG_HOUR';
+    this.scale = 'AVG_HOUR';
   }
 
-  ionViewDidLoad() :void {
+  ionViewDidLoad(): void {
     this.chartProvider.initChart(this.lineChart);
     this.drawLineChart();
   }
 
-  private drawLineChart() :void {
+  private drawLineChart(): void {
     this.chartLabels = [];
     this.chartValues = [];
 
-    this.dataProvider.defineDataForChart(this.scale, this.chartOptions.pollutant).subscribe((res :any) => {
+    this.dataProvider.defineDataForChart(this.scale, this.chartOptions.pollutant).subscribe((res: any) => {
       // loop through res in reverse order
       for (var i: number = res.length - 1; i >= 0; i--) {
-       this.chartLabels.push(this.dateForChartLabel(res[i].date));
-       this.chartValues.push(res[i][this.chartOptions.pollutant]);
+        this.chartLabels.push(this.dateForChartLabel(res[i].date));
+        this.chartValues.push(res[i][this.chartOptions.pollutant]);
       }
 
       this.chartProvider.updateLineChart(
@@ -53,32 +53,32 @@ export class ChartModalPage {
     });
   }
 
-  private dateForChartLabel(dateMesure: string) : string {
+  private dateForChartLabel(dateMesure: string): string {
     const date = new Date(dateMesure);
     switch (this.scale) {
       case 'AVG_HOUR': {
         return date.getHours() + 'h:' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
       }
       case 'AVG_DAY': {
-        return date.getDate()  + 'j';
+        return date.getDate() + 'j';
       }
       case 'AVG_MONTH': {
-        return date.getMonth() + 1  + 'm';
+        return date.getMonth() + 1 + 'm';
       } // AVG_YEAR
       default: {
-        return date.getFullYear()  + 'y';
+        return date.getFullYear() + 'y';
       }
     }
-   }
+  }
 
-   chooseScale(scale: string): void {
+  chooseScale(scale: string): void {
     this.scale = scale;
     this.drawLineChart();
-   }
+  }
 
-   closeModal(): void {
+  closeModal(): void {
     this.navCtrl.pop();
-   }
+  }
 
 
 }

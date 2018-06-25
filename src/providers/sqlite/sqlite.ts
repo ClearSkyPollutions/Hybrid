@@ -5,7 +5,7 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { Data } from '../../models/data.interface';
 import { Storage } from '@ionic/storage';
 import { SQLITE_REQ } from '../../configs/sqlite.req';
-import { BASE_URL } from '../../env/env';
+import { URL } from '../../env/env';
 
 
 
@@ -15,7 +15,7 @@ const DATABASE_FILE_NAME: string = 'data.db';
 export class SqliteProvider {
 
   private sqliteDb: SQLiteObject;
-  private RaspServerUrl: string = BASE_URL.url;
+  private RaspServerUrl: string = URL.raspberryPi;
 
   constructor(public http: HttpClient, private sqlite: SQLite, public sqlitePorter: SQLitePorter, private storage: Storage) {
     console.log('sqlite provider loaded ');
