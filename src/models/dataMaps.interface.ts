@@ -1,5 +1,5 @@
 export interface DataMapFactorized {
-    date     : string;
+    date     : Date;
     values   : DataMapValues[];
     system   : string;
     latitude : number;
@@ -14,7 +14,7 @@ export interface DataMapValues {
 }
 
 export interface DataMap  {
-    date     : string;
+    date     : Date;
     value    : string;
     pollutant: string;
     unit     : string;
@@ -25,7 +25,7 @@ export interface DataMap  {
 }
 
 export interface DataMapConstValues {
-    date     : string;
+    date     : Date;
     system   : string;
     latitude : number;
     longitude: number;

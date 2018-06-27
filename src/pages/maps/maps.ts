@@ -8,16 +8,16 @@ import { DataMapFactorized, DataMapValues } from '../../models/dataMaps.interfac
 
 @IonicPage()
 @Component({
-  selector: 'page-maps',
+  selector   : 'page-maps',
   templateUrl: 'maps.html',
 })
 export class MapsPage {
-  map: leaflet.Map;
+  map   : leaflet.Map;
   center: leaflet.PointTuple;
   dataMapFactorized: DataMapFactorized[];
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
-    private translate: TranslateService,
+    private translate   : TranslateService,
     private mapsProvider: MapsProvider
     ) {
 
@@ -27,12 +27,9 @@ export class MapsPage {
 
         this.setMarker();
       });
-
   }
 
   ionViewDidLoad(): void {
-
-
     //set map center
     this.center = [45.1326, 5.7266]; //Grenoble
 
@@ -43,8 +40,9 @@ export class MapsPage {
   initMap(): void {
     this.map = leaflet.map('map', {
       center: this.center,
-      zoom: 6,
-      maxZoom: 12
+      zoom       : 6,
+      zoomControl: false,
+      maxZoom    :  12
     });
 
     //Add OSM Layer
@@ -55,23 +53,40 @@ export class MapsPage {
 
   setMarker(): void {
     let gps: leaflet.PointTuple;
+    const dateTimeOptions = {
+      weekday: 'short',
+      year   : 'numeric',
+      month  : 'short',
+      day    : 'numeric',
+      hour   : '2-digit',
+      minute : '2-digit'
+    };
+
     this.dataMapFactorized.forEach((dataMapFactorized: DataMapFactorized) => {
       gps = [dataMapFactorized.latitude, dataMapFactorized.longitude];
       const circle = leaflet.circleMarker(gps, {
-        color: 'blue',
-        fillColor: '#0033FF',
+        color      : '#488aff',
+        fillColor  : '#488aff',
         fillOpacity: 0.5,
-        radius: 30
+        radius     : 30
       }).addTo(this.map);
 
-      let popup = '<div align="center">' + dataMapFactorized.system + '</div>';
+      let popupContent = '<div align="center"><b>' + dataMapFactorized.system + '</b></div><br>';
 
       dataMapFactorized.values.forEach((value: DataMapValues) => {
-        popup += '<div align="left">' + value.sensor + '</div>';
-        popup += '<div align="right">' + value.pollutant + ': ' + value.value + ' ' + value.unit + '</div>';
+        popupContent += '<div align="left"><b>' + value.pollutant.toUpperCase() + ': </b>' + value.value + ' ' + value.unit + '</div>';
       });
-      popup += '<div align="center">Date :' + dataMapFactorized.date + '</div>';
-      circle.bindPopup(popup);
+
+      popupContent += '<div align="right"><br>Date: ' + dataMapFactorized.date.toLocaleString('fr-fr', dateTimeOptions) + '</div>';
+
+      circle.bindPopup(popupContent, {
+          'maxWidth'    : 500,
+          'minWidth'    : 150,
+          'autoPan'     : true,
+          'closeButton' : false,
+          'closeOnClick': true,
+          'className'   : 'popupCustom'
+        });
   });
   }
 }

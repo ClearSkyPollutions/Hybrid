@@ -26,7 +26,7 @@ export class MapsProvider {
       dataMap.forEach((dataMap: DataMap) => {
         if ( !_.find(constValues, function(constValue: DataMapConstValues): boolean { return constValue.system === dataMap.system; })) {
           constValues.push({
-            date     :  dataMap.date,
+            date     :  new Date(dataMap.date),
             system   :  dataMap.system,
             latitude :  dataMap.latitude,
             longitude:  dataMap.longitude

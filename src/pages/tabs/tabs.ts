@@ -11,8 +11,8 @@ export class TabsPage {
 
   tab1Root :string = 'ListCityPage';
   tab2Root :string = 'MapsPage';
-  tab3Root :string = 'ParametersPage';
-  tab4Root :string = 'ListPolluantPage';
+  tab3Root :string = 'ListPolluantPage';
+  tab4Root :string = 'ParametersPage';
 
   constructor(public translate    : TranslateService) {
 
