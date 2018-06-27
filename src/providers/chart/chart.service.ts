@@ -15,6 +15,17 @@ export class ChartProvider {
     }];
 
     this.options = {
+        plugins: {
+            datalabels: {
+                display: true,
+                borderRadius: 4,
+                color: 'white',
+                font: {
+                    weight: 'bold'
+                },
+                formatter: Math.round
+            }
+        },
         maintainAspectRatio: false,
         legend         : {
           display     : false,
@@ -58,7 +69,6 @@ export class ChartProvider {
     }
 
   public createLineChart (htmlElement: any, chartLabels: any, chartValues: any, yAxesUnit: string, color: string) :void {
-    console.log('generating chart');
     const chart = new Chart(htmlElement,
         {
             type : 'line',

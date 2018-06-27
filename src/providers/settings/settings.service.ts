@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Settings } from '../../models/settings';
-import { BASE_URL } from '../../env/env';
+import { URL } from '../../env/env';
 import { Observable } from 'rxjs';
 
 
 @Injectable()
 export class SettingsProvider {
 
-  private RaspServerUrl: string = BASE_URL.url;
+  private RaspServerUrl: string = URL.raspberryPi;
 
   constructor(public http: HttpClient) {
   }

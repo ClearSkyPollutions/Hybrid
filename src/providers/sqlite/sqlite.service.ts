@@ -10,7 +10,7 @@ import { Data } from '../../models/data.interface';
 
 // Config
 import { SQLITE_REQ } from '../../configs/sqlite.req';
-import { BASE_URL } from '../../env/env';
+import { URL } from '../../env/env';
 
 
 
@@ -20,7 +20,7 @@ const DATABASE_FILE_NAME: string = 'data.db';
 export class SqliteProvider {
 
   private sqliteDb: SQLiteObject;
-  private RaspServerUrl: string = BASE_URL.url;
+  private RaspServerUrl: string = URL.raspberryPi;
   private measurements : Data[] = [];
 
 
@@ -29,31 +29,38 @@ export class SqliteProvider {
     private sqlite      : SQLite,
     private sqlitePorter: SQLitePorter,
     private storage     : Storage) {
-    }
+  }
+
+  public getDbState() :SQLiteObject {
+    return this.sqliteDb;
+  }
 
   public createSQLiteDatabase(): Promise<void> {
-    return this.sqlite.create({
-      name: DATABASE_FILE_NAME, // if database file already exists -> db will be opened
-      location: 'default'
-    })
-    .then((db: SQLiteObject) => {
-      this.sqliteDb = db;
-      this.storage.get('tables_created').then((val: boolean) => {
-        if (val) {
-          console.log('tables already created !');
-        } else {
-          return this.createTables();
-        }
-      });
-    })
-    .catch((e :any) => console.log(e));
+    return new Promise((resolve, reject) => {
+      this.sqlite.create({
+        name: DATABASE_FILE_NAME, // if database file already exists -> db will be opened
+        location: 'default'
+      })
+      .then((db: SQLiteObject) => {
+        this.sqliteDb = db;
+        this.storage.get('tables_created').then((val: boolean) => {
+          if (val) {
+            console.log('tables already created !');
+          } else {
+            this.createTables();
+          }
+          //this.synchroniseAllDatabase();
+          resolve();
+        });
+      })
+      .catch((e :any) => console.log(e));
+    });
   }
 
 
   public requestDataForChart(tableName: string, PollutantType: string): Promise<any> {
    const range = this.getRangeFromTableName(tableName);
    const request = 'SELECT t1.date, t1.value FROM ' + tableName + ' t1 INNER JOIN POLLUTANT t2 ON t1.typeId=t2.id WHERE t2.name = "' + PollutantType + '" ORDER BY t1.date DESC LIMIT ' + range + ';';
-   console.log(request);
    return this.sqliteDb.executeSql(request, {})
    .then((data:any) => {
     this.measurements = []; // to fix bug
@@ -61,8 +68,6 @@ export class SqliteProvider {
       for (var i = 0; i < data.rows.length; i++) {
         this.measurements.push(data.rows.item(i));
       }
-      console.log('req data for chart', this.measurements);
-      console.log('length ', this.measurements.length);
       return this.measurements;
     }
    })
@@ -81,29 +86,27 @@ export class SqliteProvider {
 
   private synchroniseTable(tableName: string): Promise<any> {
     return this.getLastDate(tableName).then((date:string) => {
-      console.log('date', date);
-      const request = tableName + '?filter=Date,gt,"' + date +  '"&transform=1';
+      const request = tableName + '?filter=Date,gt,' + date +  '&transform=1';
       console.log('url', this.RaspServerUrl + '/' + request);
       return this.http.get(this.RaspServerUrl + '/' + request)
       .map( (res :Object) => {
         res = res[tableName];
-        console.log(res);
         return this.insertNewValuesIntoDb(tableName, res);
       }).toPromise().catch((err: any) => console.log('error', err));
     });
   }
 
   private insertNewValuesIntoDb(tableName: string, data : any): Promise<any> {
-    let request = 'REPLACE INTO ' + tableName + ' (date, value, typeId) VALUES ';
-    console.log('length', data.length);
-    for (var i = 0; i < data.length - 1; i++) {
-       request = request + '("' + data[i].date + '", ' + data[i].value + ', ' + data[i].typeId + '), ';
+    if (data.length > 0) {
+      let request = 'REPLACE INTO ' + tableName + ' (date, value, typeId) VALUES ';
+      for (var i = 0; i < data.length - 1; i++) {
+         request = request + '("' + data[i].date + '", ' + data[i].value + ', ' + data[i].typeId + '), ';
+      }
+      request = request + '("' + data[i].date + '", ' + data[i].value + ', ' + data[i].typeId + ' ); ';
+      return this.sqliteDb.executeSql(request, {})
+      .then((res: any) => console.log(res))
+      .catch((e :any) =>  console.log(e));
     }
-    request = request + '("' + data[i].date + '", ' + data[i].value + ', ' + data[i].typeId + ' ); ';
-
-    return this.sqliteDb.executeSql(request, {})
-    .then((res: any) => console.log(res))
-    .catch((e :any) =>  console.log(e));
   }
 
   private getLastDate(tableName: string): Promise<string> {

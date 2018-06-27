@@ -42,15 +42,15 @@ export class HomePage  {
   ) {
     this.city = this.navParams.get('location');
 
-    // this.aqIndexProvider.getAQI().subscribe( (res : AQI) => {
-    //   this.aqIndex = res;
-    //  if (this.aqIndex.index > 5 ) {
-    //   this.localNotifications.schedule({
-    //     title: 'Air quality',
-    //     text: this.aqIndex.index + '(' + this.aqIndex.level + ')'
-    //   });
-    // }
-    // });
+    this.aqIndexProvider.getAQI().subscribe( (res : AQI) => {
+      this.aqIndex = res;
+     if (this.aqIndex.index > 5 ) {
+      this.localNotifications.schedule({
+        title: 'Air quality',
+        text: this.aqIndex.index + '(' + this.aqIndex.level + ')'
+      });
+    }
+    });
 
 
     //@TODO: load data from somewhere
@@ -62,27 +62,35 @@ export class HomePage  {
 
   }
 
-  ionViewDidLoad() :void {
-  this.sqliteProvider.createSQLiteDatabase().then(() => {
-      this.chartsC.forEach((c:any, index :number) => {
-        this.charts[index].chartView = c.nativeElement;
-        this.drawLineChart(this.charts[index]);
-      });
-      this.chartsC.changes.subscribe(() => {
-        const last = this.charts.length - 1;
-        if (last >= 0 && !this.charts[last].chartView) {
-          this.charts[last].chartView = this.chartsC.last.nativeElement;
-          this.drawLineChart(this.charts[last]);
-        }
-      });
+  ngAfterViewInit() :void {
+  this.sqliteProvider.createSQLiteDatabase().then((res:void) => {
+    this.sqliteProvider.synchroniseAllDatabase().then (() => {
+      this.updateAllCharts();
     });
+  });
   }
 
 doRefresh(refresher: Refresher) :void {
   console.log('Begin async operation');
   this.sqliteProvider.synchroniseAllDatabase().then(() :void => {
     console.log('Async operation has ended');
+    this.updateAllCharts();
     refresher.complete();
+  });
+}
+
+updateAllCharts() :void {
+  console.log('in updateAllCharts function');
+  this.chartsC.forEach((c:any, index :number) => {
+    this.charts[index].chartView = c.nativeElement;
+    this.drawLineChart(this.charts[index]);
+  });
+  this.chartsC.changes.subscribe(() => {
+    const last = this.charts.length - 1;
+    if (last >= 0 && !this.charts[last].chartView) {
+      this.charts[last].chartView = this.chartsC.last.nativeElement;
+      this.drawLineChart(this.charts[last]);
+    }
   });
 }
 
@@ -121,25 +129,23 @@ private dateForChartLabel(dateMesure: string) :string {
 private drawLineChart(chart: ChartInfo) :Promise<void> {
   const chartLabels :string[] = [];
   const chartValues :string[] = [];
-  console.log(chart.type);
   //TODO: handle first connexion (when tables are not created yet)
   return this.sqliteProvider.requestDataForChart('AVG_HOUR', chart.type).then((res :any) => {
-    console.log('trying to draw chart ..');
-    // loop through res in reverse order
-    for (var i = res.length - 1; i >= 0; i--) {
-      chartLabels.push(this.dateForChartLabel(res[i].date));
-      chartValues.push(res[i][chart.type]);
+    if (res.length > 0) {
+      console.log('trying to draw chart ..', res);
+      // loop through res in reverse order
+      for (var i = res.length - 1; i >= 0; i--) {
+        chartLabels.push(this.dateForChartLabel(res[i].date));
+        chartValues.push(res[i].value);
+      }
+      return this.chartProvider.createLineChart(
+        chart.chartView,
+        chartLabels,
+        chartValues,
+        chart.type + ' (' + chart.unit + ')',
+        chart.lineColor
+      );
     }
-
-    console.log(chartLabels);
-
-    return this.chartProvider.createLineChart(
-      chart.chartView,
-      chartLabels,
-      chartValues,
-      chart.type + ' (' + chart.unit + ')',
-      chart.lineColor
-    );
   });
 }
 
