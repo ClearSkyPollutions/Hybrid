@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
-import { DataProvider } from '../../../providers/data/data.service';
 import { ChartProvider } from '../../../providers/chart/chart.service';
+import { SqliteProvider } from '../../../providers/sqlite/sqlite.service';
 
 
 
@@ -19,11 +19,11 @@ export class ChartModalPage {
   chartLabels: any[] = [];
   chartValues: any[] = [];
 
-  constructor(public translate: TranslateService,
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    private dataProvider: DataProvider,
-    private chartProvider: ChartProvider) {
+  constructor(public translate    : TranslateService,
+     public navCtrl       : NavController,
+     public navParams     : NavParams,
+     private sqliteProvider : SqliteProvider,
+     private chartProvider: ChartProvider) {
     this.chartOptions = this.navParams.get('chartOptions');
     this.scale = 'AVG_HOUR';
   }
@@ -37,13 +37,12 @@ export class ChartModalPage {
     this.chartLabels = [];
     this.chartValues = [];
 
-    this.dataProvider.defineDataForChart(this.scale, this.chartOptions.pollutant).subscribe((res: any) => {
+    this.sqliteProvider.requestDataForChart(this.scale, this.chartOptions.pollutant).then((res :any) => {
       // loop through res in reverse order
       for (var i: number = res.length - 1; i >= 0; i--) {
-        this.chartLabels.push(this.dateForChartLabel(res[i].date));
-        this.chartValues.push(res[i][this.chartOptions.pollutant]);
+       this.chartLabels.push(this.dateForChartLabel(res[i].date));
+       this.chartValues.push(res[i].value);
       }
-
       this.chartProvider.updateLineChart(
         this.lineChart,
         this.chartLabels,

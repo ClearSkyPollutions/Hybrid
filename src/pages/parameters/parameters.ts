@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController, LoadingController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
-
 import { Settings } from '../../models/settings';
-
 import { AlertProvider } from '../../providers/alert/alert.service';
 import { SettingsProvider } from '../../providers/settings/settings.service';
 

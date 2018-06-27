@@ -14,7 +14,7 @@ import { AlertProvider } from '../providers/alert/alert.service';
 import { ChartProvider } from '../providers/chart/chart.service';
 import { SettingsProvider } from '../providers/settings/settings.service';
 import { AirQualityIndexProvider } from '../providers/air-quality-index/air-quality-index.service';
-import { SqliteProvider } from '../providers/sqlite/sqlite';
+import { SqliteProvider } from '../providers/sqlite/sqlite.service';
 
 /* Native components */
 import { StatusBar } from '@ionic-native/status-bar';
@@ -22,6 +22,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { SQLite } from '@ionic-native/sqlite';
 import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { MapsProvider } from '../providers/maps/maps.service';
+import { LocalNotifications } from '@ionic-native/local-notifications';
+
 
 
 
@@ -56,6 +58,7 @@ export function createTranslateLoader(http: HttpClient) :TranslateHttpLoader {
     SplashScreen,
     SQLite,
     SQLitePorter,
+    LocalNotifications,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DataProvider,
     PolluantProvider,

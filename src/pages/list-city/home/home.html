@@ -1,10 +1,18 @@
 <ion-header>
-  <ion-navbar color="primary">
+  <ion-navbar color="primary"> 
+      <ion-buttons end>
+          <button ion-button icon-only (click)="showSettings()" >
+              <ion-icon name="settings"></ion-icon>
+          </button>
+      </ion-buttons>
     <ion-title>Home</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
   <div class="city-header">
     <div class="about-header">
@@ -25,13 +33,13 @@
   </div>
 
 
-  <div padding class="about-info">
+  <!-- <div padding class="about-info">
 
     <div text-center>
       <button ion-button color="light" class="circle-button">
         <ion-icon name="home"></ion-icon>
       </button>
-      <button ion-button color="light" class="circle-button" (click)="showSettings()">
+      <button ion-button color="light" class="circle-button" >
         <ion-icon name="settings"></ion-icon>
       </button>
       <button ion-button color="light" class="circle-button">
@@ -39,7 +47,7 @@
       </button>
     </div>
 
-  </div>
+  </div> -->
 
   <div #chartsContainer class="chart-container">
     <div class="chart-card" *ngFor="let c of charts">

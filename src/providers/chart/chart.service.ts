@@ -15,6 +15,17 @@ export class ChartProvider {
     }];
 
     this.options = {
+        plugins: {
+            datalabels: {
+                display: true,
+                borderRadius: 4,
+                color: 'white',
+                font: {
+                    weight: 'bold'
+                },
+                formatter: Math.round
+            }
+        },
         maintainAspectRatio: false,
         legend         : {
           display     : false,
