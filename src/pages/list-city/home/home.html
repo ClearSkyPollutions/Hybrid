@@ -23,9 +23,9 @@
       <ion-card-content>  
           <div class="card-title">{{city.city}}</div>
           {{data?.temphum.date}}
-          <div class="card-pollution-info">
-            <span>{{aqIndex?.level}}</span>
-            <span>{{aqIndex?.index}} AQI</span>
+          <div class="card-pollution-info">           
+            <span >{{aqIndex?.index}} AQI</span>
+            <span [style.color]="color" >{{aqIndex?.level}}</span>
             <span>{{data?.temphum.temperature}} C°</span>
           </div>
       </ion-card-content>    

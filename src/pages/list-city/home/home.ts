@@ -29,6 +29,7 @@ export class HomePage  {
   data        : any;
   aqIndex     : AQI;
   showParams  : boolean = false;
+  color       : string;
 
   constructor(
     private modalCtrl: ModalController,
@@ -44,6 +45,7 @@ export class HomePage  {
 
     this.aqIndexProvider.getAQI().subscribe( (res : AQI) => {
       this.aqIndex = res;
+      this.color = this.aqIndex.color;
      if (this.aqIndex.index > 5 ) {
       this.localNotifications.schedule({
         title: 'Air quality',
@@ -173,5 +175,16 @@ openAddChart() :void {
     this.charts.push({type: data.name, unit: data.unit, lineColor: this.getRandomColor(), chartView: null });
   });
   newModal.present();
+}
+
+getColorOfAqi(index: number) :string {
+  let color : string;
+  if (index <= 10 && index > 7 ) {
+    return color = '#fa5858';
+  } else if (index <= 7 && index > 4 ) {
+    return color = '#ffbf00';
+  } else {
+    return color = '#80ff00';
+  }
 }
 }
