@@ -66,7 +66,8 @@ export class HomePage  {
 
   ngAfterViewInit() :void {
   this.sqliteProvider.createSQLiteDatabase().then((res:void) => {
-    this.sqliteProvider.synchroniseAllDatabase().then (() => {
+    this.sqliteProvider.synchroniseAllDatabase()
+    .then(() => {
       this.updateAllCharts();
     });
   });

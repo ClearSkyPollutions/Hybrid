@@ -11,13 +11,14 @@ import { Data } from '../../models/data.interface';
 // Config
 import { SQLITE_REQ } from '../../configs/sqlite.req';
 import { URL } from '../../env/env';
+import { ErrorProvider } from '../error/error.service';
 
 
 
 const DATABASE_FILE_NAME: string = 'data.db';
 
 @Injectable()
-export class SqliteProvider {
+export class SqliteProvider extends ErrorProvider {
 
   private sqliteDb: SQLiteObject;
   private RaspServerUrl: string = URL.raspberryPi;
@@ -25,10 +26,11 @@ export class SqliteProvider {
 
 
   constructor(
-    private http        : HttpClient,
+    //private http        : HttpClient,
     private sqlite      : SQLite,
     private sqlitePorter: SQLitePorter,
     private storage     : Storage) {
+     super();
   }
 
   public getDbState() :SQLiteObject {
@@ -88,11 +90,11 @@ export class SqliteProvider {
     return this.getLastDate(tableName).then((date:string) => {
       const request = tableName + '?filter=Date,gt,' + date +  '&transform=1';
       console.log('url', this.RaspServerUrl + '/' + request);
-      return this.http.get(this.RaspServerUrl + '/' + request)
-      .map( (res :Object) => {
+      return this.httpGET(this.RaspServerUrl + '/' + request)
+      .then( (res :Object) => {
         res = res[tableName];
         return this.insertNewValuesIntoDb(tableName, res);
-      }).toPromise().catch((err: any) => console.log('error', err));
+      }).catch((err: any) => console.log('error tttt', err));
     });
   }
 

@@ -40,7 +40,6 @@ export class ParametersPage {
     this.settingsProvider.getConfig().subscribe(
       (cfg: Settings) => {
         this.settings = cfg;
-        console.log(cfg);
         this.spinner.dismiss();
       },
       (error : any) => {
