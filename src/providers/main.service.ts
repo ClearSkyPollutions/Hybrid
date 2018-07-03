@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 // RXJS
 import { Observable } from 'rxjs/Observable';
-import { ErrorDetails, ERROR_TYPES } from '../../models/shared/error-banner.interface';
+import { ErrorDetails, ERROR_TYPES } from '../models/shared/error-banner.interface';
 
 // Const
 export const enum REST_EVENTS {
@@ -17,7 +17,7 @@ export const enum REST_EVENTS {
 }
 
 
-export abstract class ErrorProvider {
+export abstract class MainService {
 
   constructor(
     protected http  : HttpClient,
@@ -65,11 +65,12 @@ export abstract class ErrorProvider {
   private performHttpRequest(request: Observable<any>): Promise<any> {
     return request
     .toPromise()
-    .catch((response: any) => {
+    .catch((error: any) => {
+      console.error('ERR SERVICE', error);
       // An error occured, display the error banner with error object
       this.events.publish(
         'CLEAR_SKY:Error',
-        this.buildErrorObject(response)
+        this.buildErrorObject(error)
       );
     });
   }

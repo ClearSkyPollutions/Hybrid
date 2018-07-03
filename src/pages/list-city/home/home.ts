@@ -1,5 +1,5 @@
 import { Component, ViewChildren, QueryList } from '@angular/core';
-import { ModalController, IonicPage, NavParams, Modal, Refresher } from 'ionic-angular';
+import { ModalController, IonicPage, NavParams, Modal, Refresher, ToastController, Events } from 'ionic-angular';
 
 // providers
 import { DataProvider } from '../../../providers/data/data.service';
@@ -14,6 +14,7 @@ import { AQI } from '../../../models/aqi';
 // Natives
 import { SqliteProvider } from '../../../providers/sqlite/sqlite.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { ErrorDetails } from '../../../models/shared/error-banner.interface';
 
 @IonicPage()
 @Component({
@@ -39,7 +40,9 @@ export class HomePage  {
     private chartProvider: ChartProvider,
     private aqIndexProvider: AirQualityIndexProvider,
     private sqliteProvider: SqliteProvider,
-    private localNotifications: LocalNotifications
+    private localNotifications: LocalNotifications,
+    private toastCtrl   : ToastController,
+    public events       : Events
   ) {
     this.city = this.navParams.get('location');
 
@@ -76,8 +79,15 @@ export class HomePage  {
 doRefresh(refresher: Refresher) :void {
   console.log('Begin async operation');
   this.sqliteProvider.synchroniseAllDatabase().then(() :void => {
-    console.log('Async operation has ended');
     this.updateAllCharts();
+    this.events.subscribe('CLEAR_SKY:Error', (error: ErrorDetails) => {
+      console.log('Welcome', error);
+       this.toastCtrl.create({
+        message: error.event,
+        duration: 3000,
+        position: 'bottom'
+      }).present();
+    });
     refresher.complete();
   });
 }

@@ -23,8 +23,7 @@ import { SQLite } from '@ionic-native/sqlite';
 import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { MapsProvider } from '../providers/maps/maps.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { MainProvider } from '../providers/main/main';
-import { ErrorProvider } from '../providers/error/error';
+
 
 
 
@@ -69,9 +68,7 @@ export function createTranslateLoader(http: HttpClient) :TranslateHttpLoader {
     AirQualityIndexProvider,
     SettingsProvider,
     SqliteProvider,
-    MapsProvider,
-    MainProvider,
-    ErrorProvider
+    MapsProvider
   ]
 })
 

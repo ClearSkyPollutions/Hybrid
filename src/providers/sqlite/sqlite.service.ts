@@ -1,5 +1,6 @@
 // core
 import { HttpClient } from '@angular/common/http';
+import { Events, ToastController } from 'ionic-angular';
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { SQLitePorter } from '@ionic-native/sqlite-porter';
@@ -7,18 +8,20 @@ import { Storage } from '@ionic/storage';
 
 // Interfaces
 import { Data } from '../../models/data.interface';
+import { ErrorDetails } from '../../models/shared/error-banner.interface';
 
 // Config
 import { SQLITE_REQ } from '../../configs/sqlite.req';
 import { URL } from '../../env/env';
-import { ErrorProvider } from '../error/error.service';
+import { MainService } from '../main.service';
+
 
 
 
 const DATABASE_FILE_NAME: string = 'data.db';
 
 @Injectable()
-export class SqliteProvider extends ErrorProvider {
+export class SqliteProvider extends MainService {
 
   private sqliteDb: SQLiteObject;
   private RaspServerUrl: string = URL.raspberryPi;
@@ -26,11 +29,14 @@ export class SqliteProvider extends ErrorProvider {
 
 
   constructor(
-    //private http        : HttpClient,
+    public http         : HttpClient,
+    public events       : Events,
     private sqlite      : SQLite,
     private sqlitePorter: SQLitePorter,
-    private storage     : Storage) {
-     super();
+    private storage     : Storage,
+    private toastCtrl   : ToastController
+  ) {
+     super(http, events);
   }
 
   public getDbState() :SQLiteObject {
@@ -51,7 +57,6 @@ export class SqliteProvider extends ErrorProvider {
           } else {
             this.createTables();
           }
-          //this.synchroniseAllDatabase();
           resolve();
         });
       })
@@ -91,11 +96,13 @@ export class SqliteProvider extends ErrorProvider {
       const request = tableName + '?filter=Date,gt,' + date +  '&transform=1';
       console.log('url', this.RaspServerUrl + '/' + request);
       return this.httpGET(this.RaspServerUrl + '/' + request)
-      .then( (res :Object) => {
-        res = res[tableName];
-        return this.insertNewValuesIntoDb(tableName, res);
-      }).catch((err: any) => console.log('error tttt', err));
-    });
+        .then( (res :Object) => {
+          res = res[tableName];
+          return this.insertNewValuesIntoDb(tableName, res);
+        })
+        .catch((response :any) => {
+        });
+      });
   }
 
   private insertNewValuesIntoDb(tableName: string, data : any): Promise<any> {
