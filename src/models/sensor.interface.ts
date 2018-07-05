@@ -1,5 +1,6 @@
 export interface Sensor {
-    name: string;
-    desc: string;
-    image: string;
+    name      : string;
+    desc      : string;
+    image     : string;
+    pollutants: string;
 }

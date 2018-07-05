@@ -5,6 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Polluant } from '../../models/polluant';
 import { PolluantProvider } from '../../mocks/providers/polluant';
 import { AlertProvider } from '../../providers/alert/alert.service';
+import { Sensor } from '../../models/sensor.interface';
+import { SENSORS } from '../../configs/sensors.data';
 
 @IonicPage()
 @Component({
@@ -13,7 +15,10 @@ import { AlertProvider } from '../../providers/alert/alert.service';
 })
 export class ListPolluantPage {
 
-  polluants : Polluant[];
+  polluants    : Polluant[];
+  sensors      : Sensor[];
+  activeSegment: string = 'pollutants';
+
   constructor(public translate    : TranslateService,
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -21,12 +26,20 @@ export class ListPolluantPage {
     private polluantProvider: PolluantProvider
   ) {
     this.polluants = this.polluantProvider.getPolluantsDescription();
+    this.sensors = SENSORS;
   }
 
   goToPolluantDetails(p: Polluant): void {
     this.alertProvider.basicAlert({
       title: p.name,
       message: p.desc
+    }).present();
+  }
+
+  goToSensorDetails(s: Sensor): void {
+    this.alertProvider.basicAlert({
+      title: s.name,
+      message: s.desc
     }).present();
   }
 
