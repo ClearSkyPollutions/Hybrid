@@ -9,7 +9,8 @@ import { DataMapConstValues, DataMap, DataMapFactorized } from '../../models/dat
 @Injectable()
 export class MapsProvider {
 
-  private ServerUrl: string = URL.server;
+  private ServerIP: string = URL.server.ipAddress;
+  private ServerPort: string = URL.server.port;
 
   constructor(private http: HttpClient) { }
 
@@ -18,7 +19,8 @@ export class MapsProvider {
     const requestDataSensorLocation = tableName + '?transform=1';
     let dataMap: DataMap[] = [];
     const dataMapFactoArray: DataMapFactorized[] = [];
-    return this.http.get<DataMapFactorized[]>(this.ServerUrl + '/' + requestDataSensorLocation).map((res: Object) => {
+    return this.http.get<DataMapFactorized[]>('http://' + this.ServerIP + ':' + this.ServerPort + '/' 
+    + requestDataSensorLocation).map((res: Object) => {
       dataMap = res[tableName];
       const constValues: DataMapConstValues[] = [];
 

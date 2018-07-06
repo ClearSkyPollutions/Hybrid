@@ -24,7 +24,8 @@ const DATABASE_FILE_NAME: string = 'data.db';
 export class SqliteProvider extends MainService {
 
   private sqliteDb: SQLiteObject;
-  private RaspServerUrl: string = URL.raspberryPi;
+  private RaspServerIP: string = URL.raspberryPi.ipAddress;
+  private RaspServerPort: string = URL.raspberryPi.port;
   private measurements : Data[] = [];
 
 
@@ -94,8 +95,8 @@ export class SqliteProvider extends MainService {
   private synchroniseTable(tableName: string): Promise<any> {
     return this.getLastDate(tableName).then((date:string) => {
       const request = tableName + '?filter=Date,gt,' + date +  '&transform=1';
-      console.log('url', this.RaspServerUrl + '/' + request);
-      return this.httpGET(this.RaspServerUrl + '/' + request)
+      console.log('url', 'http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + request);
+      return this.httpGET('http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + request)
         .then( (res :Object) => {
           res = res[tableName];
           return this.insertNewValuesIntoDb(tableName, res);

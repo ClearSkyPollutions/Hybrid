@@ -11,6 +11,7 @@ import { SettingsProvider } from '../../providers/settings/settings.service';
   templateUrl: 'parameters.html',
 })
 export class ParametersPage {
+  
   settings: Settings;
 
   tempInputSensor: string;
@@ -32,7 +33,6 @@ export class ParametersPage {
       SecurityType: 'WPA-PSK',
       Sensors: []
     };
-
   }
 
   ionViewDidLoad() :void {
@@ -102,6 +102,31 @@ export class ParametersPage {
               this.spinner.dismiss();
             }
           );
+        }
+      }
+    }).present();
+  }
+
+  doChangeIPAdress(): void {
+    this.alertProvider.promptAlert({
+      title: 'Initial Settings',
+      message: 'Type in current RPI\'s IP Address' ,
+      input:
+      {
+        name: 'IP Address',
+        placeholder: ''
+      },
+      button_1:
+      {
+        text: 'Cancel',
+        handler: () :void => {
+          console.log('Changes cancelled');
+        }
+      },
+      button_2: {
+        text: 'Confirm',
+        handler: () :void => {
+          console.log('Modification confirmed');
         }
       }
     }).present();

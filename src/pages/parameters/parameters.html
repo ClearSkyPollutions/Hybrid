@@ -8,6 +8,12 @@
 
 <ion-content padding>
   <ion-list>
+    <ion-list-header (click)="doChangeIPAdress()">
+      IP address
+      <ion-badge item-end>192.168.2.118</ion-badge>
+    </ion-list-header>
+  </ion-list>
+  <ion-list>
     <ion-list-header>
       Frequency
       <ion-badge item-end>{{settings.Frequency }} mesures/min</ion-badge>
@@ -21,7 +27,7 @@
     </ion-item>
   </ion-list>
   <ion-list>
-    <ion-list-header>Wifi</ion-list-header>
+    <ion-list-header>Wi-Fi</ion-list-header>
     <ion-item>
       <ion-label floating>SSID</ion-label>
       <ion-input type="text" [(ngModel)]="settings.SSID"></ion-input>
