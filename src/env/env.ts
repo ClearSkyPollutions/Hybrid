@@ -1,14 +1,14 @@
 
 export const URL = {
-   raspberryPi: 
+   raspberryPi:
    {
-        ipAddress : '192.168.2.118',
+        ip: '192.168.2.118',
         port: '4000'
    },
    server:
    {
-        ipAddress : '192.168.2.118',
-        port: '5000'
+        ip: '',
+        port: ''
    }
 };
 

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class AirQualityIndexProvider {
 
-  private RaspServerIP: string = URL.raspberryPi.ipAddress;
+  private RaspServerIP: string = URL.raspberryPi.ip;
   private RaspServerPort: string = URL.raspberryPi.port;
   constructor(public http: HttpClient) {
 

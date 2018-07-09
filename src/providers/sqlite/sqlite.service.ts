@@ -24,7 +24,7 @@ const DATABASE_FILE_NAME: string = 'data.db';
 export class SqliteProvider extends MainService {
 
   private sqliteDb: SQLiteObject;
-  private RaspServerIP: string = URL.raspberryPi.ipAddress;
+  private RaspServerIP: string = URL.raspberryPi.ip;
   private RaspServerPort: string = URL.raspberryPi.port;
   private measurements : Data[] = [];
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController, LoadingController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
+import { URL } from '../../env/env';
 import { Settings } from '../../models/settings';
 import { AlertProvider } from '../../providers/alert/alert.service';
 import { SettingsProvider } from '../../providers/settings/settings.service';
@@ -11,7 +12,6 @@ import { SettingsProvider } from '../../providers/settings/settings.service';
   templateUrl: 'parameters.html',
 })
 export class ParametersPage {
-  
   settings: Settings;
 
   tempInputSensor: string;
@@ -24,14 +24,17 @@ export class ParametersPage {
     private alertProvider: AlertProvider,
     private settingsProvider: SettingsProvider,
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
   ) {
     this.settings = {
-      Frequency: 0,
-      SSID: '',
-      Password: '',
-      SecurityType: 'WPA-PSK',
-      Sensors: []
+      frequency: 0,
+      //ssid: '',
+      //password: '',
+      //securityType: 'WPA-PSK',
+      sensors: [],
+      raspberryPiAddress: URL.raspberryPi,
+      serverAddress: URL.server,
+      isDataShared: false
     };
   }
 
@@ -52,13 +55,13 @@ export class ParametersPage {
 
   removeSensor(oldSensor: string) :void {
     console.log('Removed sensor' + oldSensor);
-    this.settings.Sensors = this.settings.Sensors.filter((elem : string) =>
+    this.settings.sensors = this.settings.sensors.filter((elem : string) =>
        (elem != oldSensor));
   }
 
   addSensor():void {
     if (this.tempInputSensor) {
-      this.settings.Sensors.push(this.tempInputSensor);
+      this.settings.sensors.push(this.tempInputSensor);
     }
     this.tempInputSensor = '';
   }
@@ -106,30 +109,4 @@ export class ParametersPage {
       }
     }).present();
   }
-
-  doChangeIPAdress(): void {
-    this.alertProvider.promptAlert({
-      title: 'Initial Settings',
-      message: 'Type in current RPI\'s IP Address' ,
-      input:
-      {
-        name: 'IP Address',
-        placeholder: ''
-      },
-      button_1:
-      {
-        text: 'Cancel',
-        handler: () :void => {
-          console.log('Changes cancelled');
-        }
-      },
-      button_2: {
-        text: 'Confirm',
-        handler: () :void => {
-          console.log('Modification confirmed');
-        }
-      }
-    }).present();
-  }
-
 }

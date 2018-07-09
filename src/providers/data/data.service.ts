@@ -8,7 +8,7 @@ import { URL } from '../../env/env';
 
 @Injectable()
 export class DataProvider {
-  private RaspServerIP: string = URL.raspberryPi.ipAddress;
+  private RaspServerIP: string = URL.raspberryPi.ip;
   private RaspServerPort: string = URL.raspberryPi.port;
   constructor(private http: HttpClient) {}
 
