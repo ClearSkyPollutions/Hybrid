@@ -8,14 +8,14 @@ export const SENSORS : Sensor[] = [
         pollutants: 'PM10, PM2.5'
     },
     {
-        name : 'MQ2',
-        desc : '',
+        name : 'MQ-2',
+        desc : 'Standard gas concentration sensor, conductivity of the sensor depends on the concentration of target gases in the air.',
         image : 'assets/imgs/sensors/mq2.bmp',
-        pollutants: ''
+        pollutants: 'Combustible Gases - Methane, Butane, LPG, smoke'
     },
     {
         name : 'DHT22',
-        desc : '',
+        desc : 'Uses a capacitive humidity sensor and a thermistor to measure the surrounding air. Readings every 2 seconds.',
         image : 'assets/imgs/sensors/dht22.jpg',
         pollutants: 'Temperature, Humidity'
     },

@@ -1,7 +1,12 @@
+import { HttpAddress } from './httpAddress.interface';
+
 export interface Settings {
-    Frequency: number;
-    SSID: string;
-    Password: string;
-    SecurityType: string;
-    Sensors: string[];
+    frequency: number;
+    //ssid: string;
+    //password: string;
+    //securityType: string;
+    sensors: string[];
+    raspi: HttpAddress;
+    server: HttpAddress;
+    isDataShared: boolean;
 }

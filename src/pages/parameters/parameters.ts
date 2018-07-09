@@ -11,7 +11,7 @@ import { SettingsProvider } from '../../providers/settings/settings.service';
   templateUrl: 'parameters.html',
 })
 export class ParametersPage {
-  settings: Settings;
+  settings: any;
 
   tempInputSensor: string;
 
@@ -26,11 +26,8 @@ export class ParametersPage {
     private loadingCtrl: LoadingController
   ) {
     this.settings = {
-      Frequency: 0,
-      SSID: '',
-      Password: '',
-      SecurityType: 'WPA-PSK',
-      Sensors: []
+      frequency: 0,
+      sensors: []
     };
 
   }
@@ -52,13 +49,13 @@ export class ParametersPage {
 
   removeSensor(oldSensor: string) :void {
     console.log('Removed sensor' + oldSensor);
-    this.settings.Sensors = this.settings.Sensors.filter((elem : string) =>
+    this.settings.sensors = this.settings.sensors.filter((elem : string) =>
        (elem != oldSensor));
   }
 
   addSensor():void {
     if (this.tempInputSensor) {
-      this.settings.Sensors.push(this.tempInputSensor);
+      this.settings.sensors.push(this.tempInputSensor);
     }
     this.tempInputSensor = '';
   }

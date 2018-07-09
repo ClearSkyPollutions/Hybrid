@@ -8,7 +8,7 @@ import { Storage } from '@ionic/storage';
 
 // Interfaces
 import { Data } from '../../models/data.interface';
-import { ErrorDetails } from '../../models/shared/error-banner.interface';
+
 
 // Config
 import { SQLITE_REQ } from '../../configs/sqlite.req';

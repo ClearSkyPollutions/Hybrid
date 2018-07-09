@@ -14,7 +14,7 @@
     </ion-list-header>
     <ion-item>
       {{settings.freq}}
-      <ion-range min="0" max="30" [(ngModel)]="settings.Frequency">
+      <ion-range min="0" max="30" [(ngModel)]="settings.frequency">
         <ion-label range-left>0</ion-label>
         <ion-label range-right>30</ion-label>
       </ion-range>
@@ -40,7 +40,7 @@
   </ion-list>
   <ion-list>
     <ion-list-header>Sensors</ion-list-header>
-    <ion-item *ngFor="let sensor of settings.Sensors">
+    <ion-item *ngFor="let sensor of settings.sensors">
       <button ion-button item-end color="danger" icon-only (click)="removeSensor(sensor)">
         <ion-icon name='remove-circle'></ion-icon>
       </button>
