@@ -6,7 +6,6 @@ export interface Settings {
     //ssid: string;
     //password: string;
     //securityType: string;
-    raspberryPiAddress: AddressServer;
     serverAddress: AddressServer;
     isDataShared: boolean;
 }

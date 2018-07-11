@@ -58,5 +58,28 @@ export class AlertProvider {
     });
   }
 
+  promptAlertbis(options: AlertDialog) : Alert {
+    return this.alertCtrl.create({
+      title: options.title,
+      message: options.message,
+      inputs: [
+        {
+          name: options.input_1.name,
+          placeholder: options.input_1.placeholder
+        },
+        {
+          name: options.input_2.name,
+          placeholder: options.input_2.placeholder
+        }
+      ],
+      buttons: [
+        {
+          text: options.button.text,
+          handler: options.button.handler
+        }
+      ]
+    });
+  }
+
 
 }
