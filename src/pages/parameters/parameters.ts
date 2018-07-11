@@ -53,6 +53,7 @@ export class ParametersPage {
         this.spinner.dismiss();
       },
       (error : any) => {
+        this.connection = false;
         console.log('Couldn\'t fetch remote settings', error);
         this.spinner.dismiss();
         this.showToast('Couldn\'t connect to server');
@@ -118,6 +119,9 @@ export class ParametersPage {
               console.log('Couldn\'t fetch remote settings', error);
               this.showToast('Couldn\'t connect to server');
               this.spinner.dismiss();
+              if (!this.connection) {
+                this.addressServerDialog();
+              }
             }
           );
         }
