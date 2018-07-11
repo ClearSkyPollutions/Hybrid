@@ -11,7 +11,14 @@ page-slides {
         background: color($colors, primary, base);;
       }
 
-    
+      // .scroll-content{
+      //   margin-bottom: 0px !important;
+      //   padding-bottom: 0px !important;
+      // }
+
+    .sensor-list {
+      display: inline-block;
+    }
   
     .toolbar-background {
         background: #fff;
@@ -42,15 +49,21 @@ page-slides {
     //     bottom:inherit;
     //  }
   
-      b {
-        font-weight: 500;
-      }
-  
-      p {
-        padding: 0 40px;
-        font-size: 16px;
-        line-height: 1.5;
+    b {
+      font-weight: 500;
     }
+
+    p {
+      padding: 0 40px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    li {
+      font-size: 16px;
+    }
+
+
   
   }
   

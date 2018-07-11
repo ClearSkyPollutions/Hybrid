@@ -3,10 +3,7 @@ import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
 
-
-import { SLIDES } from '../../configs/slides.data';
-import { SlideInfo } from '../../models/slideInfo';
-import { Settings } from '../../models/settings';
+import { Capteur, InitConfig } from '../../models/init-config.interface';
 
 
 @IonicPage()
@@ -17,8 +14,9 @@ import { Settings } from '../../models/settings';
 export class SlidesPage {
 
   @ViewChild('slides') slides: Slides;
-  showSkip : boolean = false;
-  initialSettings: Settings;
+  showSkip                   : boolean = false;
+  initialSettings            : InitConfig;
+  sensorsList                : Capteur[];
 
 
   constructor(
@@ -44,7 +42,8 @@ export class SlidesPage {
       animate  : true,
       direction: 'forward'
     }).then(() => {
-      this.storage.set('hasSeenTutorial', 'true');
+      this.storage.set('initiConfig', this.initialSettings);
+      this.storage.set('hasSeenTutorial', true);
     });
   }
 
