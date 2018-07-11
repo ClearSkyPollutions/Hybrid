@@ -80,14 +80,14 @@ export class ParametersPage {
     this.alertProvider.confirmAlert({
       title: 'Confirm these changes ?',
       message: 'Be careful when changing wifi configuration remotely, you may need to connect physically to the Raspberry Pi if an error occurs',
-      button_1:
+      buttons:[
       {
         text: 'Cancel',
         handler: () :void => {
           console.log('Cancelled configuration changes');
         }
       },
-      button_2: {
+      {
         text: 'Accept',
         handler: () :void => {
           console.log('Configuration changed');
@@ -101,7 +101,7 @@ export class ParametersPage {
           );
         }
       }
-    }).present();
+    ]}).present();
   }
 
 }
