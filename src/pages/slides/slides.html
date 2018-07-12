@@ -23,29 +23,29 @@
       <img src="assets/imgs/slides/setup-rpi.gif" class="slide-image"/>
       <h2 class="slide-title">Setting up the Raspberry Pi</h2>
       <p>First up, you need to get a Raspberry Pi with internet connectivity.</p>
-      <ul>
+      <!-- <ul>
         <li>The latest model (Raspberry Pi 3B) comes equipped with Wifi and ethernet</li>
         <li>The Pi 0 also comes with Wifi, but is slower</li>
         <li>Finally, you can also buy a Wifi adapter and plug it into any Raspberry Pi</li>
-      </ul>
-      <p>We recommend heading over to https://projects.raspberrypi.org for a quick tutorial on getting started.
+      </ul> -->
+      <p>We recommend heading over to <a href="https://projects.raspberrypi.org/en/projects/raspberry-pi-getting-started">here</a>  for a quick tutorial on getting started.
       </p>
     </ion-slide>
 
     <!-- Setting up the sensors -->
     <ion-slide>
-      <!-- <img src="assets/imgs/slides/slide2.jpg" class="slide-image"/> -->
+      <img src="assets/imgs/slides/slide2.jpg" class="slide-image"/>
       <h2 class="slide-title">Setting up the sensors</h2>
       <p>To have an accurate estimate of the air quality in your area, you’ll need to buy sensors for the most common types of pollutants.</p>
-      <p>For an out-of-the-box solution, use the following sensors :</p>
+      <!-- <p>For an out-of-the-box solution, use the following sensors :</p> -->
       <ion-list>
         <ion-item *ngFor="let s of sensorsList">
-            <ion-checkbox color="primary" checked="false"></ion-checkbox>
+            <ion-checkbox color="primary" [ngModel]="" checked="false"></ion-checkbox>
             <ion-label>{{s.name}}</ion-label>     
         </ion-item> 
        
       </ion-list>
-      <p>A minimal amount of coding is necessary if you wish to add differents sensors, but we’ll be glad to help at https://github.com/capteurPollutions/Embedded.</p>
+      <!-- <p>A minimal amount of coding is necessary if you wish to add differents sensors, but we’ll be glad to help at https://github.com/capteurPollutions/Embedded.</p> -->
     </ion-slide>
 
 
@@ -64,17 +64,16 @@
         <img src="assets/imgs/slides/slide2.jpg" class="slide-image"/>
         <h2 class="slide-title">IP address of Raspberry</h2>
         <p>What’s the IP Address of the Raspberry Pi (How to get it ? ) :</p> 
-        <button ion-button round (click)="DefineIpAddressDialog()">Raspberry Pi IP</button>
-        <!-- <ion-input type="text" [ngModel]="initialSettings?.raspi.ipAddress"></ion-input>  -->
+        <button ion-button round (click)="DefineIpAddressDialog('Raspberry Pi', 'rasp_ip')">Raspberry Pi IP</button>
       </ion-slide>
 
     <!-- partage des données (+système ID) -->
     <ion-slide>
       <img src="assets/imgs/slides/slide3.jpg" class="slide-image"/>
       <h2 class="slide-title">Share your data with us</h2>
-      <ion-toggle class="center" checked="false" [ngModel]="initialSettings?.isDataShared"></ion-toggle>
+      <ion-toggle class="center" checked="true" [ngModel]="initialSettings?.isDataShared"></ion-toggle>
       <p>Help us spread knowledge and data about Air Quality ! We’re building a map of the data collected by our users and accessible to everyone (data is anonymized).</p> 
-      <p>Do you wish to upload the data collected by your system</p>
+      <!-- <p>Do you wish to upload the data collected by your system</p> -->
     </ion-slide>
 
     <!-- adresse serveur central -->
@@ -82,16 +81,14 @@
       <img src="assets/imgs/slides/slide1.jpg" class="slide-image"/>
       <h2 class="slide-title">Server IP</h2>
       <p>Optionally, you may want to use another server to upload your data to :</p> 
-      <button ion-button round (click)="DefineIpAddressDialog()">Server IP</button>
+      <button ion-button round (click)="DefineIpAddressDialog('Server', 'server_ip')">Server IP</button>
     </ion-slide>
   </ion-slides> 
 
 </ion-content>
 <ion-footer class="btn-footer">
-  <button *ngIf="showSkip" ion-button block class="auth-btn" round (click)="startApp()">Start</button>
-  <div *ngIf="!showSkip">
-    <button type="submit" float-left ion-button  color="primary" class="btnPrev" (click)="prev()">Prev</button>
-    <button type="submit" float-right ion-button color="primary" class="btnNext" (click)="next()">Next</button>
-  </div>
+    <button *ngIf="showPreviousBtn" float-left ion-button round  color="primary" class="btnPrev" (click)="prev()">Prev</button>
+    <button *ngIf="showNextBtn" float-right ion-button round color="primary" class="btnNext" (click)="next()">Next</button>
+    <button *ngIf="!showNextBtn" float-right ion-button round color="primary" class="auth-btn" (click)="startApp()">Start</button>
 </ion-footer>
 

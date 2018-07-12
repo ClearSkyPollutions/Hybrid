@@ -3,4 +3,5 @@ export interface Sensor {
     desc      : string;
     image     : string;
     pollutants: string;
+    help      : string;
 }

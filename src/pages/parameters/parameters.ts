@@ -18,16 +18,16 @@ export class ParametersPage {
   spinner: any;
 
   constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    private alertProvider: AlertProvider,
+    public navCtrl          : NavController,
+    public translate        : TranslateService,
+    private alertProvider   : AlertProvider,
     private settingsProvider: SettingsProvider,
-    private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController
+    private toastCtrl       : ToastController,
+    private loadingCtrl     : LoadingController
   ) {
     this.settings = {
       frequency: 0,
-      sensors: []
+      sensors  : []
     };
 
   }

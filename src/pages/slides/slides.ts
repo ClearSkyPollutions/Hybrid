@@ -3,8 +3,10 @@ import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
 
-import { Capteur, InitConfig } from '../../models/init-config.interface';
+import { InitConfig } from '../../models/init-config.interface';
 import { AlertProvider } from '../../providers/alert/alert.service';
+import { Sensor } from '../../models/sensor.interface';
+import { SENSORS } from '../../configs/sensors.data';
 
 
 @IonicPage()
@@ -15,9 +17,11 @@ import { AlertProvider } from '../../providers/alert/alert.service';
 export class SlidesPage {
 
   @ViewChild('slides') slides: Slides;
-  showSkip                   : boolean = false;
-  initialSettings            : InitConfig;
-  sensorsList                : Capteur[] = new Array;
+  showPreviousBtn: boolean   = false;
+  showNextBtn    : boolean   = true;
+
+  initialSettings: InitConfig;
+  sensorsList    : Sensor[] = SENSORS;
 
 
   constructor(
@@ -27,24 +31,28 @@ export class SlidesPage {
     private storage      : Storage,
     private alertProvider: AlertProvider
   ) {
-    this.sensorsList.push({name: 'MG-2', isUsed: false});
-    this.sensorsList.push({name: 'MG-2', isUsed: false});
-    this.sensorsList.push({name: 'MG-2', isUsed: false});
-    this.sensorsList.push({name: 'MG-2', isUsed: false});
+    this.initialSettings = {
+      sensors     : [''],
+      rasp_ip     : { ip: '', port: ''},
+      server_ip   : { ip: '', port: ''},
+      isDataShared: true,
+    };
   }
 
   startApp() :void {
+    console.log(this.initialSettings);
     this.navCtrl.push('TabsPage', {}, {
       animate  : true,
       direction: 'forward'
     }).then(() => {
       this.storage.set('initiConfig', this.initialSettings);
-      this.storage.set('hasSeenTutorial', true);
+      //this.storage.set('hasSeenTutorial', true);
     });
   }
 
   onSlideChangeStart(slider: Slides) :void {
-    this.showSkip = slider.isEnd();
+    this.showNextBtn     = !slider.isEnd();
+    this.showPreviousBtn = !slider.isBeginning();
   }
 
   next() :void {
@@ -55,10 +63,10 @@ export class SlidesPage {
     this.slides.slidePrev();
   }
 
-  DefineIpAddressDialog() :void {
+  DefineIpAddressDialog(deviceName : string, x: string) :void {
     this.alertProvider.promptAlertbis({
-      title: 'Raspberry Pi',
-      message: 'Enter the IP address of your Raspberry Pi.',
+      title: deviceName,
+      message: 'Enter the IP address of your ' + deviceName,
       inputs: [
       {
         name:'ip',
@@ -74,7 +82,10 @@ export class SlidesPage {
       {
         text: 'OK',
         handler: (data:any) :void => {
-          console.log(data);
+          if (data) {
+            this.initialSettings[x].ip = data.ip;
+            this.initialSettings[x].port = data.port;
+          }
         }
       }]
     }).present();
