@@ -8,14 +8,15 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class AirQualityIndexProvider {
 
-  private RaspServerUrl: string = URL.raspberryPi;
+  private RaspServerIP: string = URL.raspberryPi.ip;
+  private RaspServerPort: string = URL.raspberryPi.port;
   constructor(public http: HttpClient) {
 
   }
   public getAQI(): Observable<AQI> {
     const request = 'aqi.php';
 
-    return this.http.get<AQI>(this.RaspServerUrl + '/' + request);
+    return this.http.get<AQI>('http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + request);
   }
 
 }

@@ -5,12 +5,14 @@ export interface AlertDialog {
     buttons?: (AlertButton)[];
 }
 
+
 export interface AlertInput {
   name        : string | number;
   type?       : string;
   placeholder?: string;
   value?      : string;
 }
+  
 export interface AlertButton {
   text     : string;
   role?    : string;

@@ -80,7 +80,4 @@ export class AlertProvider {
       ]
     });
   }
-
-
-
 }
