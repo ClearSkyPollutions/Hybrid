@@ -6,3 +6,4 @@ export interface Settings {
     serverAddress: AddressServer;
     isDataShared: boolean;
 }
+

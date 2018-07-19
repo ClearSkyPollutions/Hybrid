@@ -5,6 +5,7 @@ export interface AlertDialog {
     buttons?: (AlertButton)[];
 }
 
+
 export interface AlertInput {
   name        : string | number;
   type?       : string;

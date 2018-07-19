@@ -8,7 +8,8 @@ import { URL } from '../../env/env';
 
 @Injectable()
 export class DataProvider {
-  private RaspServerUrl: string = URL.raspberryPi;
+  private RaspServerIP: string = URL.raspberryPi.ip;
+  private RaspServerPort: string = URL.raspberryPi.port;
   constructor(private http: HttpClient) {}
 
   public getLastMesure() :Observable<any> {
@@ -17,8 +18,8 @@ export class DataProvider {
     const requestTempHum = 'DHT22?order=date,desc&page=1,1&transform=1';
 
     return Observable.forkJoin([
-      this.http.get(this.RaspServerUrl + '/' + requestConcPM),
-      this.http.get(this.RaspServerUrl + '/' + requestTempHum)
+      this.http.get('http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + requestConcPM),
+      this.http.get('http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + requestTempHum)
     ])
     .map((data: any) => ({
         pm : data[0],
@@ -50,7 +51,7 @@ export class DataProvider {
       }
    }
     const request = tableName + '?columns=date,' + PollutantType + '&order=date,desc&page=1,' + range + '&transform=1';
-    return this.http.get(this.RaspServerUrl + '/' + request).map( (res : Object) =>
+    return this.http.get('http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + request).map( (res : Object) =>
       res[tableName]
     );
   }
