@@ -65,12 +65,13 @@ export class ParametersPage {
         this.storedConf.rasp_ip = this.raspi;
         this.storage.set('initConfig', this.storedConf);
         this.spinner.dismiss();
+        this.showToast('Local settings synced with the Raspberry Pi');
       },
       (error : any) => {
         this.connection = false;
         console.log('Couldn\'t fetch remote settings', error);
         this.spinner.dismiss();
-        this.showToast('Couldn\'t connect to server');
+        this.showToast('Using last known settings');
         if (!this.connection) {
          //this.addressServerDialog();
         }
@@ -116,6 +117,47 @@ export class ParametersPage {
     }
   }
 
+  doConfirm() :void {
+    this.alertProvider.confirmAlert({
+      title: 'Confirm these changes?',
+      message: 'Be careful when changing wifi configuration remotely,\nyou may need to connect physically to the Raspberry Pi\nif an error occurs',
+      buttons:
+      [{
+        text: 'Cancel',
+        handler: () :void => {
+          this.showToast('Cancelled configuration changes');
+        }
+      },
+      {
+        text: 'Accept',
+        handler: () :void => {
+          this.showSpinner();
+          this.settingsProvider.setConfig(this.settings, this.raspi).subscribe(
+            (cfg: Settings) => {
+              this.connection = true;
+              this.storedConf.isDataShared = this.settings.isDataShared;
+              this.storedConf.sensors = this.settings.sensors;
+              this.storedConf.server_ip = this.settings.serverAddress;
+              this.storedConf.rasp_ip = this.raspi;
+              this.storage.set('initConfig', this.storedConf);
+              this.spinner.dismiss();
+              this.showToast('Connected successfully to the Raspberry Pi');
+            },
+            (error : any) => {
+              this.connection = false;
+              console.log('Couldn\'t fetch remote settings', error);
+              this.showToast('Couldn\'t connect to Raspberry Pi. Please try new address');
+              this.spinner.dismiss();
+              if (!this.connection) {
+                //this.addressServerDialog();
+              }
+            }
+          );
+        }
+      }]
+    }).present();
+  }
+
   addressServerDialog(): void {
     this.alertProvider.promptAlertbis({
       title: 'Raspberry Pi',
@@ -143,44 +185,4 @@ export class ParametersPage {
     }).present();
   }
 
-  doConfirm() :void {
-    this.alertProvider.confirmAlert({
-      title: 'Confirm these changes?',
-      message: 'Be careful when changing wifi configuration remotely,\nyou may need to connect physically to the Raspberry Pi\nif an error occurs',
-      buttons:
-      [{
-        text: 'Cancel',
-        handler: () :void => {
-          this.showToast('Cancelled configuration changes');
-        }
-      },
-      {
-        text: 'Accept',
-        handler: () :void => {
-          this.showSpinner();
-          this.settingsProvider.setConfig(this.settings, this.raspi).subscribe(
-            (cfg: Settings) => {
-              this.connection = true;
-              this.storedConf.isDataShared = this.settings.isDataShared;
-              this.storedConf.sensors = this.settings.sensors;
-              this.storedConf.server_ip = this.settings.serverAddress;
-              this.storedConf.rasp_ip = this.raspi;
-              this.storage.set('initConfig', this.storedConf);
-              this.spinner.dismiss();
-              this.showToast('Configuration changed');
-            },
-            (error : any) => {
-              this.connection = false;
-              console.log('Couldn\'t fetch remote settings', error);
-              this.showToast('Couldn\'t connect to server');
-              this.spinner.dismiss();
-              if (!this.connection) {
-                //this.addressServerDialog();
-              }
-            }
-          );
-        }
-      }]
-    }).present();
-  }
 }
