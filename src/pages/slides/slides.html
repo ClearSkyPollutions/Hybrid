@@ -42,8 +42,7 @@
         <ion-item *ngFor="let s of sensorsList">
             <ion-toggle item-start [(ngModel)]="s.checked" ></ion-toggle>
             <ion-label>{{s.name}}</ion-label>
-            <ion-icon small name="build" item-end></ion-icon>   
-            <!-- <ion-label>{{s.help}}</ion-label>    -->
+            <a button href="{{s.help}}" clear item-end><ion-icon name="build"></ion-icon></a>
         </ion-item> 
        
       </ion-list>

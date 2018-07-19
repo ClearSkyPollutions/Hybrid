@@ -21,11 +21,11 @@ export class SlidesPage {
 
   initialSettings: InitConfig;
   sensorsList    : any[] = [
-    {name: 'PMS5003', checked   : false},
-    {name: 'MQ-2', checked      : false},
-    {name: 'DHT22', checked     : false},
-    {name: 'MISC', checked      : false},
-    {name: 'Microphone', checked: false}
+    {name: 'PMS5003', checked   : false, help: 'https://www.google.com/search?q=PMS5003'},
+    {name: 'MQ-2', checked      : false, help: 'https://www.google.com/search?q=MQ-2'},
+    {name: 'DHT22', checked     : false, help: 'https://www.google.com/search?q=DHT22'},
+    {name: 'MISC', checked      : false, help: 'https://www.google.com/search?q=MISC'},
+    {name: 'Microphone', checked: false, help: 'https://www.google.com/search?q=Microphone'}
   ];
 
 
@@ -38,7 +38,7 @@ export class SlidesPage {
   ) {
     this.initialSettings = {
       sensors     : [''],
-      rasp_ip     : { ip: '', port: ''},
+      rasp_ip     : { ip: '192.168.0.', port: '80'},
       server_ip   : { ip: '192.168.2.118', port: '80'},
       isDataShared: false,
     };
@@ -71,6 +71,7 @@ export class SlidesPage {
   }
 
   DefineIpAddressDialog(serverName : string, server: string) :void {
+    console.log('hfhdshfd' + this.initialSettings[server].ip);
     this.alertProvider.promptAlertbis({
       title: serverName,
       message: 'Enter the IP address of your ' + serverName,
@@ -78,12 +79,14 @@ export class SlidesPage {
       {
         name:'ip',
         type: 'text',
-        placeholder: (this.initialSettings[server].ip == '') ? 'IP' : this.initialSettings[server].ip,
+        value: this.initialSettings[server].ip,
+        placeholder: 'IP Address',
       },
       {
         name: 'port',
-        type: 'text',
-        placeholder: (this.initialSettings[server].port == '') ? 'Port' : this.initialSettings[server].port,
+        type: 'number',
+        value: this.initialSettings[server].port,
+        placeholder: 'Port'
       }],
       buttons:[
       {
@@ -103,6 +106,8 @@ export class SlidesPage {
               .filter((sensor : any) => sensor.checked)
               .map((sensor : any) => sensor.name);
   }
+
+
 
 
 }

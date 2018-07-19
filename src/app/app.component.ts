@@ -21,11 +21,8 @@ export class MyApp {
   ) {
     // check if the user has already seen the tutorial
     this.storage.get('hasSeenTutorial').then((hasSeenTutorial: boolean) => {
-      if (hasSeenTutorial) {
-        this.rootPage = 'TabsPage';
-      } else {
-        this.rootPage = 'SlidesPage';
-      }
+       (hasSeenTutorial) ? this.rootPage = 'TabsPage' : this.rootPage = 'SlidesPage';
+
       this.platformReady();
     });
   }

@@ -65,11 +65,15 @@ export class AlertProvider {
       inputs: [
         {
           name: options.inputs[0].name,
-          placeholder: options.inputs[0].placeholder
+          value: options.inputs[0].value,
+          placeholder: options.inputs[0].placeholder,
+          type: options.inputs[0].type
         },
         {
           name: options.inputs[1].name,
-          placeholder: options.inputs[1].placeholder
+          value: options.inputs[1].value,
+          placeholder: options.inputs[1].placeholder,
+          type: options.inputs[1].type
         }
       ],
       buttons: [

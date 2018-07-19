@@ -84,5 +84,9 @@ page-slides {
     //   margin-right: 10px;
     //   width: 25px;
     // }
+
+    ion-item > a {
+        text-decoration: none;
+    }
   
 }

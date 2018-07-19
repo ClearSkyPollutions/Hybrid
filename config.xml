@@ -94,10 +94,6 @@
     <allow-navigation href="http://10.26.196.202:8100" />
     <allow-navigation href="http://localhost:8100" />
     <allow-navigation href="http://10.26.196.171:8100" />
-<<<<<<< HEAD
     <allow-navigation href="http://192.168.2.95:8100" />
-=======
-    <allow-navigation href="http://192.168.2.96:8100" />
->>>>>>> 3f0cd91470f33b4d1eae626aaf6142f2c877fe4d
     <engine name="android" spec="7.0.0" />
 </widget>

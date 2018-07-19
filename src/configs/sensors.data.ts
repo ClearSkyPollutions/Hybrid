@@ -5,13 +5,13 @@ export const SENSORS : Sensor[] = [
         name      : 'PMS5003',
         desc      : '',
         image     : 'assets/imgs/sensors/pms5003.png',
-        pollutants: 'PM10, PM2.5',
+        pollutants: 'Fine particles',
         help      : 'www.google.com'
     },
     {
         name      : 'MQ-2',
         desc      : 'Standard gas concentration sensor, conductivity of the sensor depends on the concentration of target gases in the air.',
-        image     : 'assets/imgs/sensors/mq2.bmp',
+        image     : 'assets/imgs/sensors/mq2.png',
         pollutants: 'Combustible Gases - Methane, Butane, LPG, smoke',
         help      : ''
     },
@@ -26,14 +26,14 @@ export const SENSORS : Sensor[] = [
         name      : 'MISC',
         desc      : '',
         image     : 'assets/imgs/sensors/misc.png',
-        pollutants: '',
+        pollutants: 'gaz',
         help      : ''
     },
     {
         name      : 'Microphone',
         desc      : '',
         image     : 'assets/imgs/sensors/microphone.jpg',
-        pollutants: '',
+        pollutants: 'sound',
         help      : ''
     }
 ];
