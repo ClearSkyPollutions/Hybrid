@@ -5,8 +5,7 @@ import { Storage } from '@ionic/storage';
 
 import { InitConfig } from '../../models/init-config.interface';
 import { AlertProvider } from '../../providers/alert/alert.service';
-import { Sensor } from '../../models/sensor.interface';
-import { SENSORS } from '../../configs/sensors.data';
+
 
 
 @IonicPage()
@@ -21,7 +20,13 @@ export class SlidesPage {
   showNextBtn    : boolean   = true;
 
   initialSettings: InitConfig;
-  sensorsList    : Sensor[] = SENSORS;
+  sensorsList    : any[] = [
+    {name: 'PMS5003', checked   : false},
+    {name: 'MQ-2', checked      : false},
+    {name: 'DHT22', checked     : false},
+    {name: 'MISC', checked      : false},
+    {name: 'Microphone', checked: false}
+  ];
 
 
   constructor(
@@ -34,19 +39,21 @@ export class SlidesPage {
     this.initialSettings = {
       sensors     : [''],
       rasp_ip     : { ip: '', port: ''},
-      server_ip   : { ip: '', port: ''},
-      isDataShared: true,
+      server_ip   : { ip: '192.168.2.118', port: '80'},
+      isDataShared: false,
     };
   }
 
   startApp() :void {
+    this.initialSettings.sensors = this.getSelectedSensors();
     console.log(this.initialSettings);
+
     this.navCtrl.push('TabsPage', {}, {
       animate  : true,
       direction: 'forward'
     }).then(() => {
-      this.storage.set('initiConfig', this.initialSettings);
-      //this.storage.set('hasSeenTutorial', true);
+      this.storage.set('initConfig', this.initialSettings);
+      this.storage.set('hasSeenTutorial', true);
     });
   }
 
@@ -63,32 +70,38 @@ export class SlidesPage {
     this.slides.slidePrev();
   }
 
-  DefineIpAddressDialog(deviceName : string, x: string) :void {
+  DefineIpAddressDialog(serverName : string, server: string) :void {
     this.alertProvider.promptAlertbis({
-      title: deviceName,
-      message: 'Enter the IP address of your ' + deviceName,
+      title: serverName,
+      message: 'Enter the IP address of your ' + serverName,
       inputs: [
       {
         name:'ip',
         type: 'text',
-        placeholder: 'IP address',
+        placeholder: (this.initialSettings[server].ip == '') ? 'IP' : this.initialSettings[server].ip,
       },
       {
         name: 'port',
         type: 'text',
-        placeholder: 'Port',
+        placeholder: (this.initialSettings[server].port == '') ? 'Port' : this.initialSettings[server].port,
       }],
       buttons:[
       {
         text: 'OK',
         handler: (data:any) :void => {
           if (data) {
-            this.initialSettings[x].ip = data.ip;
-            this.initialSettings[x].port = data.port;
+            this.initialSettings[server].ip = data.ip;
+            this.initialSettings[server].port = data.port;
           }
         }
       }]
     }).present();
+  }
+
+  getSelectedSensors(): any[] {
+    return this.sensorsList
+              .filter((sensor : any) => sensor.checked)
+              .map((sensor : any) => sensor.name);
   }
 
 

@@ -6,7 +6,7 @@ export const SENSORS : Sensor[] = [
         desc      : '',
         image     : 'assets/imgs/sensors/pms5003.png',
         pollutants: 'PM10, PM2.5',
-        help      : ''
+        help      : 'www.google.com'
     },
     {
         name      : 'MQ-2',

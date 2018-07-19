@@ -40,8 +40,10 @@
       <!-- <p>For an out-of-the-box solution, use the following sensors :</p> -->
       <ion-list>
         <ion-item *ngFor="let s of sensorsList">
-            <ion-checkbox color="primary" [ngModel]="" checked="false"></ion-checkbox>
-            <ion-label>{{s.name}}</ion-label>     
+            <ion-toggle item-start [(ngModel)]="s.checked" ></ion-toggle>
+            <ion-label>{{s.name}}</ion-label>
+            <ion-icon small name="build" item-end></ion-icon>   
+            <!-- <ion-label>{{s.help}}</ion-label>    -->
         </ion-item> 
        
       </ion-list>
@@ -71,7 +73,7 @@
     <ion-slide>
       <img src="assets/imgs/slides/slide3.jpg" class="slide-image"/>
       <h2 class="slide-title">Share your data with us</h2>
-      <ion-toggle class="center" checked="true" [ngModel]="initialSettings?.isDataShared"></ion-toggle>
+      <ion-toggle class="center" [(ngModel)]="initialSettings.isDataShared"></ion-toggle>
       <p>Help us spread knowledge and data about Air Quality ! We’re building a map of the data collected by our users and accessible to everyone (data is anonymized).</p> 
       <!-- <p>Do you wish to upload the data collected by your system</p> -->
     </ion-slide>
