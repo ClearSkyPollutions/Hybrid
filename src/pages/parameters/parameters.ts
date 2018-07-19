@@ -14,8 +14,16 @@ import { InitConfig } from '../../models/init-config.interface';
   templateUrl: 'parameters.html',
 })
 export class ParametersPage {
-  settings: Settings;
-  raspi: AddressServer;
+  raspi: AddressServer = {
+    ip: '',
+    port: ''
+  };
+  settings: Settings = {
+    frequency: 20,
+    isDataShared: false,
+    sensors: [],
+    serverAddress: this.raspi
+  };
   storedConf: InitConfig;
   tempInputSensor: string;
   spinner: any;
@@ -43,10 +51,10 @@ export class ParametersPage {
   }
 
   ionViewDidLoad() :void {
-    if (this.isEmptyAddress()) {
-      this.addressServerDialog();
-      return;
-    }
+    //if (this.isEmptyAddress()) {
+    //  this.addressServerDialog();
+    //  return;
+    //}
     this.showSpinner();
     this.settingsProvider.getConfig().subscribe(
       (cfg: Settings) => {
@@ -64,7 +72,7 @@ export class ParametersPage {
         this.spinner.dismiss();
         this.showToast('Couldn\'t connect to server');
         if (!this.connection) {
-          this.addressServerDialog();
+         //this.addressServerDialog();
         }
       }
     );
@@ -167,7 +175,7 @@ export class ParametersPage {
               this.showToast('Couldn\'t connect to server');
               this.spinner.dismiss();
               if (!this.connection) {
-                this.addressServerDialog();
+                //this.addressServerDialog();
               }
             }
           );
