@@ -1,25 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { URL } from '../../env/env';
 import { Observable } from 'rxjs';
 import { Card } from 'ionic-angular';
 import _ from 'lodash';
 import { DataMapConstValues, DataMap, DataMapFactorized } from '../../models/dataMaps.interface';
+import { AddressServer } from '../../models/addressServer.interface';
 
 @Injectable()
 export class MapsProvider {
 
-  private ServerIP: string = URL.server.ip;
-  private ServerPort: string = URL.server.port;
-
   constructor(private http: HttpClient) { }
 
-  public getDataSensorLocation(): Observable<DataMapFactorized[]> {
+  public getDataSensorLocation(s : AddressServer): Observable<DataMapFactorized[]> {
     const tableName = 'MAP';
     const requestDataSensorLocation = tableName + '?transform=1';
     let dataMap: DataMap[] = [];
     const dataMapFactoArray: DataMapFactorized[] = [];
-    return this.http.get<DataMapFactorized[]>('http://' + this.ServerIP + ':' + this.ServerPort + '/'
+    return this.http.get<DataMapFactorized[]>('http://' + s.ip + ':' + s.port + '/'
     + requestDataSensorLocation).map((res: Object) => {
       dataMap = res[tableName];
       const constValues: DataMapConstValues[] = [];

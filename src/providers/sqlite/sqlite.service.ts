@@ -12,8 +12,8 @@ import { Data } from '../../models/data.interface';
 
 // Config
 import { SQLITE_REQ } from '../../configs/sqlite.req';
-import { URL } from '../../env/env';
 import { MainService } from '../main.service';
+import { AddressServer } from '../../models/addressServer.interface';
 
 
 
@@ -24,8 +24,6 @@ const DATABASE_FILE_NAME: string = 'data.db';
 export class SqliteProvider extends MainService {
 
   private sqliteDb: SQLiteObject;
-  private RaspServerIP: string = URL.raspberryPi.ip;
-  private RaspServerPort: string = URL.raspberryPi.port;
   private measurements : Data[] = [];
 
 
@@ -92,11 +90,11 @@ export class SqliteProvider extends MainService {
     .catch((e: any) => console.error(e));
   }
 
-  private synchroniseTable(tableName: string): Promise<any> {
+  private synchroniseTable(tableName: string, r : AddressServer): Promise<any> {
     return this.getLastDate(tableName).then((date:string) => {
       const request = tableName + '?filter=Date,gt,' + date +  '&transform=1';
-      console.log('url', 'http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + request);
-      return this.httpGET('http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + request)
+      console.log('url', 'http://' + r.ip + ':' + r.port + '/' + request);
+      return this.httpGET('http://' + r.ip + ':' + r.port + '/' + request)
         .then( (res :Object) => {
           res = res[tableName];
           return this.insertNewValuesIntoDb(tableName, res);
@@ -126,12 +124,12 @@ export class SqliteProvider extends MainService {
     .catch((e :any) => console.log(e));
   }
 
-  public synchroniseAllDatabase() :Promise<any> {
+  public synchroniseAllDatabase(r : AddressServer) :Promise<any> {
     return Promise.all([
-      this.synchroniseTable('AVG_HOUR'),
-      this.synchroniseTable('AVG_MONTH'),
-      this.synchroniseTable('AVG_DAY'),
-      this.synchroniseTable('AVG_YEAR')
+      this.synchroniseTable('AVG_HOUR', r),
+      this.synchroniseTable('AVG_MONTH', r),
+      this.synchroniseTable('AVG_DAY', r),
+      this.synchroniseTable('AVG_YEAR', r)
     ]).then(() => {
       console.log('test');
     });

@@ -1,22 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AQI } from '../../models/aqi';
-import { URL } from '../../env/env';
 import { Observable } from 'rxjs';
+import { AddressServer } from '../../models/addressServer.interface';
 
 
 @Injectable()
 export class AirQualityIndexProvider {
 
-  private RaspServerIP: string = URL.raspberryPi.ip;
-  private RaspServerPort: string = URL.raspberryPi.port;
   constructor(public http: HttpClient) {
 
   }
-  public getAQI(): Observable<AQI> {
+  public getAQI(r : AddressServer): Observable<AQI> {
     const request = 'aqi.php';
 
-    return this.http.get<AQI>('http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + request);
+    return this.http.get<AQI>('http://' + r.ip + ':' + r.port + '/' + request);
   }
 
 }

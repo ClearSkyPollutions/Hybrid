@@ -14,16 +14,8 @@ import { InitConfig } from '../../models/init-config.interface';
   templateUrl: 'parameters.html',
 })
 export class ParametersPage {
-  raspi: AddressServer = {
-    ip: '',
-    port: ''
-  };
-  settings: Settings = {
-    frequency: 20,
-    isDataShared: false,
-    sensors: [],
-    serverAddress: this.raspi
-  };
+  raspi: AddressServer;
+  settings: Settings;
   storedConf: InitConfig;
   tempInputSensor: string;
   spinner: any;
@@ -38,16 +30,17 @@ export class ParametersPage {
     private loadingCtrl: LoadingController,
     private storage: Storage
   ) {
-    storage.get('initConfig').then((val : InitConfig) => {
-      this.settings = {
-        frequency: 20,
-        sensors: val.sensors,
-        serverAddress: val.server_ip,
-        isDataShared: val.isDataShared
-      };
-      this.raspi = val.rasp_ip;
-    });
     this.connection = false;
+    this.raspi = {
+      ip: '',
+      port: ''
+    };
+    this.settings = {
+      frequency: 20,
+      isDataShared: false,
+      sensors: [],
+      serverAddress: this.raspi
+    };
   }
 
   ionViewDidLoad() :void {
@@ -55,28 +48,37 @@ export class ParametersPage {
     //  this.addressServerDialog();
     //  return;
     //}
-    this.showSpinner();
-    this.settingsProvider.getConfig().subscribe(
-      (cfg: Settings) => {
-        this.settings = cfg;
-        this.storedConf.isDataShared = this.settings.isDataShared;
-        this.storedConf.sensors = this.settings.sensors;
-        this.storedConf.server_ip = this.settings.serverAddress;
-        this.storedConf.rasp_ip = this.raspi;
-        this.storage.set('initConfig', this.storedConf);
-        this.spinner.dismiss();
-        this.showToast('Local settings synced with the Raspberry Pi');
-      },
-      (error : any) => {
-        this.connection = false;
-        console.log('Couldn\'t fetch remote settings', error);
-        this.spinner.dismiss();
-        this.showToast('Using last known settings');
-        if (!this.connection) {
-         //this.addressServerDialog();
+    this.storage.get('initConfig').then((val : InitConfig) => {
+      this.settings = {
+        frequency: 20,
+        sensors: val.sensors,
+        serverAddress: val.server_ip,
+        isDataShared: val.isDataShared
+      };
+      this.showSpinner();
+      this.raspi = val.rasp_ip;
+      this.settingsProvider.getConfig(this.raspi).subscribe(
+        (cfg: Settings) => {
+          this.spinner.dismiss();
+          this.showToast('Local settings synced with the Raspberry Pi');
+          this.settings = cfg;
+          this.storedConf.isDataShared = this.settings.isDataShared;
+          this.storedConf.sensors = this.settings.sensors;
+          this.storedConf.server_ip = this.settings.serverAddress;
+          this.storedConf.rasp_ip = this.raspi;
+          this.storage.set('initConfig', this.storedConf);
+        },
+        (error : any) => {
+          this.connection = false;
+          console.log('Couldn\'t fetch remote settings', error);
+          this.spinner.dismiss();
+          this.showToast('Using last known settings');
+          if (!this.connection) {
+           //this.addressServerDialog();
+          }
         }
-      }
-    );
+      );
+    });
   }
 
   removeSensor(oldSensor: string) :void {
@@ -94,7 +96,7 @@ export class ParametersPage {
 
   showToast(msg: string) :void {
     const toast = this.toastCtrl.create({
-      position: 'top',
+      position: 'bottom',
       message: msg,
       duration: 2000
     });
@@ -134,20 +136,20 @@ export class ParametersPage {
           this.showSpinner();
           this.settingsProvider.setConfig(this.settings, this.raspi).subscribe(
             (cfg: Settings) => {
+              this.spinner.dismiss();
+              this.showToast('Connected successfully to the Raspberry Pi');
               this.connection = true;
               this.storedConf.isDataShared = this.settings.isDataShared;
               this.storedConf.sensors = this.settings.sensors;
               this.storedConf.server_ip = this.settings.serverAddress;
               this.storedConf.rasp_ip = this.raspi;
               this.storage.set('initConfig', this.storedConf);
-              this.spinner.dismiss();
-              this.showToast('Connected successfully to the Raspberry Pi');
             },
             (error : any) => {
               this.connection = false;
               console.log('Couldn\'t fetch remote settings', error);
-              this.showToast('Couldn\'t connect to Raspberry Pi. Please try new address');
               this.spinner.dismiss();
+              this.showToast('Couldn\'t connect to Raspberry Pi. Please try new address');
               if (!this.connection) {
                 //this.addressServerDialog();
               }

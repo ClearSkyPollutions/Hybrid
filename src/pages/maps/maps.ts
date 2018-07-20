@@ -4,6 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { MapsProvider } from '../../providers/maps/maps.service';
 import leaflet from 'leaflet';
 import { DataMapFactorized, DataMapValues } from '../../models/dataMaps.interface';
+import { Storage } from '@ionic/storage';
+import { InitConfig } from '../../models/init-config.interface';
 
 
 @IonicPage()
@@ -18,14 +20,15 @@ export class MapsPage {
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
     private translate   : TranslateService,
-    private mapsProvider: MapsProvider
+    private mapsProvider: MapsProvider,
+    private storage: Storage
     ) {
-
-      this.mapsProvider.getDataSensorLocation().subscribe((res: DataMapFactorized[]) => {
-        this.dataMapFactorized = res;
-        console.log(this.dataMapFactorized);
-
-        this.setMarker();
+      this.storage.get('initConfig').then((val : InitConfig) => {
+        this.mapsProvider.getDataSensorLocation(val.server_ip).subscribe((res: DataMapFactorized[]) => {
+          this.dataMapFactorized = res;
+          console.log(this.dataMapFactorized);
+          this.setMarker();
+        });
       });
   }
 

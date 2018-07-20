@@ -1,25 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { URL } from '../../env/env';
-
+import { AddressServer } from '../../models/addressServer.interface';
 
 
 
 @Injectable()
 export class DataProvider {
-  private RaspServerIP: string = URL.raspberryPi.ip;
-  private RaspServerPort: string = URL.raspberryPi.port;
+
   constructor(private http: HttpClient) {}
 
-  public getLastMesure() :Observable<any> {
+  public getLastMesure(r : AddressServer) :Observable<any> {
     const requestConcPM = 'AVG_HOUR?order=date,desc&page=1,1&transform=1';
 
     const requestTempHum = 'DHT22?order=date,desc&page=1,1&transform=1';
 
     return Observable.forkJoin([
-      this.http.get('http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + requestConcPM),
-      this.http.get('http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + requestTempHum)
+      this.http.get('http://' + r.ip + ':' + r.port + '/' + requestConcPM),
+      this.http.get('http://' + r.ip + ':' + r.port + '/' + requestTempHum)
     ])
     .map((data: any) => ({
         pm : data[0],
@@ -30,7 +28,7 @@ export class DataProvider {
 
 
 
-  public defineDataForChart(tableName: string, PollutantType: string) :Observable<any> {
+  public defineDataForChart(r : AddressServer, tableName: string, PollutantType: string) :Observable<any> {
     let range: number;
     switch (tableName) {
       case 'AVG_HOUR': {
@@ -51,7 +49,7 @@ export class DataProvider {
       }
    }
     const request = tableName + '?columns=date,' + PollutantType + '&order=date,desc&page=1,' + range + '&transform=1';
-    return this.http.get('http://' + this.RaspServerIP + ':' + this.RaspServerPort + '/' + request).map( (res : Object) =>
+    return this.http.get('http://' + r.ip + ':' + r.port + '/' + request).map( (res : Object) =>
       res[tableName]
     );
   }
