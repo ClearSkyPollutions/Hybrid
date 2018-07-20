@@ -36,9 +36,9 @@ export class ParametersPage {
     };
     this.settings = {
       frequency: 20,
-      isDataShared: false,
       sensors: [],
-      serverAddress: this.raspi
+      serverAddress: this.raspi,
+      isDataShared: false
     };
   }
 
@@ -57,11 +57,12 @@ export class ParametersPage {
           this.spinner.dismiss();
           this.showToast('Local settings synced with the Raspberry Pi');
           this.settings = cfg;
-          this.storedConf.isDataShared = this.settings.isDataShared;
-          this.storedConf.sensors = this.settings.sensors;
-          this.storedConf.server_ip = this.settings.serverAddress;
-          this.storedConf.rasp_ip = this.raspi;
-          this.storage.set('initConfig', this.storedConf);
+          this.storedConf = {
+            sensors     : this.settings.sensors,
+            rasp_ip     : this.raspi ,
+            server_ip   : this.settings.serverAddress,
+            isDataShared: this.settings.isDataShared
+          };
         },
         (error : any) => {
           console.log('Couldn\'t fetch remote settings', error);
@@ -129,10 +130,12 @@ export class ParametersPage {
             (cfg: Settings) => {
               this.spinner.dismiss();
               this.showToast('Connected successfully to the Raspberry Pi');
-              this.storedConf.isDataShared = this.settings.isDataShared;
-              this.storedConf.sensors = this.settings.sensors;
-              this.storedConf.server_ip = this.settings.serverAddress;
-              this.storedConf.rasp_ip = this.raspi;
+              this.storedConf = {
+                sensors     : this.settings.sensors,
+                rasp_ip     : this.raspi ,
+                server_ip   : this.settings.serverAddress,
+                isDataShared: this.settings.isDataShared
+              };
               this.storage.set('initConfig', this.storedConf);
             },
             (error : any) => {
