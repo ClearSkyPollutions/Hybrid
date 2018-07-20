@@ -30,7 +30,6 @@ export class ParametersPage {
     private loadingCtrl: LoadingController,
     private storage: Storage
   ) {
-    this.connection = false;
     this.raspi = {
       ip: '',
       port: ''
@@ -44,10 +43,6 @@ export class ParametersPage {
   }
 
   ionViewDidLoad() :void {
-    //if (this.isEmptyAddress()) {
-    //  this.addressServerDialog();
-    //  return;
-    //}
     this.storage.get('initConfig').then((val : InitConfig) => {
       this.settings = {
         frequency: 20,
@@ -69,13 +64,9 @@ export class ParametersPage {
           this.storage.set('initConfig', this.storedConf);
         },
         (error : any) => {
-          this.connection = false;
           console.log('Couldn\'t fetch remote settings', error);
           this.spinner.dismiss();
           this.showToast('Using last known settings');
-          if (!this.connection) {
-           //this.addressServerDialog();
-          }
         }
       );
     });
@@ -138,7 +129,6 @@ export class ParametersPage {
             (cfg: Settings) => {
               this.spinner.dismiss();
               this.showToast('Connected successfully to the Raspberry Pi');
-              this.connection = true;
               this.storedConf.isDataShared = this.settings.isDataShared;
               this.storedConf.sensors = this.settings.sensors;
               this.storedConf.server_ip = this.settings.serverAddress;
@@ -146,45 +136,13 @@ export class ParametersPage {
               this.storage.set('initConfig', this.storedConf);
             },
             (error : any) => {
-              this.connection = false;
               console.log('Couldn\'t fetch remote settings', error);
               this.spinner.dismiss();
               this.showToast('Couldn\'t connect to Raspberry Pi. Please try new address');
-              if (!this.connection) {
-                //this.addressServerDialog();
-              }
             }
           );
         }
       }]
     }).present();
   }
-
-  addressServerDialog(): void {
-    this.alertProvider.promptAlertbis({
-      title: 'Raspberry Pi',
-      message: 'The IP address and server port are invalid. \nPlease, correct them to configure your Raspberry Pi.',
-      inputs:
-      [{
-        name:'ip',
-        type: 'text',
-        placeholder: 'IP address',
-      },
-      {
-        name: 'port',
-        type: 'text',
-        placeholder: 'Port',
-      }],
-      buttons:
-      [{
-          text: 'OK',
-          handler: (data:any) :void => {
-            this.raspi.ip = data.ip;
-            this.raspi.port = data.port;
-            this.ionViewDidLoad();
-        }
-      }]
-    }).present();
-  }
-
 }
