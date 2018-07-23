@@ -5,6 +5,7 @@ import { Storage } from '@ionic/storage';
 
 import { InitConfig } from '../../models/init-config.interface';
 import { AlertProvider } from '../../providers/alert/alert.service';
+import { SettingsProvider } from '../../providers/settings/settings.service';
 
 
 
@@ -18,6 +19,7 @@ export class SlidesPage {
   @ViewChild('slides') slides: Slides;
   showPreviousBtn: boolean   = false;
   showNextBtn    : boolean   = true;
+  isAbleToStart  : boolean   = false;
 
   initialSettings: InitConfig;
   sensorsList    : any[] = [
@@ -34,7 +36,8 @@ export class SlidesPage {
     public navCtrl       : NavController,
     public navParams     : NavParams,
     private storage      : Storage,
-    private alertProvider: AlertProvider
+    private alertProvider: AlertProvider,
+    private settProvider : SettingsProvider,
   ) {
     this.initialSettings = {
       sensors     : [''],
@@ -47,14 +50,15 @@ export class SlidesPage {
   startApp() :void {
     this.initialSettings.sensors = this.getSelectedSensors();
     console.log(this.initialSettings);
-
-    this.navCtrl.push('TabsPage', {}, {
-      animate  : true,
-      direction: 'forward'
-    }).then(() => {
-      this.storage.set('initConfig', this.initialSettings);
-      this.storage.set('hasSeenTutorial', true);
-    });
+    if (this.isAbleToStart) {
+      this.navCtrl.push('TabsPage', {}, {
+        animate  : true,
+        direction: 'forward'
+      }).then(() => {
+        this.storage.set('initConfig', this.initialSettings);
+        this.storage.set('hasSeenTutorial', true);
+      });
+    }
   }
 
   onSlideChangeStart(slider: Slides) :void {
@@ -71,7 +75,7 @@ export class SlidesPage {
   }
 
   DefineIpAddressDialog(serverName : string, server: string) :void {
-    console.log('hfhdshfd' + this.initialSettings[server].ip);
+    console.log(serverName + ' ' + this.initialSettings[server].ip);
     this.alertProvider.promptAlertbis({
       title: serverName,
       message: 'Enter the IP address of your ' + serverName,
@@ -88,13 +92,21 @@ export class SlidesPage {
         value: this.initialSettings[server].port,
         placeholder: 'Port'
       }],
-      buttons:[
-      {
+      buttons:
+      [{
         text: 'OK',
         handler: (data:any) :void => {
           if (data) {
-            this.initialSettings[server].ip = data.ip;
-            this.initialSettings[server].port = data.port;
+            if (server == 'rasp_ip') {
+              this.settProvider.getConfig(data).subscribe(() => {
+                this.initialSettings[server].ip = data.ip;
+                this.initialSettings[server].port = data.port;
+                this.isAbleToStart = true;
+              }, (error : any) => {
+                console.log('Could not reach the server', error);
+                this.isAbleToStart = false;
+              });
+            }
           }
         }
       }]
