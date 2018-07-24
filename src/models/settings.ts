@@ -1,7 +1,9 @@
+import { AddressServer } from './addressServer.interface';
+
 export interface Settings {
-    Frequency: number;
-    SSID: string;
-    Password: string;
-    SecurityType: string;
-    Sensors: string[];
+    sensors: string[];
+    frequency: number;
+    serverAddress: AddressServer;
+    isDataShared: boolean;
 }
+

@@ -15,6 +15,10 @@ import { AQI } from '../../../models/aqi';
 import { SqliteProvider } from '../../../providers/sqlite/sqlite.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { ErrorDetails } from '../../../models/shared/error-banner.interface';
+import { Storage } from '@ionic/storage';
+import { AddressServer } from '../../../models/addressServer.interface';
+import { InitConfig } from '../../../models/init-config.interface';
+
 
 @IonicPage()
 @Component({
@@ -31,6 +35,7 @@ export class HomePage  {
   aqIndex     : AQI;
   showParams  : boolean = false;
   color       : string;
+  raspi       : AddressServer;
 
   constructor(
     private modalCtrl: ModalController,
@@ -42,21 +47,23 @@ export class HomePage  {
     private sqliteProvider: SqliteProvider,
     private localNotifications: LocalNotifications,
     private toastCtrl   : ToastController,
-    public events       : Events
+    public events       : Events,
+    private storage: Storage
   ) {
     this.city = this.navParams.get('location');
-
-    this.aqIndexProvider.getAQI().subscribe( (res : AQI) => {
-      this.aqIndex = res;
-      this.color = this.aqIndex.color;
-     if (this.aqIndex.index > 5 ) {
-      this.localNotifications.schedule({
-        title: 'Air quality',
-        text: this.aqIndex.index + '(' + this.aqIndex.level + ')'
+    this.storage.get('initConfig').then( (val: InitConfig) => {
+      this.raspi = val.rasp_ip;
+      this.aqIndexProvider.getAQI(val.rasp_ip).subscribe( (res : AQI) => {
+        this.aqIndex = res;
+        this.color = this.aqIndex.color;
+       if (this.aqIndex.index > 5 ) {
+        this.localNotifications.schedule({
+          title: 'Air quality',
+          text: this.aqIndex.index + '(' + this.aqIndex.level + ')'
+        });
+      }
       });
-    }
     });
-
 
     //@TODO: load data from somewhere
     this.charts.push({ type: 'pm10', unit: 'µg/m^3', lineColor: '#046bfe', chartView: '' });
@@ -64,12 +71,11 @@ export class HomePage  {
     this.charts.push({ type: 'temperature', unit: '°C', lineColor: '#ff2039', chartView: '' });
     this.charts.push({ type: 'humidity', unit: '%', lineColor: '#ffab00', chartView: '' });
     //this.showLastMesure();
-
   }
 
   ngAfterViewInit() :void {
   this.sqliteProvider.createSQLiteDatabase().then((res:void) => {
-    this.sqliteProvider.synchroniseAllDatabase()
+    this.sqliteProvider.synchroniseAllDatabase(this.raspi)
     .then(() => {
       this.updateAllCharts();
     });
@@ -78,7 +84,7 @@ export class HomePage  {
 
 doRefresh(refresher: Refresher) :void {
   console.log('Begin async operation');
-  this.sqliteProvider.synchroniseAllDatabase().then(() :void => {
+  this.sqliteProvider.synchroniseAllDatabase(this.raspi).then(() :void => {
     this.updateAllCharts();
     this.events.subscribe('CLEAR_SKY:Error', (error: ErrorDetails) => {
       console.log('Welcome', error);
@@ -117,7 +123,7 @@ private getRandomColor() : string {
 }
 
 private showLastMesure() :void {
-  this.dataProvider.getLastMesure().subscribe(
+  this.dataProvider.getLastMesure(this.raspi).subscribe(
     (lastdata : any) => {
       this.data = {
         pm: lastdata.pm['AVG_HOUR'][0],

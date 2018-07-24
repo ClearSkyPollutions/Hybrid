@@ -24,12 +24,12 @@ export class AlertProvider {
       message: options.message,
       buttons: [
         {
-          text: options.button_1.text,
-          handler: options.button_1.handler
+          text: options.buttons[0].text,
+          handler: options.buttons[0].handler
         },
         {
-          text: options.button_2.text,
-          handler: options.button_2.handler
+          text: options.buttons[1].text,
+          handler: options.buttons[1].handler
         }
       ]
     });
@@ -41,22 +41,47 @@ export class AlertProvider {
       message: options.message,
       inputs: [
         {
-          name: options.input.name,
-          placeholder: options.input.placeholder
+          name: options.inputs[0].name,
+          placeholder: options.inputs[0].placeholder
         },
       ],
       buttons: [
         {
-          text: options.button_1.text,
-          handler: options.button_1.handler
+          text: options.buttons[0].text,
+          handler: options.buttons[0].handler
         },
         {
-          text: options.button_2.text,
-          handler: options.button_2.handler
+          text: options.buttons[1].text,
+          handler: options.buttons[1].handler
         }
       ]
     });
   }
 
-
+  promptAlertbis(options: AlertDialog) : Alert {
+    return this.alertCtrl.create({
+      title: options.title,
+      message: options.message,
+      inputs: [
+        {
+          name: options.inputs[0].name,
+          value: options.inputs[0].value,
+          placeholder: options.inputs[0].placeholder,
+          type: options.inputs[0].type
+        },
+        {
+          name: options.inputs[1].name,
+          value: options.inputs[1].value,
+          placeholder: options.inputs[1].placeholder,
+          type: options.inputs[1].type
+        }
+      ],
+      buttons: [
+        {
+          text: options.buttons[0].text,
+          handler: options.buttons[0].handler
+        }
+      ]
+    });
+  }
 }

@@ -1,27 +1,24 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Settings } from '../../models/settings';
-import { URL } from '../../env/env';
 import { Observable } from 'rxjs';
+import { AddressServer } from '../../models/addressServer.interface';
 
 
 @Injectable()
 export class SettingsProvider {
 
-  private RaspServerUrl: string = URL.raspberryPi;
-
   constructor(public http: HttpClient) {
   }
 
-  public getConfig() :Observable<Settings> {
+  public getConfig(r : AddressServer) :Observable<Settings> {
     const request = 'config.json';
-    return this.http.get<Settings>(this.RaspServerUrl + '/' + request);
+        return this.http.get<Settings>('http://' + r.ip + ':' + r.port + '/' + request);
   }
 
-  public setConfig(s : Settings) :Observable<Object> {
+  public setConfig(s : Settings, r : AddressServer) :Observable<Object> {
     const request = 'config.php';
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-    return this.http.put(this.RaspServerUrl + '/' + request, s, {headers});
+    return this.http.put('http://' + r.ip + ':' + r.port + '/' + request, s, {headers});
   }
 }

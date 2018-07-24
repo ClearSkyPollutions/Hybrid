@@ -3,19 +3,37 @@
   <ion-navbar color="primary">
     <ion-title>Pollutants</ion-title>
   </ion-navbar>
-
+  <ion-segment [(ngModel)]="activeSegment">
+      <ion-segment-button value="pollutants">
+        Pollutants
+      </ion-segment-button>
+      <ion-segment-button value="sensors">
+        Sensors
+      </ion-segment-button>
+    </ion-segment>
 </ion-header>
 
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let p of polluants" (click)="goToPolluantDetails(p)">
-        <ion-thumbnail item-start>
-            <img [src]="p.image">
-        </ion-thumbnail>
-        <h2>{{p.name}}</h2>
-        <p>{{p.source}}</p>
-    </ion-item>
-  </ion-list>
-  
+  <div [ngSwitch]="activeSegment">
+    <ion-list *ngSwitchCase="'pollutants'" >
+      <ion-item *ngFor="let p of polluants" (click)="goToPolluantDetails(p)">
+          <ion-thumbnail item-start>
+              <img [src]="p.image">
+          </ion-thumbnail>
+          <h2>{{p.name}}</h2>
+          <p>{{p.source}}</p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'sensors'">
+        <ion-item *ngFor="let s of sensors" (click)="goToSensorDetails(s)">
+            <ion-thumbnail item-start>
+                <img [src]="s.image">
+            </ion-thumbnail>
+            <h2>{{s.name}}</h2>
+            <p>{{s.pollutants}}</p>
+        </ion-item>
+    </ion-list>
+  </div>
 </ion-content>
