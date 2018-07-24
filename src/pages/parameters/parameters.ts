@@ -63,6 +63,7 @@ export class ParametersPage {
             server_ip   : this.settings.serverAddress,
             isDataShared: this.settings.isDataShared
           };
+          this.storage.set('initConfig', this.storedConf);
         },
         (error : any) => {
           console.log('Couldn\'t fetch remote settings', error);
@@ -126,24 +127,28 @@ export class ParametersPage {
         text: 'Accept',
         handler: () :void => {
           this.showSpinner();
-          this.settingsProvider.setConfig(this.settings, this.raspi).subscribe(
-            (cfg: Settings) => {
-              this.spinner.dismiss();
-              this.showToast('Connected successfully to the Raspberry Pi');
-              this.storedConf = {
-                sensors     : this.settings.sensors,
-                rasp_ip     : this.raspi ,
-                server_ip   : this.settings.serverAddress,
-                isDataShared: this.settings.isDataShared
-              };
-              this.storage.set('initConfig', this.storedConf);
-            },
-            (error : any) => {
-              console.log('Couldn\'t fetch remote settings', error);
-              this.spinner.dismiss();
-              this.showToast('Couldn\'t connect to Raspberry Pi. Please try new address');
-            }
-          );
+          try {
+            this.settingsProvider.setConfig(this.settings, this.raspi).subscribe(
+              (cfg: Settings) => {
+                this.spinner.dismiss();
+                this.showToast('Connected successfully to the Raspberry Pi');
+                this.storedConf = {
+                  sensors     : this.settings.sensors,
+                  rasp_ip     : this.raspi ,
+                  server_ip   : this.settings.serverAddress,
+                  isDataShared: this.settings.isDataShared
+                };
+                this.storage.set('initConfig', this.storedConf);
+              },
+              (error : any) => {
+                console.log('Couldn\'t fetch remote settings', error);
+                this.spinner.dismiss();
+                this.showToast('Couldn\'t connect to Raspberry Pi. Please try new address');
+              }
+            );
+          } catch (error) {
+            this.showToast('Invalid address');
+          }
         }
       }]
     }).present();

@@ -49,7 +49,6 @@
       <!-- <p>A minimal amount of coding is necessary if you wish to add differents sensors, but we’ll be glad to help at https://github.com/capteurPollutions/Embedded.</p> -->
     </ion-slide>
 
-
     <!-- Setting up ClearSky -->
     <ion-slide>
       <img src="assets/imgs/slides/slide1.jpg" class="slide-image"/>
@@ -59,14 +58,6 @@
           Next up, configuring the mobile app to visualize this data !
       </p> 
     </ion-slide>
-
-    <!-- Ip addresse of Raspberry-->
-    <ion-slide>
-        <img src="assets/imgs/slides/slide2.jpg" class="slide-image"/>
-        <h2 class="slide-title">IP address of Raspberry</h2>
-        <p>What’s the IP Address of the Raspberry Pi (How to get it ? ) :</p> 
-        <button ion-button round (click)="DefineIpAddressDialog('Raspberry Pi', 'rasp_ip')">Raspberry Pi IP</button>
-      </ion-slide>
 
     <!-- partage des données (+système ID) -->
     <ion-slide>
@@ -84,12 +75,20 @@
       <p>Optionally, you may want to use another server to upload your data to :</p> 
       <button ion-button round (click)="DefineIpAddressDialog('Server', 'server_ip')">Server IP</button>
     </ion-slide>
-  </ion-slides> 
+
+    <!-- Ip addresse of Raspberry-->
+    <ion-slide>
+      <img src="assets/imgs/slides/slide2.jpg" class="slide-image"/>
+      <h2 class="slide-title">IP address of Raspberry</h2>
+      <p>What’s the IP Address of the Raspberry Pi (How to get it ? ) :</p> 
+      <button ion-button round (click)="DefineIpAddressDialog('Raspberry Pi', 'rasp_ip')">Raspberry Pi IP</button>
+    </ion-slide>
+  </ion-slides>
 
 </ion-content>
 <ion-footer class="btn-footer">
     <button *ngIf="showPreviousBtn" float-left ion-button round  color="primary" class="btnPrev" (click)="prev()">Prev</button>
     <button *ngIf="showNextBtn" float-right ion-button round color="primary" class="btnNext" (click)="next()">Next</button>
-    <button *ngIf="!showNextBtn" float-right ion-button round color="primary" class="auth-btn" (click)="startApp()">Start</button>
+    <button *ngIf="showStartBtn"  float-right ion-button round color="primary" class="auth-btn" (click)="startApp()">Start</button>
 </ion-footer>
 

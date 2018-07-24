@@ -1,11 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides, ToastController, LoadingController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
 
 import { InitConfig } from '../../models/init-config.interface';
 import { AlertProvider } from '../../providers/alert/alert.service';
 import { SettingsProvider } from '../../providers/settings/settings.service';
+import { Settings } from '../../models/settings';
 
 
 
@@ -19,9 +20,12 @@ export class SlidesPage {
   @ViewChild('slides') slides: Slides;
   showPreviousBtn: boolean   = false;
   showNextBtn    : boolean   = true;
+  showStartBtn   : boolean   = false;
   isAbleToStart  : boolean   = false;
 
   initialSettings: InitConfig;
+  newSettings    : Settings;
+  spinner        : any;
   sensorsList    : any[] = [
     {name: 'PMS5003', checked   : false, help: 'https://www.google.com/search?q=PMS5003'},
     {name: 'MQ-2', checked      : false, help: 'https://www.google.com/search?q=MQ-2'},
@@ -38,7 +42,9 @@ export class SlidesPage {
     private storage      : Storage,
     private alertProvider: AlertProvider,
     private settProvider : SettingsProvider,
-  ) {
+    private loadingCtrl  : LoadingController,
+    private toastCtrl    : ToastController
+    ) {
     this.initialSettings = {
       sensors     : [''],
       rasp_ip     : { ip: '192.168.0.', port: '80'},
@@ -50,15 +56,22 @@ export class SlidesPage {
   startApp() :void {
     this.initialSettings.sensors = this.getSelectedSensors();
     console.log(this.initialSettings);
-    if (this.isAbleToStart) {
-      this.navCtrl.push('TabsPage', {}, {
-        animate  : true,
-        direction: 'forward'
-      }).then(() => {
-        this.storage.set('initConfig', this.initialSettings);
-        this.storage.set('hasSeenTutorial', true);
+    this.storage.set('hasSeenTutorial', true);
+    this.storage.set('initConfig', this.initialSettings).then((val : InitConfig) => {
+      this.newSettings = {
+        sensors: val.sensors,
+        frequency: 20,
+        serverAddress: val.server_ip,
+        isDataShared: val.isDataShared
+      };
+      this.settProvider.setConfig(this.newSettings, val.rasp_ip).subscribe(() => {
+        console.log(this.newSettings);
+        this.navCtrl.push('TabsPage', {}, {
+          animate  : true,
+          direction: 'forward'
+        });
       });
-    }
+    });
   }
 
   onSlideChangeStart(slider: Slides) :void {
@@ -96,16 +109,23 @@ export class SlidesPage {
       [{
         text: 'OK',
         handler: (data:any) :void => {
-          if (data) {
-            if (server == 'rasp_ip') {
+          this.initialSettings[server].ip = data.ip;
+          this.initialSettings[server].port = data.port;
+          if (server == 'rasp_ip') {
+            this.showSpinner();
+            try {
               this.settProvider.getConfig(data).subscribe(() => {
-                this.initialSettings[server].ip = data.ip;
-                this.initialSettings[server].port = data.port;
                 this.isAbleToStart = true;
+                this.showStartBtn = true;
+                this.spinner.dismiss();
               }, (error : any) => {
-                console.log('Could not reach the server', error);
+                this.spinner.dismiss();
+                this.showToast('Could not reach the server, please try an other address');
                 this.isAbleToStart = false;
               });
+            } catch (error) {
+              this.showToast('Invalid address');
+              this.isAbleToStart = false;
             }
           }
         }
@@ -117,6 +137,22 @@ export class SlidesPage {
     return this.sensorsList
               .filter((sensor : any) => sensor.checked)
               .map((sensor : any) => sensor.name);
+  }
+
+  showToast(msg: string) :void {
+    const toast = this.toastCtrl.create({
+      position: 'bottom',
+      message: msg,
+      duration: 2000
+    });
+    toast.present();
+  }
+
+  showSpinner() :void {
+    this.spinner = this.loadingCtrl.create({
+      content: 'Connecting to server...'
+    });
+    this.spinner.present();
   }
 
 
