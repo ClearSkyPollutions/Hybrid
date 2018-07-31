@@ -1,14 +1,14 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>Pollutants</ion-title>
+    <ion-title>{{ 'info' | translate:user }}</ion-title>
   </ion-navbar>
   <ion-segment [(ngModel)]="activeSegment">
       <ion-segment-button value="pollutants">
-        Pollutants
+        {{ 'pollutants' | translate:user }}
       </ion-segment-button>
       <ion-segment-button value="sensors">
-        Sensors
+        {{ 'sensors' | translate:user }}
       </ion-segment-button>
     </ion-segment>
 </ion-header>

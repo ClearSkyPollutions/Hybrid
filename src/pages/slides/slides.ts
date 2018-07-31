@@ -77,6 +77,7 @@ export class SlidesPage {
   onSlideChangeStart(slider: Slides) :void {
     this.showNextBtn     = !slider.isEnd();
     this.showPreviousBtn = !slider.isBeginning();
+    this.showStartBtn    = (slider.isEnd() && this.isAbleToStart) ;
   }
 
   next() :void {
