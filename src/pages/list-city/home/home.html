@@ -13,9 +13,9 @@
   <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content
         pullingIcon="arrow-dropdown"
-        pullingText="Pull to refresh"
+        pullingText="{{ 'refresh_action_message' | translate:user}}"
         refreshingSpinner="circles"
-        refreshingText="Uploading new data...">
+        refreshingText="{{ 'refresh_message' | translate:user}}">
       </ion-refresher-content>
   </ion-refresher>
 

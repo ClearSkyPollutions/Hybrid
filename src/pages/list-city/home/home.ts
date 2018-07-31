@@ -58,7 +58,7 @@ export class HomePage  {
         this.color = this.aqIndex.color;
        if (this.aqIndex.index > 5 ) {
         this.localNotifications.schedule({
-          title: 'Air quality',
+          title: this.translate.instant('airquality'),
           text: this.aqIndex.index + '(' + this.aqIndex.level + ')'
         });
       }
