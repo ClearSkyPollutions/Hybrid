@@ -28,7 +28,7 @@ export class SlidesPage {
   spinner        : any;
   sensorsList    : any[] = [
     {name: 'PMS5003', checked   : false, help: 'https://www.google.com/search?q=PMS5003'},
-    {name: 'MQ-2', checked      : false, help: 'https://www.google.com/search?q=MQ-2'},
+    {name: 'MQ2', checked      : false, help: 'https://www.google.com/search?q=MQ-2'},
     {name: 'DHT22', checked     : false, help: 'https://www.google.com/search?q=DHT22'},
     {name: 'MISC', checked      : false, help: 'https://www.google.com/search?q=MISC'},
     {name: 'Microphone', checked: false, help: 'https://www.google.com/search?q=Microphone'}
@@ -92,19 +92,19 @@ export class SlidesPage {
     console.log(serverName + ' ' + this.initialSettings[server].ip);
     this.alertProvider.promptAlertbis({
       title: serverName,
-      message: 'Enter the IP address of your ' + serverName,
+      message: '',
       inputs: [
       {
         name:'ip',
         type: 'text',
         value: this.initialSettings[server].ip,
-        placeholder: 'IP Address',
+        placeholder: this.translate.instant('ipAddress'),
       },
       {
         name: 'port',
         type: 'number',
         value: this.initialSettings[server].port,
-        placeholder: 'Port'
+        placeholder: this.translate.instant('port')
       }],
       buttons:
       [{
@@ -121,11 +121,11 @@ export class SlidesPage {
                 this.spinner.dismiss();
               }, (error : any) => {
                 this.spinner.dismiss();
-                this.showToast('Could not reach the server, please try an other address');
+                this.showToast('param_alertconnection_failed');
                 this.isAbleToStart = false;
               });
             } catch (error) {
-              this.showToast('Invalid address');
+              this.showToast(this.translate.instant('param_alert_failed'));
               this.isAbleToStart = false;
             }
           }
@@ -151,7 +151,7 @@ export class SlidesPage {
 
   showSpinner() :void {
     this.spinner = this.loadingCtrl.create({
-      content: 'Connecting to server...'
+      content: this.translate.instant('param_spinner_toast')
     });
     this.spinner.present();
   }

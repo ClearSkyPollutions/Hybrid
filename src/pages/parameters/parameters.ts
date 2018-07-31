@@ -118,13 +118,13 @@ export class ParametersPage {
       message: this.translate.instant('param_alert_message'),
       buttons:
       [{
-        text: 'Cancel',
+        text: this.translate.instant('param_alertcancel_btn'),
         handler: () :void => {
           this.showToast(this.translate.instant('param_alert_cancel'));
         }
       },
       {
-        text: 'Accept',
+        text: this.translate.instant('param_alertconfirm_btn'),
         handler: () :void => {
           this.showSpinner();
           try {
