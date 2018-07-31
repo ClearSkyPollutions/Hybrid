@@ -31,15 +31,15 @@ export class ListPolluantPage {
 
   goToPolluantDetails(p: Polluant): void {
     this.alertProvider.basicAlert({
-      title: p.name,
-      message: p.desc
+      title: this.translate.instant(p.name),
+      message: this.translate.instant(p.desc)
     }).present();
   }
 
   goToSensorDetails(s: Sensor): void {
     this.alertProvider.basicAlert({
       title: s.name,
-      message: s.desc
+      message: this.translate.instant(s.desc)
     }).present();
   }
 

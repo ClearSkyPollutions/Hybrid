@@ -21,8 +21,8 @@
           <ion-thumbnail item-start>
               <img [src]="p.image">
           </ion-thumbnail>
-          <h2>{{p.name}}</h2>
-          <p>{{p.source}}</p>
+          <h2>{{p.name | translate:user}}</h2>
+          <p>{{p.source | translate:user}}</p>
       </ion-item>
     </ion-list>
 
@@ -31,8 +31,8 @@
             <ion-thumbnail item-start>
                 <img [src]="s.image">
             </ion-thumbnail>
-            <h2>{{s.name}}</h2>
-            <p>{{s.pollutants}}</p>
+            <h2>{{s.name }}</h2>
+            <p>{{ s.pollutants | translate:user }}</p>
         </ion-item>
     </ion-list>
   </div>

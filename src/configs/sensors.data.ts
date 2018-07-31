@@ -3,37 +3,37 @@ import { Sensor } from '../models/sensor.interface';
 export const SENSORS : Sensor[] = [
     {
         name      : 'PMS5003',
-        desc      : '',
+        desc      : 'pms5003[desc]',
         image     : 'assets/imgs/sensors/pms5003.png',
-        pollutants: 'Fine particles',
+        pollutants: 'pms5003[pollutants]',
         help      : 'www.google.com'
     },
     {
-        name      : 'MQ-2',
-        desc      : 'Standard gas concentration sensor, conductivity of the sensor depends on the concentration of target gases in the air.',
+        name      : 'MQ2',
+        desc      : 'mq2[desc]',
         image     : 'assets/imgs/sensors/mq2.png',
-        pollutants: 'Combustible Gases - Methane, Butane, LPG, smoke',
+        pollutants: 'mq2[pollutants]',
         help      : ''
     },
     {
         name      : 'DHT22',
-        desc      : 'Uses a capacitive humidity sensor and a thermistor to measure the surrounding air. Readings every 2 seconds.',
+        desc      : 'dht22[desc]',
         image     : 'assets/imgs/sensors/dht22.jpg',
-        pollutants: 'Temperature, Humidity',
+        pollutants: 'dht22[pollutants]',
         help      : ''
     },
     {
         name      : 'MISC',
-        desc      : '',
+        desc      : 'misc[desc]',
         image     : 'assets/imgs/sensors/misc.png',
-        pollutants: 'gaz',
+        pollutants: 'misc[pollutants]',
         help      : ''
     },
     {
         name      : 'Microphone',
-        desc      : '',
+        desc      : 'microphone[desc]',
         image     : 'assets/imgs/sensors/microphone.jpg',
-        pollutants: 'sound',
+        pollutants: 'microphone[pollutants]',
         help      : ''
     }
 ];
