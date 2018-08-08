@@ -3,11 +3,11 @@ import { IonicPage, NavController, NavParams, Slides, ToastController, LoadingCo
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
 
-import { InitConfig } from '../../models/init-config.interface';
+import { StoredConf } from '../../models/init-config.interface';
 import { AlertProvider } from '../../providers/alert/alert.service';
 import { SettingsProvider } from '../../providers/settings/settings.service';
 import { Settings } from '../../models/settings';
-import { System } from '../../models/system';
+import { Geolocation } from '@ionic-native/geolocation';
 
 
 
@@ -24,7 +24,7 @@ export class SlidesPage {
   showStartBtn   : boolean   = false;
   isAbleToStart  : boolean   = false;
 
-  initialSettings: InitConfig;
+  initialSettings: StoredConf;
   newSettings    : Settings;
   spinner        : any;
   sensorsList    : any[] = [
@@ -44,27 +44,33 @@ export class SlidesPage {
     private alertProvider: AlertProvider,
     private settProvider : SettingsProvider,
     private loadingCtrl  : LoadingController,
-    private toastCtrl    : ToastController
-    ) {
+    private toastCtrl    : ToastController,
+    private geolocation: Geolocation
+  ) {
     this.initialSettings = {
+      frequency   : 20,
       sensors     : [''],
       rasp_ip     : { ip: '192.168.0.', port: '80'},
       server_ip   : { ip: '192.168.2.118', port: '80'},
       isDataShared: false,
     };
+    this.newSettings = {
+      frequency: 20,
+      sensors     : [''],
+      serverAddress   : { ip: '192.168.2.118', port: '80'},
+      isDataShared: false,
+      latitude: '-1',
+      longitude: '-1'
+    };
   }
 
   startApp() :void {
     this.initialSettings.sensors = this.getSelectedSensors();
-    console.log(this.initialSettings);
     this.storage.set('hasSeenTutorial', true);
-    this.storage.set('initConfig', this.initialSettings).then((val : InitConfig) => {
-      this.newSettings = {
-        sensors: val.sensors,
-        frequency: 20,
-        serverAddress: val.server_ip,
-        isDataShared: val.isDataShared
-      };
+    this.storage.set('initConfig', this.initialSettings).then((val : StoredConf) => {
+      this.newSettings.sensors = val.sensors;
+      this.newSettings.serverAddress = val.server_ip;
+      this.newSettings.isDataShared = val.isDataShared;
       this.settProvider.setConfig(this.newSettings, val.rasp_ip).subscribe(() => {
         console.log(this.newSettings);
         this.navCtrl.push('TabsPage', {}, {
@@ -116,16 +122,18 @@ export class SlidesPage {
             this.showSpinner();
             try {
               this.settProvider.getConfig(data).subscribe(() => {
-                this.settProvider.getSystemID(data).subscribe(
-                  (system : any) => {
-                    this.storage.set('system', system['SYSTEM'][0]);
-                    console.log(system['SYSTEM'][0]);
+                this.settProvider.getSystem(data).subscribe(
+                  (sys : any) => {
+                    sys['SYSTEM'][0]['latitude'] = this.newSettings.latitude;
+                    sys['SYSTEM'][0]['longitude'] = this.newSettings.longitude;
+                    this.storage.set('system', sys['SYSTEM'][0]);
+                    console.log(sys['SYSTEM'][0]);
                   }
                 );
                 this.isAbleToStart = true;
                 this.showStartBtn = true;
                 this.spinner.dismiss();
-              }, (error : any) => {
+              }, () => {
                 this.spinner.dismiss();
                 this.showToast('Could not reach the server, please try an other address');
                 this.isAbleToStart = false;
@@ -162,7 +170,18 @@ export class SlidesPage {
     this.spinner.present();
   }
 
-
+  getPosition() : void {
+    if (this.initialSettings.isDataShared) {
+      this.geolocation.getCurrentPosition().then((resp : any) => {
+        console.log(resp);
+        console.log(resp['coords']['latitude']);
+        this.newSettings.latitude  = String(resp['coords']['latitude']);
+        this.newSettings.longitude = String(resp['coords']['longitude']);
+       }).catch((error : any) => {
+         console.log('Error getting location', error);
+       });
+    }
+  }
 
 
 }

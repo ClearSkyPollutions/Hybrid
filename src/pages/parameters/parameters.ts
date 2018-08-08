@@ -6,7 +6,8 @@ import { Settings } from '../../models/settings';
 import { AlertProvider } from '../../providers/alert/alert.service';
 import { SettingsProvider } from '../../providers/settings/settings.service';
 import { AddressServer } from '../../models/addressServer.interface';
-import { InitConfig } from '../../models/init-config.interface';
+import { StoredConf } from '../../models/init-config.interface';
+import { System } from '../../models/system';
 
 @IonicPage()
 @Component({
@@ -16,7 +17,8 @@ import { InitConfig } from '../../models/init-config.interface';
 export class ParametersPage {
   raspi: AddressServer;
   settings: Settings;
-  storedConf: InitConfig;
+  storedConf: StoredConf;
+  system : System;
   tempInputSensor: string;
   spinner: any;
   connection: boolean;
@@ -38,26 +40,34 @@ export class ParametersPage {
       frequency: 20,
       sensors: [],
       serverAddress: this.raspi,
-      isDataShared: false
+      isDataShared: false,
+      latitude: '1',
+      longitude: '1'
     };
   }
 
   ionViewDidLoad() :void {
-    this.storage.get('initConfig').then((val : InitConfig) => {
-      this.settings = {
-        frequency: 20,
-        sensors: val.sensors,
-        serverAddress: val.server_ip,
-        isDataShared: val.isDataShared
-      };
-      this.showSpinner();
+    this.storage.get('initConfig').then((val : StoredConf) => {
+      this.settings.frequency = val.frequency;
+      this.settings.sensors = val.sensors;
+      this.settings.serverAddress = val.server_ip;
+      this.settings.isDataShared = val.isDataShared;
       this.raspi = val.rasp_ip;
+      this.showSpinner();
       this.settingsProvider.getConfig(this.raspi).subscribe(
         (cfg: Settings) => {
           this.spinner.dismiss();
           this.showToast('Local settings synced with the Raspberry Pi');
-          this.settings = cfg;
+          this.settings = {
+            frequency     : cfg.frequency,
+            sensors       : cfg.sensors,
+            serverAddress : cfg.serverAddress,
+            isDataShared  : cfg.isDataShared,
+            latitude      : '-1',
+            longitude     : '-1'
+          };
           this.storedConf = {
+            frequency   : this.settings.frequency,
             sensors     : this.settings.sensors,
             rasp_ip     : this.raspi ,
             server_ip   : this.settings.serverAddress,
@@ -128,17 +138,24 @@ export class ParametersPage {
         handler: () :void => {
           this.showSpinner();
           try {
-            this.settingsProvider.setConfig(this.settings, this.raspi).subscribe(
-              (cfg: Settings) => {
-                this.spinner.dismiss();
-                this.showToast('Connected successfully to the Raspberry Pi');
-                this.storedConf = {
-                  sensors     : this.settings.sensors,
-                  rasp_ip     : this.raspi ,
-                  server_ip   : this.settings.serverAddress,
-                  isDataShared: this.settings.isDataShared
-                };
-                this.storage.set('initConfig', this.storedConf);
+              this.storage.get('system').then((sys : any) => {
+                console.log(sys);
+                this.settings.latitude = sys['latitude'];
+                this.settings.longitude = sys['longitude'];
+                this.settingsProvider.setConfig(this.settings, this.raspi).subscribe(
+                  () => {
+                    console.log(this.settings);
+                    this.spinner.dismiss();
+                    this.showToast('Connected successfully to the Raspberry Pi');
+                    this.storedConf = {
+                      frequency   : this.settings.frequency,
+                      sensors     : this.settings.sensors,
+                      rasp_ip     : this.raspi ,
+                      server_ip   : this.settings.serverAddress,
+                      isDataShared: this.settings.isDataShared
+                    };
+                    this.storage.set('initConfig', this.storedConf);
+                });
               },
               (error : any) => {
                 console.log('Couldn\'t fetch remote settings', error);

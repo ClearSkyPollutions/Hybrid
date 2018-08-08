@@ -63,7 +63,7 @@
     <ion-slide>
       <img src="assets/imgs/slides/slide3.jpg" class="slide-image"/>
       <h2 class="slide-title">Share your data with us</h2>
-      <ion-toggle class="center" [(ngModel)]="initialSettings.isDataShared"></ion-toggle>
+      <ion-toggle class="center" [(ngModel)]="initialSettings.isDataShared" (ionChange)="getPosition()"></ion-toggle>
       <p>Help us spread knowledge and data about Air Quality ! We’re building a map of the data collected by our users and accessible to everyone (data is anonymized).</p> 
       <!-- <p>Do you wish to upload the data collected by your system</p> -->
     </ion-slide>
