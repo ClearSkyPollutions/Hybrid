@@ -14,6 +14,7 @@ import { Data } from '../../models/data.interface';
 import { SQLITE_REQ } from '../../configs/sqlite.req';
 import { MainService } from '../main.service';
 import { AddressServer } from '../../models/addressServer.interface';
+import { System } from '../../models/system';
 
 
 
@@ -74,8 +75,8 @@ export class SqliteProvider extends MainService {
       for (var i = 0; i < data.rows.length; i++) {
         this.measurements.push(data.rows.item(i));
       }
-      return this.measurements;
     }
+    return this.measurements;
    })
    .catch((e:any) => console.log(e));
   }
@@ -92,16 +93,16 @@ export class SqliteProvider extends MainService {
 
   private synchroniseTable(tableName: string, r : AddressServer): Promise<any> {
     return this.getLastDate(tableName).then((date:string) => {
-      const request = tableName + '?filter=Date,gt,' + date +  '&transform=1';
-      console.log('url', 'http://' + r.ip + ':' + r.port + '/' + request);
-      return this.httpGET('http://' + r.ip + ':' + r.port + '/' + request)
-        .then( (res :Object) => {
-          res = res[tableName];
-          return this.insertNewValuesIntoDb(tableName, res);
-        })
-        .catch((response :any) => {
-        });
+      this.storage.get('system').then((system : any) => {
+        const request = tableName + '?filter[]=Date,gt,' + date + '&filter[]=systemId,eq,' + system['id'] + '&transform=1';
+        console.log('url', 'http://' + r.ip + ':' + r.port + '/' + request);
+        return this.httpGET('http://' + r.ip + ':' + r.port + '/' + request)
+          .then( (res :Object) => {
+            res = res[tableName];
+            return this.insertNewValuesIntoDb(tableName, res);
+          }).catch((response :any) => console.log(response));
       });
+    });
   }
 
   private insertNewValuesIntoDb(tableName: string, data : any): Promise<any> {
@@ -130,9 +131,7 @@ export class SqliteProvider extends MainService {
       this.synchroniseTable('AVG_MONTH', r),
       this.synchroniseTable('AVG_DAY', r),
       this.synchroniseTable('AVG_YEAR', r)
-    ]).then(() => {
-      console.log('test');
-    });
+    ]).then(() => {});
   }
 
   private getRangeFromTableName(tableName: string) : number {

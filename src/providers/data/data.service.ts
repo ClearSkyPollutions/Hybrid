@@ -26,6 +26,10 @@ export class DataProvider {
     );
   }
 
+  public checkConnection(address : AddressServer) : Observable<any> {
+    const requestTest = 'api.php';
+    return this.http.get('http://' + address.ip + ':' + address.port + '/' + requestTest);
+  }
 
 
   public defineDataForChart(r : AddressServer, tableName: string, PollutantType: string) :Observable<any> {

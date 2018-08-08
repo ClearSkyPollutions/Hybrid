@@ -7,6 +7,7 @@ import { InitConfig } from '../../models/init-config.interface';
 import { AlertProvider } from '../../providers/alert/alert.service';
 import { SettingsProvider } from '../../providers/settings/settings.service';
 import { Settings } from '../../models/settings';
+import { System } from '../../models/system';
 
 
 
@@ -115,6 +116,12 @@ export class SlidesPage {
             this.showSpinner();
             try {
               this.settProvider.getConfig(data).subscribe(() => {
+                this.settProvider.getSystemID(data).subscribe(
+                  (system : any) => {
+                    this.storage.set('system', system['SYSTEM'][0]);
+                    console.log(system['SYSTEM'][0]);
+                  }
+                );
                 this.isAbleToStart = true;
                 this.showStartBtn = true;
                 this.spinner.dismiss();

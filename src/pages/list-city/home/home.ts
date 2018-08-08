@@ -1,5 +1,5 @@
 import { Component, ViewChildren, QueryList } from '@angular/core';
-import { ModalController, IonicPage, NavParams, Modal, Refresher, ToastController, Events } from 'ionic-angular';
+import { ModalController, IonicPage, NavParams, Modal, Refresher, ToastController, Events, LoadingController } from 'ionic-angular';
 
 // providers
 import { DataProvider } from '../../../providers/data/data.service';
@@ -36,6 +36,7 @@ export class HomePage  {
   showParams  : boolean = false;
   color       : string;
   raspi       : AddressServer;
+  server      : AddressServer;
 
   constructor(
     private modalCtrl: ModalController,
@@ -53,15 +54,16 @@ export class HomePage  {
     this.city = this.navParams.get('location');
     this.storage.get('initConfig').then( (val: InitConfig) => {
       this.raspi = val.rasp_ip;
+      this.server = val.server_ip;
       this.aqIndexProvider.getAQI(val.rasp_ip).subscribe( (res : AQI) => {
         this.aqIndex = res;
         this.color = this.aqIndex.color;
-       if (this.aqIndex.index > 5 ) {
-        this.localNotifications.schedule({
-          title: 'Air quality',
-          text: this.aqIndex.index + '(' + this.aqIndex.level + ')'
-        });
-      }
+        if (this.aqIndex.index > 5 ) {
+          this.localNotifications.schedule({
+            title: 'Air quality',
+            text: this.aqIndex.index + '(' + this.aqIndex.level + ')'
+          });
+        }
       });
     });
 
@@ -74,134 +76,192 @@ export class HomePage  {
   }
 
   ngAfterViewInit() :void {
-  this.sqliteProvider.createSQLiteDatabase().then((res:void) => {
-    this.sqliteProvider.synchroniseAllDatabase(this.raspi)
-    .then(() => {
-      this.updateAllCharts();
+    this.storage.get('initConfig').then( (val: InitConfig) => {
+      this.raspi = val.rasp_ip;
+      this.server = val.server_ip;
+      this.sqliteProvider.createSQLiteDatabase().then((res:void) => {
+        this.dataProvider.checkConnection(this.raspi).subscribe(() => {
+          this.sqliteProvider.synchroniseAllDatabase(this.raspi).then(() => {
+            this.updateAllCharts();
+          });
+        },
+        (error : any) => {
+          console.error(error);
+          this.dataProvider.checkConnection(this.server).subscribe(() => {
+              this.sqliteProvider.synchroniseAllDatabase(this.server).then(() => {
+                this.updateAllCharts();
+              });
+            },
+            (error : any) => {
+              console.error(error);
+              this.showToast(this.translate.instant('home_toast_no_connection'));
+            }
+          );
+        });
+      });
     });
-  });
   }
 
-doRefresh(refresher: Refresher) :void {
-  console.log('Begin async operation');
-  this.sqliteProvider.synchroniseAllDatabase(this.raspi).then(() :void => {
-    this.updateAllCharts();
-    this.events.subscribe('CLEAR_SKY:Error', (error: ErrorDetails) => {
-      console.log('Welcome', error);
-       this.toastCtrl.create({
-        message: error.event,
-        duration: 3000,
-        position: 'bottom'
-      }).present();
+  doRefresh(refresher: Refresher) :void {
+    console.log('Begin async operation');
+    this.storage.get('initConfig').then( (val: InitConfig) => {
+      this.raspi = val.rasp_ip;
+      this.server = val.server_ip;
+      this.dataProvider.checkConnection(this.raspi).subscribe(() => {
+        this.sqliteProvider.synchroniseAllDatabase(this.raspi).then(() => {
+          this.updateAllCharts();
+          this.events.subscribe('CLEAR_SKY:Error', (error: ErrorDetails) => {
+            console.log('Welcome', error);
+            this.toastCtrl.create({
+              message: error.event,
+              duration: 3000,
+              position: 'bottom'
+            }).present();
+          });
+          refresher.complete();
+        });
+      },
+      (error : any) => {
+        console.error(error);
+        this.dataProvider.checkConnection(this.server).subscribe(() => {
+          this.sqliteProvider.synchroniseAllDatabase(this.server).then(() => {
+            this.updateAllCharts();
+            this.events.subscribe('CLEAR_SKY:Error', (error: ErrorDetails) => {
+              console.log('Welcome', error);
+              this.toastCtrl.create({
+                message: error.event,
+                duration: 3000,
+                position: 'bottom'
+              }).present();
+            });
+            refresher.complete();
+          });
+        },
+        (error : any) => {
+          console.error(error);
+          this.showToast(this.translate.instant('home_toast_no_connection'));
+        });
+      });
     });
-    refresher.complete();
-  });
-}
+  }
 
-updateAllCharts() :void {
-  console.log('in updateAllCharts function');
-  this.chartsC.forEach((c:any, index :number) => {
-    this.charts[index].chartView = c.nativeElement;
-    this.drawLineChart(this.charts[index]);
-  });
-  this.chartsC.changes.subscribe(() => {
-    const last = this.charts.length - 1;
-    if (last >= 0 && !this.charts[last].chartView) {
-      this.charts[last].chartView = this.chartsC.last.nativeElement;
-      this.drawLineChart(this.charts[last]);
-    }
-  });
-}
-
-private showSettings() :void {
-    this.showParams = !this.showParams;
-}
-
-private getRandomColor() : string {
-  const lineColors = ['#046bfe', '#02d935', '#ff2039', '#ffab00'];
-  return lineColors[Math.floor(Math.random() * lineColors.length)];
-}
-
-private showLastMesure() :void {
-  this.dataProvider.getLastMesure(this.raspi).subscribe(
-    (lastdata : any) => {
-      this.data = {
-        pm: lastdata.pm['AVG_HOUR'][0],
-        temphum: lastdata.temphum['DHT22'][0]
-      };
-    }
-  );
-}
-
-private deleteCard(oldSensor: ChartInfo) :void {
-  console.log('Removed data ' + oldSensor.type);
-  this.charts = this.charts.filter((elem : ChartInfo) => (elem.type != oldSensor.type));
-}
-
-
-
-private dateForChartLabel(dateMesure: string) :string {
-  const date = new Date(dateMesure);
-  return date.getHours() + ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
-}
-
-private drawLineChart(chart: ChartInfo) :Promise<void> {
-  const chartLabels :string[] = [];
-  const chartValues :string[] = [];
-  //TODO: handle first connexion (when tables are not created yet)
-  return this.sqliteProvider.requestDataForChart('AVG_HOUR', chart.type).then((res :any) => {
-    if (res.length > 0) {
-      console.log('trying to draw chart ..', res);
-      // loop through res in reverse order
-      for (var i = res.length - 1; i >= 0; i--) {
-        chartLabels.push(this.dateForChartLabel(res[i].date));
-        chartValues.push(res[i].value);
+  updateAllCharts() :void {
+    console.log('in updateAllCharts function');
+    this.chartsC.forEach((c:any, index :number) => {
+      this.charts[index].chartView = c.nativeElement;
+      this.drawLineChart(this.charts[index]);
+    });
+    this.chartsC.changes.subscribe(() => {
+      const last = this.charts.length - 1;
+      if (last >= 0 && !this.charts[last].chartView) {
+        this.charts[last].chartView = this.chartsC.last.nativeElement;
+        this.drawLineChart(this.charts[last]);
       }
-      return this.chartProvider.createLineChart(
-        chart.chartView,
-        chartLabels,
-        chartValues,
-        chart.type + ' (' + chart.unit + ')',
-        chart.lineColor
-      );
-    }
-  });
-}
-
-openChartModal(pollutant: string, unit: string, color: string) :void {
-  const chartOptions : ChartOptions = {
-    pollutant: pollutant,
-    unit: unit,
-    color: color
-  };
-  this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions }, {
-    cssClass: 'inset-modal',
-  })
-    .present();
-}
-
-openAddChart() :void {
-  const newModal : Modal = this.modalCtrl.create('AddChartPage', null, {
-    cssClass: 'inset-modal',
-  });
-  newModal.onDidDismiss((data :any) => {
-    // If cancelled :
-    if (!data) {
-      return;
-    }
-    this.charts.push({type: data.name, unit: data.unit, lineColor: this.getRandomColor(), chartView: null });
-  });
-  newModal.present();
-}
-
-getColorOfAqi(index: number) :string {
-  let color : string;
-  if (index <= 10 && index > 7 ) {
-    return color = '#fa5858';
-  } else if (index <= 7 && index > 4 ) {
-    return color = '#ffbf00';
-  } else {
-    return color = '#80ff00';
+    });
   }
-}
+
+  private showSettings() :void {
+      this.showParams = !this.showParams;
+  }
+
+  private getRandomColor() : string {
+    const lineColors = ['#046bfe', '#02d935', '#ff2039', '#ffab00'];
+    return lineColors[Math.floor(Math.random() * lineColors.length)];
+  }
+
+  private showLastMesure() :void {
+    this.dataProvider.getLastMesure(this.raspi).subscribe(
+      (lastdata : any) => {
+        this.data = {
+          pm: lastdata.pm['AVG_HOUR'][0],
+          temphum: lastdata.temphum['DHT22'][0]
+        };
+      }
+    );
+  }
+
+  private deleteCard(oldSensor: ChartInfo) :void {
+    console.log('Removed data ' + oldSensor.type);
+    this.charts = this.charts.filter((elem : ChartInfo) => (elem.type != oldSensor.type));
+  }
+
+
+
+  private dateForChartLabel(dateMesure: string) :string {
+    const date = new Date(dateMesure);
+    return date.getHours() + ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
+  }
+
+  private drawLineChart(chart: ChartInfo) :Promise<void> {
+    const chartLabels :string[] = [];
+    const chartValues :string[] = [];
+    //TODO: handle first connexion (when tables are not created yet)
+    return this.sqliteProvider.requestDataForChart('AVG_HOUR', chart.type).then((res :any) => {
+      if (res != null) {
+        if (res.length > 0) {
+          console.log('trying to draw chart ..', res);
+          // loop through res in reverse order
+          for (var i = res.length - 1; i >= 0; i--) {
+            chartLabels.push(this.dateForChartLabel(res[i].date));
+            chartValues.push(res[i].value);
+          }
+          return this.chartProvider.createLineChart(
+            chart.chartView,
+            chartLabels,
+            chartValues,
+            chart.type + ' (' + chart.unit + ')',
+            chart.lineColor
+          );
+        } else {
+          this.drawLineChart(chart);
+        }
+      }
+    });
+  }
+
+  openChartModal(pollutant: string, unit: string, color: string) :void {
+    const chartOptions : ChartOptions = {
+      pollutant: pollutant,
+      unit: unit,
+      color: color
+    };
+    this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions }, {
+      cssClass: 'inset-modal',
+    })
+      .present();
+  }
+
+  openAddChart() :void {
+    const newModal : Modal = this.modalCtrl.create('AddChartPage', null, {
+      cssClass: 'inset-modal',
+    });
+    newModal.onDidDismiss((data :any) => {
+      // If cancelled :
+      if (!data) {
+        return;
+      }
+      this.charts.push({type: data.name, unit: data.unit, lineColor: this.getRandomColor(), chartView: null });
+    });
+    newModal.present();
+  }
+
+  getColorOfAqi(index: number) :string {
+    let color : string;
+    if (index <= 10 && index > 7 ) {
+      return color = '#fa5858';
+    } else if (index <= 7 && index > 4 ) {
+      return color = '#ffbf00';
+    } else {
+      return color = '#80ff00';
+    }
+  }
+
+  showToast(msg: string) :void {
+    const toast = this.toastCtrl.create({
+      position: 'bottom',
+      message: msg,
+      duration: 2000
+    });
+    toast.present();
+  }
 }
