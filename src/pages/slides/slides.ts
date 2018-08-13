@@ -64,23 +64,6 @@ export class SlidesPage {
     };
   }
 
-  startApp() :void {
-    this.initialSettings.sensors = this.getSelectedSensors();
-    this.storage.set('hasSeenTutorial', true);
-    this.storage.set('initConfig', this.initialSettings).then((val : StoredConf) => {
-      this.newSettings.sensors = val.sensors;
-      this.newSettings.serverAddress = val.server_ip;
-      this.newSettings.isDataShared = val.isDataShared;
-      this.settProvider.setConfig(this.newSettings, val.rasp_ip).subscribe(() => {
-        console.log(this.newSettings);
-        this.navCtrl.push('TabsPage', {}, {
-          animate  : true,
-          direction: 'forward'
-        });
-      });
-    });
-  }
-
   onSlideChangeStart(slider: Slides) :void {
     this.showNextBtn     = !slider.isEnd();
     this.showPreviousBtn = !slider.isBeginning();
@@ -95,7 +78,6 @@ export class SlidesPage {
   }
 
   DefineIpAddressDialog(serverName : string, server: string) :void {
-    console.log(serverName + ' ' + this.initialSettings[server].ip);
     this.alertProvider.promptAlertbis({
       title: serverName,
       message: 'Enter the IP address of your ' + serverName,
@@ -121,19 +103,18 @@ export class SlidesPage {
           if (server == 'rasp_ip') {
             this.showSpinner();
             try {
-              this.settProvider.getConfig(data).subscribe(() => {
-                this.settProvider.getSystem(data).subscribe(
-                  (sys : any) => {
-                    sys['SYSTEM'][0]['latitude'] = this.newSettings.latitude;
-                    sys['SYSTEM'][0]['longitude'] = this.newSettings.longitude;
-                    this.storage.set('system', sys['SYSTEM'][0]);
-                    console.log(sys['SYSTEM'][0]);
-                  }
-                );
-                this.isAbleToStart = true;
-                this.showStartBtn = true;
-                this.spinner.dismiss();
-              }, () => {
+              this.settProvider.getSystem(data).subscribe(
+                (sys : any) => {
+                  sys['SYSTEM'][0]['latitude'] = this.newSettings.latitude;
+                  sys['SYSTEM'][0]['longitude'] = this.newSettings.longitude;
+                  this.storage.set('system', sys['SYSTEM'][0])
+                  .then(() => console.log(sys['SYSTEM'][0])
+                  );
+                  this.isAbleToStart = true;
+                  this.showStartBtn = true;
+                  this.spinner.dismiss();
+                },
+              () => {
                 this.spinner.dismiss();
                 this.showToast('Could not reach the server, please try an other address');
                 this.isAbleToStart = false;
@@ -146,6 +127,23 @@ export class SlidesPage {
         }
       }]
     }).present();
+  }
+
+  startApp() :void {
+    this.initialSettings.sensors = this.getSelectedSensors();
+    this.storage.set('hasSeenTutorial', true);
+    this.storage.set('initConfig', this.initialSettings).then((val : StoredConf) => {
+      this.newSettings.sensors = val.sensors;
+      this.newSettings.serverAddress = val.server_ip;
+      this.newSettings.isDataShared = val.isDataShared;
+      this.settProvider.setConfig(this.newSettings, val.rasp_ip).subscribe(() => {
+        console.log(this.newSettings);
+        this.navCtrl.push('TabsPage', {}, {
+          animate  : true,
+          direction: 'forward'
+        });
+      });
+    });
   }
 
   getSelectedSensors(): any[] {
@@ -172,9 +170,10 @@ export class SlidesPage {
 
   getPosition() : void {
     if (this.initialSettings.isDataShared) {
+      console.log('isDataShared = true');
       this.geolocation.getCurrentPosition().then((resp : any) => {
+        console.log('in getCurrentPosition().then()');
         console.log(resp);
-        console.log(resp['coords']['latitude']);
         this.newSettings.latitude  = String(resp['coords']['latitude']);
         this.newSettings.longitude = String(resp['coords']['longitude']);
        }).catch((error : any) => {

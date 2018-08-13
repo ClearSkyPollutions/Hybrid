@@ -8,6 +8,7 @@ import { SettingsProvider } from '../../providers/settings/settings.service';
 import { AddressServer } from '../../models/addressServer.interface';
 import { StoredConf } from '../../models/init-config.interface';
 import { System } from '../../models/system';
+import { Geolocation } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
@@ -22,6 +23,9 @@ export class ParametersPage {
   tempInputSensor: string;
   spinner: any;
   connection: boolean;
+  isPositionShared: boolean;
+  latitude : string;
+  longitude : string;
 
   constructor(
     public navCtrl          : NavController,
@@ -30,7 +34,8 @@ export class ParametersPage {
     private settingsProvider: SettingsProvider,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    private storage: Storage
+    private storage: Storage,
+    private geolocation : Geolocation
   ) {
     this.raspi = {
       ip: '',
@@ -41,9 +46,10 @@ export class ParametersPage {
       sensors: [],
       serverAddress: this.raspi,
       isDataShared: false,
-      latitude: '1',
-      longitude: '1'
+      latitude: '-1',
+      longitude: '-1'
     };
+    this.isPositionShared = false;
   }
 
   ionViewDidLoad() :void {
@@ -122,6 +128,25 @@ export class ParametersPage {
     }
   }
 
+  getPosition() : void {
+    if (this.isPositionShared) {
+      console.log('isPositionShared = true');
+      this.geolocation.getCurrentPosition().then((resp : any) => {
+        console.log('in getCurrentPosition().then()');
+        console.log(resp);
+        this.latitude  = String(resp['coords']['latitude']);
+        this.longitude = String(resp['coords']['longitude']);
+        this.storage.get('system').then((sys : any) => {
+          sys['latitude'] = this.latitude;
+          sys['longitude'] = this.longitude;
+          this.storage.set('system', sys);
+        });
+       }).catch((error : any) => {
+         console.log('Error getting location', error);
+       });
+    }
+  }
+
   doConfirm() :void {
     this.alertProvider.confirmAlert({
       title: 'Confirm these changes?',
@@ -138,31 +163,37 @@ export class ParametersPage {
         handler: () :void => {
           this.showSpinner();
           try {
-              this.storage.get('system').then((sys : any) => {
-                console.log(sys);
-                this.settings.latitude = sys['latitude'];
-                this.settings.longitude = sys['longitude'];
-                this.settingsProvider.setConfig(this.settings, this.raspi).subscribe(
-                  () => {
-                    console.log(this.settings);
-                    this.spinner.dismiss();
-                    this.showToast('Connected successfully to the Raspberry Pi');
-                    this.storedConf = {
-                      frequency   : this.settings.frequency,
-                      sensors     : this.settings.sensors,
-                      rasp_ip     : this.raspi ,
-                      server_ip   : this.settings.serverAddress,
-                      isDataShared: this.settings.isDataShared
-                    };
-                    this.storage.set('initConfig', this.storedConf);
-                });
-              },
-              (error : any) => {
-                console.log('Couldn\'t fetch remote settings', error);
-                this.spinner.dismiss();
-                this.showToast('Couldn\'t connect to Raspberry Pi. Please try new address');
+              if (this.isPositionShared && this.settings.isDataShared) {
+                this.settings.latitude = this.latitude;
+                this.settings.longitude = this.longitude;
+              } else {
+                this.settings.latitude = '-1';
+                this.settings.longitude = '-1';
               }
-            );
+              console.log(this.settings);
+              this.storage.get('system').then((sys : any) => {
+                sys['latitude'] = this.latitude;
+                sys['longitude'] = this.longitude;
+                this.storage.set('system', sys);
+            });
+              this.settingsProvider.setConfig(this.settings, this.raspi).subscribe(
+                () => {
+                  console.log(this.settings);
+                  this.spinner.dismiss();
+                  this.showToast('Connected successfully to the Raspberry Pi');
+                  this.storedConf = {
+                    frequency   : this.settings.frequency,
+                    sensors     : this.settings.sensors,
+                    rasp_ip     : this.raspi ,
+                    server_ip   : this.settings.serverAddress,
+                    isDataShared: this.settings.isDataShared
+                  };
+                  this.storage.set('initConfig', this.storedConf);
+                }, (error : any) => {
+                  console.log('Couldn\'t fetch remote settings', error);
+                  this.spinner.dismiss();
+                  this.showToast('Couldn\'t connect to Raspberry Pi. Please try new address');
+                });
           } catch (error) {
             this.showToast('Invalid address');
           }

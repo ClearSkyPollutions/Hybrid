@@ -5,7 +5,7 @@
     "temp": "Temperature",
     "hum" : "Humidity",
     "settings" : "Settings",
-    
     "cities" : "Cities",
-    "home_toast_no_connection" : "Failed to connect to the server and raspberry pi"
+    "home_toast_no_connection" : "Failed to connect to the server and raspberry pi",
+    "position"  : "Share your position"
 }
