@@ -147,6 +147,12 @@ export class ParametersPage {
     }
   }
 
+  setPositionCheckboxValue() : void {
+    if (!this.settings.isDataShared) {
+      this.isPositionShared = false;
+    }
+  }
+
   doConfirm() :void {
     this.alertProvider.confirmAlert({
       title: 'Confirm these changes?',
