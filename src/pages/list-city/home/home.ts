@@ -14,7 +14,6 @@ import { AQI } from '../../../models/aqi';
 // Natives
 import { SqliteProvider } from '../../../providers/sqlite/sqlite.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { ErrorDetails } from '../../../models/shared/error-banner.interface';
 import { Storage } from '@ionic/storage';
 import { AddressServer } from '../../../models/addressServer.interface';
 import { InitConfig } from '../../../models/init-config.interface';
@@ -55,26 +54,6 @@ export class HomePage  {
     private storage: Storage
   ) {
     this.city = this.navParams.get('location');
-    this.storage.get('initConfig').then( (val: InitConfig) => {
-      this.raspi = val.rasp_ip;
-      this.server = val.server_ip;
-      this.aqIndexProvider.getAQI(val.rasp_ip)
-      .timeoutWith(5000, Observable.throw(() => {
-        this.aqIndexProvider.getAQI(val.server_ip).subscribe( (res : AQI) => {
-          this.showAQI(res);
-        });
-      }))
-      .subscribe( (res : AQI) => {
-        this.showAQI(res);
-      }, () => {
-        this.aqIndexProvider.getAQI(val.server_ip)
-        .timeoutWith(5000, Observable.throw(() => {console.log('getAQI timeout'); }))
-        .subscribe( (res : AQI) => {
-          this.showAQI(res);
-        });
-      });
-    });
-
     //@TODO: load data from somewhere
     this.charts.push({ type: 'pm10', unit: 'µg/m^3', lineColor: '#046bfe', chartView: '' });
     this.charts.push({ type: 'pm25', unit: 'µg/m^3', lineColor: '#02d935', chartView: '' });
@@ -88,11 +67,13 @@ export class HomePage  {
       this.raspi = val.rasp_ip;
       this.server = val.server_ip;
       this.checkAndSynchronize();
+      this.syncAQI();
     });
   }
 
   doRefresh(refresher: Refresher) :void {
     console.log('Begin async operation');
+    this.syncAQI();
     this.dataProvider.checkConnection(this.raspi)
     .timeoutWith(5000, Observable.throw(
       () => {this.showChartData(this.server, refresher); }))
@@ -248,6 +229,26 @@ export class HomePage  {
       );
       }
     );
+  }
+
+  syncAQI() : void {
+    this.storage.get('system').then((sys : any) => {
+        this.aqIndexProvider.getAQI(this.raspi, sys['id'])
+        .timeoutWith(5000, Observable.throw(() => {
+          this.aqIndexProvider.getAQI(this.server, sys['id']).subscribe( (res : AQI) => {
+            this.showAQI(res);
+          });
+        }))
+        .subscribe( (res : AQI) => {
+          this.showAQI(res);
+        }, () => {
+          this.aqIndexProvider.getAQI(this.server, sys['id'])
+          .timeoutWith(5000, Observable.throw(() => {console.log('getAQI timeout'); }))
+          .subscribe( (res : AQI) => {
+            this.showAQI(res);
+          });
+        });
+      });
   }
 
   private showAQI(res : AQI) : void {

@@ -11,9 +11,9 @@ export class AirQualityIndexProvider {
   constructor(public http: HttpClient) {
 
   }
-  public getAQI(r : AddressServer): Observable<AQI> {
-    const request = 'aqi.php';
-
+  public getAQI(r : AddressServer, systemid : string): Observable<AQI> {
+    const request = 'aqi.php?id=' + systemid;
+    console.log('url', 'http://' + r.ip + ':' + r.port + '/' + request);
     return this.http.get<AQI>('http://' + r.ip + ':' + r.port + '/' + request);
   }
 
