@@ -80,7 +80,7 @@ export class MapsPage {
         popupContent += '<div align="left"><b>' + value.pollutant.toUpperCase() + ': </b>' + value.value + ' ' + value.unit + '</div>';
       });
 
-      popupContent += '<div align="right"><br>Date: ' + dataMapFactorized.date.toLocaleString('fr-fr', dateTimeOptions) + '</div>';
+      popupContent += '<div align="right"><br>Date: ' + dataMapFactorized.date.toLocaleString(this.translate.getBrowserLang(), dateTimeOptions) + '</div>';
 
       circle.bindPopup(popupContent, {
           'maxWidth'    : 500,
