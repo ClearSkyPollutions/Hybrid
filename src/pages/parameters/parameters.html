@@ -1,37 +1,16 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>{{'settings' | translate}}</ion-title>
+    <ion-title>{{'settings' | translate:user }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content padding>
-  <!-- 
-  <ion-list>
-    <ion-list-header>Wi-Fi</ion-list-header>
-    <ion-item>
-      <ion-label>SSID</ion-label>
-      <ion-input type="text" [(ngModel)]="settings.SSID"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Security</ion-label>
-      <ion-select [(ngModel)]="settings.SecurityType">
-        <ion-option value="WEP">WEP</ion-option>
-        <ion-option value="WPA-PSK">WPA-PSK</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>Password</ion-label>
-      <ion-input type="password" [(ngModel)]="settings.Password"></ion-input>
-    </ion-item>
-  </ion-list>
--->
-  
   <ion-list>
     <ion-list-header>
-      Frequency
-      <ion-badge item-end>{{settings.frequency }} mesures/min</ion-badge>
+      {{'frequency' | translate:user }}
+      <ion-badge item-end>{{settings.frequency }} {{'measures' | translate:user }}/min</ion-badge>
     </ion-list-header>
     <ion-item>
       {{settings.freq}}
@@ -43,7 +22,7 @@
   </ion-list>
 
   <ion-list>
-    <ion-list-header>Sensors</ion-list-header>
+    <ion-list-header>{{'sensors' | translate:user }}</ion-list-header>
     <ion-item *ngFor="let sensor of settings.sensors">
       <button ion-button item-end color="danger" icon-only (click)="removeSensor(sensor)">
         <ion-icon name='remove-circle'></ion-icon>
@@ -51,7 +30,7 @@
       <ion-label>{{sensor}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-input type="text" placeholder="New Sensor" [(ngModel)]="tempInputSensor" (keyup.enter)="addSensor()"></ion-input>
+      <ion-input type="text" placeholder="{{ 'newSensor' | translate:user }}" [(ngModel)]="tempInputSensor" (keyup.enter)="addSensor()"></ion-input>
       <button ion-button item-end color="primary" icon-only (keyup.enter)="addSensor()" (click)="addSensor()">
         <ion-icon name='add-circle'></ion-icon>
       </button>
@@ -63,25 +42,25 @@
       Raspberry Pi
     </ion-list-header>
     <ion-item >
-      <ion-label>IP address</ion-label>
+      <ion-label>{{'ipAddress' | translate:user }}</ion-label>
       <ion-input type="text" [(ngModel)]="raspi.ip"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Port</ion-label>
+      <ion-label>{{'port' | translate:user }}</ion-label>
       <ion-input type="number" [(ngModel)]="raspi.port"></ion-input>
     </ion-item>
   </ion-list>
 
   <ion-list>
     <ion-list-header >
-      Server
+      {{'server' | translate:user }}
     </ion-list-header>
     <ion-item >
-      <ion-label>IP address</ion-label>
+      <ion-label>{{'ipAddress' | translate:user }}</ion-label>
       <ion-input type="text" [(ngModel)]="settings.serverAddress.ip"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Port</ion-label>
+      <ion-label>{{'port' | translate:user }}</ion-label>
       <ion-input type="number"  [(ngModel)]="settings.serverAddress.port"></ion-input>
     </ion-item>
   </ion-list>
@@ -90,6 +69,7 @@
     <ion-list-header>
       <ion-label>Share your data</ion-label>
       <ion-checkbox [(ngModel)]="settings.isDataShared" item-end item-end (keyup.enter)="setPositionCheckboxValue()" (click)="setPositionCheckboxValue()"></ion-checkbox>
+
     </ion-list-header>
     <ion-item *ngIf="settings.isDataShared">
       <ion-label>{{ 'position' | translate:user }}</ion-label>
@@ -100,10 +80,10 @@
     
   </ion-row>
   <div float-right padding-left>
-    <button ion-button block (click)="doConfirm()">Submit</button>
+    <button ion-button block (click)="doConfirm()">{{'submit' | translate:user }}</button>
   </div>
   <div float-right>
-    <button ion-button block (click)="ionViewDidLoad()">Reset</button>
+    <button ion-button block (click)="ionViewDidLoad()">{{'reset' | translate:user }}</button>
   </div>
   
 

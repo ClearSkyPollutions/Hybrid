@@ -63,7 +63,7 @@ export class ParametersPage {
       this.settingsProvider.getConfig(this.raspi).subscribe(
         (cfg: Settings) => {
           this.spinner.dismiss();
-          this.showToast('Local settings synced with the Raspberry Pi');
+          this.showToast(this.translate.instant('param_sync_toast'));
           this.settings = {
             frequency     : cfg.frequency,
             sensors       : cfg.sensors,
@@ -84,7 +84,7 @@ export class ParametersPage {
         (error : any) => {
           console.log('Couldn\'t fetch remote settings', error);
           this.spinner.dismiss();
-          this.showToast('Using last known settings');
+          this.showToast(this.translate.instant('param_syncfailed_toast'));
         }
       );
     });
@@ -114,7 +114,7 @@ export class ParametersPage {
 
   showSpinner() :void {
     this.spinner = this.loadingCtrl.create({
-      content: 'Connecting to server...'
+      content: this.translate.instant('param_spinner_toast')
     });
     this.spinner.present();
   }
@@ -155,17 +155,17 @@ export class ParametersPage {
 
   doConfirm() :void {
     this.alertProvider.confirmAlert({
-      title: 'Confirm these changes?',
-      message: 'Be careful when changing wifi configuration remotely,\nyou may need to connect physically to the Raspberry Pi\nif an error occurs',
+      title: this.translate.instant('param_alert_title'),
+      message: this.translate.instant('param_alert_message'),
       buttons:
       [{
-        text: 'Cancel',
+        text: this.translate.instant('param_alertcancel_btn'),
         handler: () :void => {
-          this.showToast('Cancelled configuration changes');
+          this.showToast(this.translate.instant('param_alert_cancel'));
         }
       },
       {
-        text: 'Accept',
+        text: this.translate.instant('param_alertconfirm_btn'),
         handler: () :void => {
           this.showSpinner();
           try {
@@ -186,7 +186,7 @@ export class ParametersPage {
                 () => {
                   console.log(this.settings);
                   this.spinner.dismiss();
-                  this.showToast('Connected successfully to the Raspberry Pi');
+                  this.showToast(this.translate.instant('param_alert_success'));
                   this.storedConf = {
                     frequency   : this.settings.frequency,
                     sensors     : this.settings.sensors,
@@ -198,10 +198,10 @@ export class ParametersPage {
                 }, (error : any) => {
                   console.log('Couldn\'t fetch remote settings', error);
                   this.spinner.dismiss();
-                  this.showToast('Couldn\'t connect to Raspberry Pi. Please try new address');
+                this.showToast(this.translate.instant('param_alertconnection_failed'));
                 });
           } catch (error) {
-            this.showToast('Invalid address');
+            this.showToast(this.translate.instant('param_alert_failed'));
           }
         }
       }]

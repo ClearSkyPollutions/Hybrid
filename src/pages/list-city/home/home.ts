@@ -14,10 +14,12 @@ import { AQI } from '../../../models/aqi';
 // Natives
 import { SqliteProvider } from '../../../providers/sqlite/sqlite.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { ErrorDetails } from '../../../models/shared/error-banner.interface';
 import { Storage } from '@ionic/storage';
 import { AddressServer } from '../../../models/addressServer.interface';
+
 import { StoredConf } from '../../../models/init-config.interface';
+
+
 
 
 @IonicPage()
@@ -37,6 +39,7 @@ export class HomePage  {
   color       : string;
   raspi       : AddressServer;
   server      : AddressServer;
+  addr        : AddressServer;
 
   constructor(
     private modalCtrl: ModalController,
@@ -52,20 +55,22 @@ export class HomePage  {
     private storage: Storage
   ) {
     this.city = this.navParams.get('location');
+
     this.storage.get('initConfig').then( (val: StoredConf) => {
+
       this.raspi = val.rasp_ip;
-      this.server = val.server_ip;
       this.aqIndexProvider.getAQI(val.rasp_ip).subscribe( (res : AQI) => {
         this.aqIndex = res;
         this.color = this.aqIndex.color;
-        if (this.aqIndex.index > 5 ) {
-          this.localNotifications.schedule({
-            title: 'Air quality',
-            text: this.aqIndex.index + '(' + this.aqIndex.level + ')'
-          });
-        }
+       if (this.aqIndex.index > 5 ) {
+        this.localNotifications.schedule({
+          title: this.translate.instant('airquality'),
+          text: this.aqIndex.index + '(' + this.aqIndex.level + ')'
+        });
+      }
       });
     });
+
 
     //@TODO: load data from somewhere
     this.charts.push({ type: 'pm10', unit: 'µg/m^3', lineColor: '#046bfe', chartView: '' });
@@ -79,73 +84,37 @@ export class HomePage  {
     this.storage.get('initConfig').then( (val: StoredConf) => {
       this.raspi = val.rasp_ip;
       this.server = val.server_ip;
-      this.sqliteProvider.createSQLiteDatabase().then((res:void) => {
-        this.dataProvider.checkConnection(this.raspi).subscribe(() => {
-          this.sqliteProvider.synchroniseAllDatabase(this.raspi).then(() => {
-            this.updateAllCharts();
-          });
-        },
-        (error : any) => {
-          console.error(error);
-          this.dataProvider.checkConnection(this.server).subscribe(() => {
-              this.sqliteProvider.synchroniseAllDatabase(this.server).then(() => {
-                this.updateAllCharts();
-              });
-            },
-            (error : any) => {
-              console.error(error);
-              this.showToast(this.translate.instant('home_toast_no_connection'));
-            }
-          );
-        });
-      });
+      this.checkAndSynchronize();
+      this.syncAQI();
     });
   }
 
   doRefresh(refresher: Refresher) :void {
     console.log('Begin async operation');
-    this.storage.get('initConfig').then( (val: StoredConf) => {
-      this.raspi = val.rasp_ip;
-      this.server = val.server_ip;
-      this.dataProvider.checkConnection(this.raspi).subscribe(() => {
-        this.sqliteProvider.synchroniseAllDatabase(this.raspi).then(() => {
-          this.updateAllCharts();
-          this.events.subscribe('CLEAR_SKY:Error', (error: ErrorDetails) => {
-            console.log('Welcome', error);
-            this.toastCtrl.create({
-              message: error.event,
-              duration: 3000,
-              position: 'bottom'
-            }).present();
-          });
-          refresher.complete();
-        });
-      },
-      (error : any) => {
-        console.error(error);
-        this.dataProvider.checkConnection(this.server).subscribe(() => {
-          this.sqliteProvider.synchroniseAllDatabase(this.server).then(() => {
-            this.updateAllCharts();
-            this.events.subscribe('CLEAR_SKY:Error', (error: ErrorDetails) => {
-              console.log('Welcome', error);
-              this.toastCtrl.create({
-                message: error.event,
-                duration: 3000,
-                position: 'bottom'
-              }).present();
-            });
+
+    this.syncAQI();
+    this.dataProvider.checkConnection(this.raspi)
+    .timeoutWith(5000, Observable.throw(
+      () => {this.showChartData(this.server, refresher); }))
+    .subscribe(
+      () => { this.showChartData(this.raspi, refresher); },
+      () => {this.dataProvider.checkConnection(this.server)
+        .timeoutWith(5000, Observable.throw(
+          () => {
+            this.showToast(this.translate.instant('home_toast_no_connection'));
+            refresher.complete();
+          }))
+        .subscribe(
+          () => { this.showChartData(this.server, refresher); },
+          () => {
+            this.showToast(this.translate.instant('home_toast_no_connection'));
+
             refresher.complete();
           });
-        },
-        (error : any) => {
-          console.error(error);
-          this.showToast(this.translate.instant('home_toast_no_connection'));
-        });
       });
-    });
   }
 
-  updateAllCharts() :void {
+  private updateAllCharts() :void {
     console.log('in updateAllCharts function');
     this.chartsC.forEach((c:any, index :number) => {
       this.charts[index].chartView = c.nativeElement;
@@ -255,7 +224,7 @@ export class HomePage  {
     }
   }
 
-  showToast(msg: string) :void {
+  private showToast(msg: string) :void {
     const toast = this.toastCtrl.create({
       position: 'bottom',
       message: msg,
@@ -263,4 +232,64 @@ export class HomePage  {
     });
     toast.present();
   }
+
+  private checkAndSynchronize() : void {
+    this.dataProvider.checkConnection(this.raspi)
+    .timeoutWith(2000, Observable.throw(
+      () => {this.showChartData(this.server, null); }))
+    .subscribe(
+      () => { this.showChartData(this.raspi, null); },
+      () => {this.dataProvider.checkConnection(this.server)
+        .timeoutWith(2000, Observable.throw(
+          () => {this.showToast(this.translate.instant('home_toast_no_connection')); }))
+        .subscribe(
+          () => { this.showChartData(this.server, null); },
+          () => { this.showToast(this.translate.instant('home_toast_no_connection')); }
+      );
+      }
+    );
+  }
+
+  syncAQI() : void {
+    this.storage.get('system').then((sys : any) => {
+        this.aqIndexProvider.getAQI(this.raspi, sys['id'])
+        .timeoutWith(5000, Observable.throw(() => {
+          this.aqIndexProvider.getAQI(this.server, sys['id']).subscribe( (res : AQI) => {
+            this.showAQI(res);
+          });
+        }))
+        .subscribe( (res : AQI) => {
+          this.showAQI(res);
+        }, () => {
+          this.aqIndexProvider.getAQI(this.server, sys['id'])
+          .timeoutWith(5000, Observable.throw(() => {console.log('getAQI timeout'); }))
+          .subscribe( (res : AQI) => {
+            this.showAQI(res);
+          });
+        });
+      });
+  }
+
+  private showAQI(res : AQI) : void {
+    this.aqIndex = res;
+      this.color = this.aqIndex.color;
+      if (this.aqIndex.index > 5 ) {
+        this.localNotifications.schedule({
+          title: 'Air quality',
+          text: this.aqIndex.index + '(' + this.aqIndex.level + ')'
+        });
+      }
+  }
+
+  private showChartData(addr : AddressServer, refresher : Refresher) : void {
+    this.sqliteProvider.createSQLiteDatabase().then( () => {
+      this.sqliteProvider.synchroniseAllDatabase(addr).then(() => {
+        this.updateAllCharts();
+        if (refresher != null) {
+          refresher.complete();
+        }
+      });
+    });
+  }
+
 }
