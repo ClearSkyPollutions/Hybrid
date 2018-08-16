@@ -2,7 +2,7 @@
   <!-- Welcome -->
   <ion-slides #slides pager (ionSlideWillChange)="onSlideChangeStart($event)">
     <ion-slide> 
-      <img src="assets/imgs/slides/slide1.png" class="slide-image"/>
+      <img src="assets/imgs/slides/slide11.jpg" class="slide-image"/>
       <h2 class="slide-title">{{'title_slide1' | translate:user }}</h2>
       <p [innerHtml]="'text_slide1' | translate:user "></p>
     </ion-slide>
@@ -48,7 +48,7 @@
 
     <!-- adresse serveur central -->
     <ion-slide>
-      <img src="assets/imgs/slides/slide2.png" class="slide-image"/>
+      <img src="assets/imgs/slides/slide21.jpg" class="slide-image"/>
       <h2 class="slide-title">{{'title_slide6' | translate:user }}</h2>
       <p [innerHtml]="'text_slide6' | translate:user"></p>
       <button ion-button round (click)="DefineIpAddressDialog('Server', 'server_ip')">{{'server' | translate:user }}</button>
@@ -56,7 +56,7 @@
 
     <!-- Ip addresse of Raspberry-->
     <ion-slide>
-      <img src="assets/imgs/slides/slide3.png" class="slide-image"/>
+      <img src="assets/imgs/slides/slide31.jpg" class="slide-image"/>
       <h2 class="slide-title">{{'title_slide7' | translate:user }}</h2>
       <button ion-button round (click)="DefineIpAddressDialog('Raspberry Pi', 'rasp_ip')">Raspberry Pi</button>
     </ion-slide>
