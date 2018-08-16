@@ -21,7 +21,11 @@ $app-direction: ltr;
 // the Sass variables found in Ionic's source scss files.
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/theming/overriding-ionic-variables/
-
+// $text-input-md-highlight-color-invalid: transparent;
+$text-input-md-highlight-color-valid: transparent;
+// $text-input-md-show-invalid-highlight: transparent;
+// $text-input-md-highlight-color: transparent;
+$text-input-md-show-valid-highlight: transparent;
 
 
 

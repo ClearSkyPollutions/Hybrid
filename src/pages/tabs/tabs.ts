@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @IonicPage()
@@ -8,11 +9,12 @@ import { IonicPage } from 'ionic-angular';
 })
 export class TabsPage {
 
-  tab1Root = 'HomePage';
-  tab2Root = 'AboutPage';
-  tab3Root = 'ListPolluantPage';
+  tab1Root :string = 'ListCityPage';
+  tab2Root :string = 'MapsPage';
+  tab3Root :string = 'ListPolluantPage';
+  tab4Root :string = 'ParametersPage';
 
-  constructor() {
+  constructor(public translate    : TranslateService) {
 
   }
 }

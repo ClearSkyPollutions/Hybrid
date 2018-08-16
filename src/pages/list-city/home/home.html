@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-navbar color="primary"> 
+      <ion-buttons end>
+          <button ion-button icon-only (click)="showSettings()" >
+              <ion-icon name="settings"></ion-icon>
+          </button>
+      </ion-buttons>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content
+        pullingIcon="arrow-dropdown"
+        pullingText="Pull to refresh"
+        refreshingSpinner="circles"
+        refreshingText="Uploading new data...">
+      </ion-refresher-content>
+  </ion-refresher>
+
+  <div class="city-header">
+    <div class="about-header">
+      <img [src]="city.image" />
+    </div>
+
+    <ion-card class="info-card">
+      <ion-card-content>  
+          <div class="card-title">{{city.city}}</div>
+          {{data?.temphum.date}}
+          <div class="card-pollution-info">           
+            <span >{{aqIndex?.index}} AQI</span>
+            <span [style.color]="color" >{{aqIndex?.level}}</span>
+            <span>{{data?.temphum.temperature}} C°</span>
+          </div>
+      </ion-card-content>    
+    </ion-card>
+  </div>
+
+
+  <!-- <div padding class="about-info">
+
+    <div text-center>
+      <button ion-button color="light" class="circle-button">
+        <ion-icon name="home"></ion-icon>
+      </button>
+      <button ion-button color="light" class="circle-button" >
+        <ion-icon name="settings"></ion-icon>
+      </button>
+      <button ion-button color="light" class="circle-button">
+        <ion-icon name="body"></ion-icon>
+      </button>
+    </div>
+
+  </div> -->
+
+  <div #chartsContainer class="chart-container">
+    <div class="chart-card" *ngFor="let c of charts">
+      <p>{{c.type}}</p>
+      <canvas [style.display]="showParams ? 'none' : 'block'" #ch (click)="openChartModal(c.type, c.unit, c.lineColor)"></canvas>
+      <div [style.display]="showParams ? 'block' : 'none'">
+        <button ion-button color="dark" item-start clear icon-only (click)="deleteCard(c)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+        <button ion-button color="yellow" item-start clear icon-only (click)="favoriteCard(c)">
+          <ion-icon name="star"></ion-icon>
+        </button>
+      </div>
+    </div>
+    </div>
+  <ion-fab bottom right>
+    <button ion-fab [style.display]="showParams ? 'inline-block' : 'none'" icon-only (click)="openAddChart()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>
