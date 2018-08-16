@@ -1,6 +1,6 @@
 <ion-tabs>
-  <ion-tab [root]="tab1Root" tabTitle="Cities" tabIcon="home"></ion-tab>
-  <ion-tab [root]="tab2Root" tabTitle="Maps" tabIcon="map"></ion-tab>
-  <ion-tab [root]="tab3Root" tabTitle="Info" tabIcon="list-box"></ion-tab>
-  <ion-tab [root]="tab4Root" tabTitle="Settings" tabIcon="settings"></ion-tab>
+  <ion-tab [root]="tab1Root" tabTitle="{{ 'home' | translate:user }}" tabIcon="home"></ion-tab>
+  <ion-tab [root]="tab2Root" tabTitle="{{ 'map' | translate:user }}" tabIcon="map"></ion-tab>
+  <ion-tab [root]="tab3Root" tabTitle="{{ 'info' | translate:user }}" tabIcon="list-box"></ion-tab>
+  <ion-tab [root]="tab4Root" tabTitle="{{ 'settings' | translate:user }}" tabIcon="settings"></ion-tab>
 </ion-tabs>

@@ -5,7 +5,7 @@
               <ion-icon name="settings"></ion-icon>
           </button>
       </ion-buttons>
-    <ion-title>Home</ion-title>
+    <ion-title>{{ 'home' | translate:user }}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -13,9 +13,11 @@
   <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content
         pullingIcon="arrow-dropdown"
-        pullingText="Pull to refresh"
+        pullingText="{{ 'refresh_action_message' | translate:user}}"
         refreshingSpinner="circles"
-        refreshingText="Downloading new data...">
+
+        refreshingText="{{ 'refresh_message' | translate:user}}">
+
       </ion-refresher-content>
   </ion-refresher>
 
@@ -26,12 +28,14 @@
 
     <ion-card class="info-card">
       <ion-card-content>  
-          <div class="card-title">{{city.city}}</div>
-          {{data?.temphum.date}}
-          <div class="card-pollution-info">           
+          <div class="card-title">{{city.city | translate:user}}</div>
+          <!-- {{data?.temphum.date}} -->
+          <!-- <span>{{data?.temphum.temperature}} C°</span> -->
+          <div class="card-pollution-info">
             <span >{{aqIndex?.index}} AQI</span>
             <span [style.color]="color" >{{aqIndex?.level}}</span>
-            <span>{{data?.temphum.temperature}} C°</span>
+            <span>28 C°</span>
+                
           </div>
       </ion-card-content>    
     </ion-card>

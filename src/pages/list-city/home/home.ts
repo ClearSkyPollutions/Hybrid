@@ -54,6 +54,22 @@ export class HomePage  {
     private storage: Storage
   ) {
     this.city = this.navParams.get('location');
+
+    this.storage.get('initConfig').then( (val: InitConfig) => {
+      this.raspi = val.rasp_ip;
+      this.aqIndexProvider.getAQI(val.rasp_ip).subscribe( (res : AQI) => {
+        this.aqIndex = res;
+        this.color = this.aqIndex.color;
+       if (this.aqIndex.index > 5 ) {
+        this.localNotifications.schedule({
+          title: this.translate.instant('airquality'),
+          text: this.aqIndex.index + '(' + this.aqIndex.level + ')'
+        });
+      }
+      });
+    });
+
+
     //@TODO: load data from somewhere
     this.charts.push({ type: 'pm10', unit: 'µg/m^3', lineColor: '#046bfe', chartView: '' });
     this.charts.push({ type: 'pm25', unit: 'µg/m^3', lineColor: '#02d935', chartView: '' });

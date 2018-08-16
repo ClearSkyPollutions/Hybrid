@@ -1,42 +1,24 @@
 <ion-content >
-
-  <!-- <ion-slides pager (ionSlideWillChange)="onSlideChangeStart($event)" [autoplay]="3000">
-    <ion-slide *ngFor="let slide of slides">
-      <img [src]="slide.image" class="slide-image"/>
-      <h2 class="slide-title" [innerHTML]="slide.title"></h2>
-      <p [innerHTML]="slide.description"></p>
-
-    </ion-slide>
-  </ion-slides> -->
-
   <!-- Welcome -->
   <ion-slides #slides pager (ionSlideWillChange)="onSlideChangeStart($event)">
     <ion-slide> 
-      <img src="assets/imgs/slides/slide2.jpg" class="slide-image"/>
-      <h2 class="slide-title">Welcome to ClearSky !</h2>
-      <p>With the next few pages we’ll try and help you setup your multi-pollutions sensing system.</p>
-      <p>Depending on your familiarity with the Raspberry Pi, the process may take up to 15 minutes.</p> 
+      <img src="assets/imgs/slides/slide11.jpg" class="slide-image"/>
+      <h2 class="slide-title">{{'title_slide1' | translate:user }}</h2>
+      <p [innerHtml]="'text_slide1' | translate:user "></p>
     </ion-slide>
 
     <!-- Setting up the Raspberry Pi -->
     <ion-slide> 
       <img src="assets/imgs/slides/setup-rpi.gif" class="slide-image"/>
-      <h2 class="slide-title">Setting up the Raspberry Pi</h2>
-      <p>First up, you need to get a Raspberry Pi with internet connectivity.</p>
-      <!-- <ul>
-        <li>The latest model (Raspberry Pi 3B) comes equipped with Wifi and ethernet</li>
-        <li>The Pi 0 also comes with Wifi, but is slower</li>
-        <li>Finally, you can also buy a Wifi adapter and plug it into any Raspberry Pi</li>
-      </ul> -->
-      <p>We recommend heading over to <a href="https://projects.raspberrypi.org/en/projects/raspberry-pi-getting-started">here</a>  for a quick tutorial on getting started.
-      </p>
+      <h2 class="slide-title">{{'title_slide2' | translate:user }}</h2>
+      <p [innerHtml]="'text_slide2' | translate:user">{{'text_slide2' | translate:user }}</p>
     </ion-slide>
 
     <!-- Setting up the sensors -->
     <ion-slide>
       <img src="assets/imgs/slides/slide2.jpg" class="slide-image"/>
-      <h2 class="slide-title">Setting up the sensors</h2>
-      <p>To have an accurate estimate of the air quality in your area, you’ll need to buy sensors for the most common types of pollutants.</p>
+      <h2 class="slide-title">{{'title_slide3' | translate:user }}</h2>
+      <p [innerHtml]="'text_slide3' | translate:user">{{'text_slide3' | translate:user }}</p>
       <!-- <p>For an out-of-the-box solution, use the following sensors :</p> -->
       <ion-list>
         <ion-item *ngFor="let s of sensorsList">
@@ -51,44 +33,39 @@
 
     <!-- Setting up ClearSky -->
     <ion-slide>
-      <img src="assets/imgs/slides/slide1.jpg" class="slide-image"/>
-      <h2 class="slide-title">Setting up ClearSky</h2>
-      <p>Please clone or download from github in your Raspberry Pi :</p> 
-      <p>After restarting, your Raspberry should now start reading the data from the sensors.
-          Next up, configuring the mobile app to visualize this data !
-      </p> 
+      <img src="assets/imgs/slides/slide3.jpg" class="slide-image"/>
+      <h2 class="slide-title">{{'title_slide4' | translate:user }}</h2>
+      <p [innerHtml]="'text_slide4' | translate:user"></p>
     </ion-slide>
 
     <!-- partage des données (+système ID) -->
     <ion-slide>
-      <img src="assets/imgs/slides/slide3.jpg" class="slide-image"/>
-      <h2 class="slide-title">Share your data with us</h2>
+      <img src="assets/imgs/slides/slide1.jpg" class="slide-image"/>
+      <h2 class="slide-title">{{'title_slide5' | translate:user }}</h2>
       <ion-toggle class="center" [(ngModel)]="initialSettings.isDataShared"></ion-toggle>
-      <p>Help us spread knowledge and data about Air Quality ! We’re building a map of the data collected by our users and accessible to everyone (data is anonymized).</p> 
-      <!-- <p>Do you wish to upload the data collected by your system</p> -->
+      <p [innerHtml]="'text_slide5' | translate:user"></p>
     </ion-slide>
 
     <!-- adresse serveur central -->
     <ion-slide>
-      <img src="assets/imgs/slides/slide1.jpg" class="slide-image"/>
-      <h2 class="slide-title">Server IP</h2>
-      <p>Optionally, you may want to use another server to upload your data to :</p> 
-      <button ion-button round (click)="DefineIpAddressDialog('Server', 'server_ip')">Server IP</button>
+      <img src="assets/imgs/slides/slide21.jpg" class="slide-image"/>
+      <h2 class="slide-title">{{'title_slide6' | translate:user }}</h2>
+      <p [innerHtml]="'text_slide6' | translate:user"></p>
+      <button ion-button round (click)="DefineIpAddressDialog('Server', 'server_ip')">{{'server' | translate:user }}</button>
     </ion-slide>
 
     <!-- Ip addresse of Raspberry-->
     <ion-slide>
-      <img src="assets/imgs/slides/slide2.jpg" class="slide-image"/>
-      <h2 class="slide-title">IP address of Raspberry</h2>
-      <p>What’s the IP Address of the Raspberry Pi (How to get it ? ) :</p> 
-      <button ion-button round (click)="DefineIpAddressDialog('Raspberry Pi', 'rasp_ip')">Raspberry Pi IP</button>
+      <img src="assets/imgs/slides/slide31.jpg" class="slide-image"/>
+      <h2 class="slide-title">{{'title_slide7' | translate:user }}</h2>
+      <button ion-button round (click)="DefineIpAddressDialog('Raspberry Pi', 'rasp_ip')">Raspberry Pi</button>
     </ion-slide>
   </ion-slides>
 
 </ion-content>
-<ion-footer class="btn-footer">
-    <button *ngIf="showPreviousBtn" float-left ion-button round  color="primary" class="btnPrev" (click)="prev()">Prev</button>
-    <button *ngIf="showNextBtn" float-right ion-button round color="primary" class="btnNext" (click)="next()">Next</button>
-    <button *ngIf="showStartBtn"  float-right ion-button round color="primary" class="auth-btn" (click)="startApp()">Start</button>
-</ion-footer>
 
+<ion-footer class="btn-footer">
+    <button *ngIf="showPreviousBtn" float-left ion-button round  color="primary" class="btnPrev" (click)="prev()">{{'previous' | translate:user }}</button>
+    <button *ngIf="showNextBtn" float-right ion-button round color="primary" class="btnNext" (click)="next()">{{'next' | translate:user }}</button>
+    <button *ngIf="showStartBtn"  float-right ion-button round color="primary" class="auth-btn" (click)="startApp()">{{'start' | translate:user }}</button>
+</ion-footer>
