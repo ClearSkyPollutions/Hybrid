@@ -16,8 +16,9 @@ import { SqliteProvider } from '../../../providers/sqlite/sqlite.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Storage } from '@ionic/storage';
 import { AddressServer } from '../../../models/addressServer.interface';
-import { InitConfig } from '../../../models/init-config.interface';
-import { Observable } from 'rxjs/Observable';
+
+import { StoredConf } from '../../../models/init-config.interface';
+
 
 
 
@@ -55,7 +56,8 @@ export class HomePage  {
   ) {
     this.city = this.navParams.get('location');
 
-    this.storage.get('initConfig').then( (val: InitConfig) => {
+    this.storage.get('initConfig').then( (val: StoredConf) => {
+
       this.raspi = val.rasp_ip;
       this.aqIndexProvider.getAQI(val.rasp_ip).subscribe( (res : AQI) => {
         this.aqIndex = res;
@@ -79,7 +81,7 @@ export class HomePage  {
   }
 
   ngAfterViewInit() :void {
-    this.storage.get('initConfig').then( (val: InitConfig) => {
+    this.storage.get('initConfig').then( (val: StoredConf) => {
       this.raspi = val.rasp_ip;
       this.server = val.server_ip;
       this.checkAndSynchronize();
@@ -89,6 +91,7 @@ export class HomePage  {
 
   doRefresh(refresher: Refresher) :void {
     console.log('Begin async operation');
+
     this.syncAQI();
     this.dataProvider.checkConnection(this.raspi)
     .timeoutWith(5000, Observable.throw(
@@ -105,6 +108,7 @@ export class HomePage  {
           () => { this.showChartData(this.server, refresher); },
           () => {
             this.showToast(this.translate.instant('home_toast_no_connection'));
+
             refresher.complete();
           });
       });
@@ -160,7 +164,6 @@ export class HomePage  {
   private drawLineChart(chart: ChartInfo) :Promise<void> {
     const chartLabels :string[] = [];
     const chartValues :string[] = [];
-    //TODO: handle first connexion (when tables are not created yet)
     return this.sqliteProvider.requestDataForChart('AVG_HOUR', chart.type).then((res :any) => {
       if (res != null) {
         if (res.length > 0) {

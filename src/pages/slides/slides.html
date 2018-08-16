@@ -40,9 +40,9 @@
 
     <!-- partage des données (+système ID) -->
     <ion-slide>
-      <img src="assets/imgs/slides/slide1.jpg" class="slide-image"/>
+      <img src="assets/imgs/slides/slide3.jpg" class="slide-image"/>
       <h2 class="slide-title">{{'title_slide5' | translate:user }}</h2>
-      <ion-toggle class="center" [(ngModel)]="initialSettings.isDataShared"></ion-toggle>
+      <ion-toggle class="center" [(ngModel)]="initialSettings.isDataShared" (ionChange)="getPosition()"></ion-toggle>
       <p [innerHtml]="'text_slide5' | translate:user"></p>
     </ion-slide>
 

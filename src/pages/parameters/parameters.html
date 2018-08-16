@@ -67,9 +67,14 @@
 
   <ion-list>
     <ion-list-header>
-      <ion-label>{{'shareYourData' | translate:user }}</ion-label>
-      <ion-checkbox [(ngModel)]="settings.isDataShared" item-end></ion-checkbox>
+      <ion-label>Share your data</ion-label>
+      <ion-checkbox [(ngModel)]="settings.isDataShared" item-end item-end (keyup.enter)="setPositionCheckboxValue()" (click)="setPositionCheckboxValue()"></ion-checkbox>
+
     </ion-list-header>
+    <ion-item *ngIf="settings.isDataShared">
+      <ion-label>{{ 'position' | translate:user }}</ion-label>
+      <ion-checkbox [(ngModel)]="isPositionShared" item-end (keyup.enter)="getPosition()" (click)="getPosition()"></ion-checkbox>
+    </ion-item>
   </ion-list>
   <ion-row>
     

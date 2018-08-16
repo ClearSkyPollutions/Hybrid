@@ -6,7 +6,9 @@ import { Settings } from '../../models/settings';
 import { AlertProvider } from '../../providers/alert/alert.service';
 import { SettingsProvider } from '../../providers/settings/settings.service';
 import { AddressServer } from '../../models/addressServer.interface';
-import { InitConfig } from '../../models/init-config.interface';
+import { StoredConf } from '../../models/init-config.interface';
+import { System } from '../../models/system';
+import { Geolocation } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
@@ -16,10 +18,14 @@ import { InitConfig } from '../../models/init-config.interface';
 export class ParametersPage {
   raspi: AddressServer;
   settings: Settings;
-  storedConf: InitConfig;
+  storedConf: StoredConf;
+  system : System;
   tempInputSensor: string;
   spinner: any;
   connection: boolean;
+  isPositionShared: boolean;
+  latitude : string;
+  longitude : string;
 
   constructor(
     public navCtrl          : NavController,
@@ -28,7 +34,8 @@ export class ParametersPage {
     private settingsProvider: SettingsProvider,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    private storage: Storage
+    private storage: Storage,
+    private geolocation : Geolocation
   ) {
     this.raspi = {
       ip: '',
@@ -38,26 +45,35 @@ export class ParametersPage {
       frequency: 20,
       sensors: [],
       serverAddress: this.raspi,
-      isDataShared: false
+      isDataShared: false,
+      latitude: '-1',
+      longitude: '-1'
     };
+    this.isPositionShared = false;
   }
 
   ionViewDidLoad() :void {
-    this.storage.get('initConfig').then((val : InitConfig) => {
-      this.settings = {
-        frequency: 20,
-        sensors: val.sensors,
-        serverAddress: val.server_ip,
-        isDataShared: val.isDataShared
-      };
-      this.showSpinner();
+    this.storage.get('initConfig').then((val : StoredConf) => {
+      this.settings.frequency = val.frequency;
+      this.settings.sensors = val.sensors;
+      this.settings.serverAddress = val.server_ip;
+      this.settings.isDataShared = val.isDataShared;
       this.raspi = val.rasp_ip;
+      this.showSpinner();
       this.settingsProvider.getConfig(this.raspi).subscribe(
         (cfg: Settings) => {
           this.spinner.dismiss();
           this.showToast(this.translate.instant('param_sync_toast'));
-          this.settings = cfg;
+          this.settings = {
+            frequency     : cfg.frequency,
+            sensors       : cfg.sensors,
+            serverAddress : cfg.serverAddress,
+            isDataShared  : cfg.isDataShared,
+            latitude      : '-1',
+            longitude     : '-1'
+          };
           this.storedConf = {
+            frequency   : this.settings.frequency,
             sensors     : this.settings.sensors,
             rasp_ip     : this.raspi ,
             server_ip   : this.settings.serverAddress,
@@ -112,6 +128,31 @@ export class ParametersPage {
     }
   }
 
+  getPosition() : void {
+    if (this.isPositionShared) {
+      console.log('isPositionShared = true');
+      this.geolocation.getCurrentPosition().then((resp : any) => {
+        console.log('in getCurrentPosition().then()');
+        console.log(resp);
+        this.latitude  = String(resp['coords']['latitude']);
+        this.longitude = String(resp['coords']['longitude']);
+        this.storage.get('system').then((sys : any) => {
+          sys['latitude'] = this.latitude;
+          sys['longitude'] = this.longitude;
+          this.storage.set('system', sys);
+        });
+       }).catch((error : any) => {
+         console.log('Error getting location', error);
+       });
+    }
+  }
+
+  setPositionCheckboxValue() : void {
+    if (!this.settings.isDataShared) {
+      this.isPositionShared = false;
+    }
+  }
+
   doConfirm() :void {
     this.alertProvider.confirmAlert({
       title: this.translate.instant('param_alert_title'),
@@ -128,24 +169,37 @@ export class ParametersPage {
         handler: () :void => {
           this.showSpinner();
           try {
-            this.settingsProvider.setConfig(this.settings, this.raspi).subscribe(
-              (cfg: Settings) => {
-                this.spinner.dismiss();
-                this.showToast(this.translate.instant('param_alert_success'));
-                this.storedConf = {
-                  sensors     : this.settings.sensors,
-                  rasp_ip     : this.raspi ,
-                  server_ip   : this.settings.serverAddress,
-                  isDataShared: this.settings.isDataShared
-                };
-                this.storage.set('initConfig', this.storedConf);
-              },
-              (error : any) => {
-                console.log("Couldn\'t fetch remote settings", error);
-                this.spinner.dismiss();
-                this.showToast(this.translate.instant('param_alertconnection_failed'));
+              if (this.isPositionShared && this.settings.isDataShared) {
+                this.settings.latitude = this.latitude;
+                this.settings.longitude = this.longitude;
+              } else {
+                this.settings.latitude = '-1';
+                this.settings.longitude = '-1';
               }
-            );
+              console.log(this.settings);
+              this.storage.get('system').then((sys : any) => {
+                sys['latitude'] = this.latitude;
+                sys['longitude'] = this.longitude;
+                this.storage.set('system', sys);
+            });
+              this.settingsProvider.setConfig(this.settings, this.raspi).subscribe(
+                () => {
+                  console.log(this.settings);
+                  this.spinner.dismiss();
+                  this.showToast(this.translate.instant('param_alert_success'));
+                  this.storedConf = {
+                    frequency   : this.settings.frequency,
+                    sensors     : this.settings.sensors,
+                    rasp_ip     : this.raspi ,
+                    server_ip   : this.settings.serverAddress,
+                    isDataShared: this.settings.isDataShared
+                  };
+                  this.storage.set('initConfig', this.storedConf);
+                }, (error : any) => {
+                  console.log('Couldn\'t fetch remote settings', error);
+                  this.spinner.dismiss();
+                this.showToast(this.translate.instant('param_alertconnection_failed'));
+                });
           } catch (error) {
             this.showToast(this.translate.instant('param_alert_failed'));
           }

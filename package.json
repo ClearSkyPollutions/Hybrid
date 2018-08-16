@@ -22,7 +22,7 @@
     "@angular/platform-browser": "5.2.10",
     "@angular/platform-browser-dynamic": "5.2.10",
     "@ionic-native/core": "4.7.0",
-    "@ionic-native/geolocation": "^4.7.0",
+    "@ionic-native/geolocation": "^4.11.0",
     "@ionic-native/local-notifications": "^4.7.0",
     "@ionic-native/splash-screen": "4.7.0",
     "@ionic-native/sqlite": "^4.7.0",
@@ -70,7 +70,9 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-geolocation": {},
+      "cordova-plugin-geolocation": {
+        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
+      },
       "uk.co.workingedge.cordova.plugin.sqliteporter": {},
       "cordova-sqlite-storage": {},
       "cordova-plugin-local-notification": {},
