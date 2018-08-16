@@ -1,4 +1,15 @@
 {
+
+    "airquality": "Air Quality",
+    "pm10": "PM 10",
+    "pm25": "PM 2.5",
+    "temp": "Temperature",
+    "hum" : "Humidity",
+    "settings" : "Settings",
+    
+    "cities" : "Cities",
+    "home_toast_no_connection" : "Failed to connect to the server and raspberry pi"
+
     "title_slide1"  : "Welcome to ClearSky !",
     "text_slide1"   : "<p>With the next few pages we’ll try and help you setup your multi-pollutions sensing system.</p><p>Depending on your familiarity with the Raspberry Pi, the process may take up to 15 minutes.</p>",
     "title_slide2"  : "Setting up the Raspberry Pi",
@@ -92,4 +103,5 @@
     "shareYourData" : "Share your data",
     "submit"        : "Submit",
     "reset"         : "Reset"
+
 }

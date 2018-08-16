@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Settings } from '../../models/settings';
 import { Observable } from 'rxjs';
 import { AddressServer } from '../../models/addressServer.interface';
+import { System } from '../../models/system';
 
 
 @Injectable()
@@ -20,5 +21,10 @@ export class SettingsProvider {
     const request = 'config.php';
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.put('http://' + r.ip + ':' + r.port + '/' + request, s, {headers});
+  }
+
+  public getSystemID(address : AddressServer) : Observable<any> {
+    const requestID = 'SYSTEM?transform=1';
+    return this.http.get<any>('http://' + address.ip + ':' + address.port + '/' + requestID);
   }
 }
