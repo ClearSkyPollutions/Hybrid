@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>New Chart</ion-title>
+    <ion-title>{{ 'newChart' | translate:user }}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="cancelModal()">
         <ion-icon item-right name="ios-close-outline"></ion-icon>
@@ -14,11 +14,11 @@
 
 <ion-content padding>
   <ion-item>
-    <ion-label> Name </ion-label>
+    <ion-label>{{ 'nameChart' | translate:user }} </ion-label>
     <ion-input [(ngModel)]="name"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label> Units </ion-label>
+    <ion-label>{{ 'unitChart' | translate:user }} </ion-label>
     <ion-input [(ngModel)]="unit"></ion-input>
   </ion-item>
   <button ion-button color="light" small class="circle-button" (click)="closeModal()">OK</button>

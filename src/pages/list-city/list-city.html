@@ -1,23 +1,23 @@
 <ion-header>
-    <ion-navbar color="primary">
-      <ion-title>Cities</ion-title>
-    </ion-navbar>
-  </ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{ 'cities' | translate:user }}</ion-title>
+  </ion-navbar>
+</ion-header>
 <ion-content >
 
-    <ion-card *ngFor="let city of cities; let i=index"
-     (click)="goToCityDetail(city)"
-     [ngClass]="{
-      'card-overlay-first':i == 0,
-      'card-overlay':i > 0
-    }">
+  <ion-card *ngFor="let city of cities; let i=index"
+   (click)="goToCityDetail(city)"
+   [ngClass]="{
+    'card-overlay-first':i == 0,
+    'card-overlay':i > 0
+  }">
 
-      <div class="card-aqi">{{city.AQI}} <span>AQI</span></div> 
-      <img [src]="city.image"/>
-      <div class="card-title">{{city.city}}</div>
-      <div class="card-subtitle">{{city.country}}</div>
-   
-    </ion-card> 
+    <div class="card-aqi">{{city.AQI}} <span>AQI</span></div> 
+    <img [src]="city.image"/>
+    <div class="card-title">{{city.city | translate:user}}</div>
+    <div class="card-subtitle">{{city.country |translate:user}}</div>
+ 
+  </ion-card> 
 
-    
+  
 </ion-content>

@@ -2,32 +2,32 @@ import { City } from '../models/city.interface';
 
 export const CITIES :City[] = [
     {
-      city   : 'Grenoble',
+      city   : 'grenoble',
       country: 'France',
       AQI    : '18',
       image  : 'assets/imgs/cities/greb.jpg'
     },
     {
-      city   : 'Vizille',
-      country: 'France',
+      city   : 'vizille',
+      country: 'france',
       AQI    : '5',
       image  : 'assets/imgs/cities/vizille.jpg'
     },
     {
-      city   : 'Rome',
-      country: 'Italie',
+      city   : 'rome',
+      country: 'italy',
       AQI    : '7',
       image  : 'assets/imgs/cities/rome.jpg'
     },
     {
-      city   : 'Paris',
-      country: 'France',
+      city   : 'paris',
+      country: 'france',
       AQI    : '10',
       image  : 'assets/imgs/cities/paris.jpg'
     },
     {
-      city   : 'Istanbul',
-      country: 'Turquie',
+      city   : 'istanbul',
+      country: 'turkey',
       AQI    : '12',
       image  : 'assets/imgs/cities/ortakoy.jpg'
     }

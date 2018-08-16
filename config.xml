@@ -3,7 +3,7 @@
     <name>ClearSkyIonic</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.2.95:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -95,5 +95,6 @@
     <allow-navigation href="http://localhost:8100" />
     <allow-navigation href="http://10.26.196.171:8100" />
     <allow-navigation href="http://192.168.2.95:8100" />
+    <allow-navigation href="http://192.168.2.83:8100" />
     <engine name="android" spec="7.0.0" />
 </widget>
