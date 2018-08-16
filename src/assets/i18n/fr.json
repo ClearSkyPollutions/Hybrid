@@ -9,7 +9,7 @@
     "cities" : "Villes",
 
     "home_toast_no_connection" : "Échec de la connexion au Raspberry Pi et au serveur",
-    "postion"   : "Partager votre position"
+    "postion"   : "Partager votre position",
 
 
     "title_slide1"  : "Bienvenue sur ClearSky!",

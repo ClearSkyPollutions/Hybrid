@@ -9,7 +9,7 @@
     "cities" : "Cities",
 
     "home_toast_no_connection" : "Failed to connect to the server and raspberry pi",
-    "position"  : "Share your position"
+    "position"  : "Share your position",
 
 
     "title_slide1"  : "Welcome to ClearSky !",
@@ -23,7 +23,7 @@
     "title_slide5"  : "Share your data with us",
     "text_slide5"   : "Help us spread knowledge and data about Air Quality !<br>We’re building a map of the data collected by our users and accessible to everyone.<br>",
     "title_slide6"  : "Server address",
-    "text_slide6"   : "Optionally, you may want to use another server to upload your data to :",
+    "text_slide6"   : "Optionally, you may want to use another server to download your data to :",
     "title_slide7"  : "Raspberry Pi's address",
     "text_slide7"   : "What’s the IP address of the Raspberry Pi (How to get it ? )",
     "previous"      : "Previous",
@@ -35,7 +35,7 @@
     "temp"          : "Temperature",
     "hum"           : "Humidity",
     "refresh_action_message" : "Pull to refresh",
-    "refresh_message"        : "Uploading new data...",
+    "refresh_message"        : "Downloading new data...",
     "pms5003[pollutants]"    : "Fine particles",
     "mq2[pollutants]"        : "Combustible Gases - Methane, Butane, LPG, smoke",
     "dht22[pollutants]"      : "Temperature, Humidity",
