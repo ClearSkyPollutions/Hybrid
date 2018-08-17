@@ -5,7 +5,7 @@ export interface Settings {
     frequency: number;
     serverAddress: AddressServer;
     isDataShared: boolean;
-    longitude: string;
-    latitude: string;
+    longitude: number;
+    latitude: number;
 }
 

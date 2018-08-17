@@ -24,8 +24,8 @@ export class ParametersPage {
   spinner: any;
   connection: boolean;
   isPositionShared: boolean;
-  latitude : string;
-  longitude : string;
+  latitude : number;
+  longitude : number;
 
   constructor(
     public navCtrl          : NavController,
@@ -46,8 +46,8 @@ export class ParametersPage {
       sensors: [],
       serverAddress: this.raspi,
       isDataShared: false,
-      latitude: '-1',
-      longitude: '-1'
+      latitude: null,
+      longitude: null
     };
     this.isPositionShared = false;
   }
@@ -69,8 +69,8 @@ export class ParametersPage {
             sensors       : cfg.sensors,
             serverAddress : cfg.serverAddress,
             isDataShared  : cfg.isDataShared,
-            latitude      : '-1',
-            longitude     : '-1'
+            latitude      : null,
+            longitude     : null
           };
           this.storedConf = {
             frequency   : this.settings.frequency,
@@ -134,8 +134,8 @@ export class ParametersPage {
       this.geolocation.getCurrentPosition().then((resp : any) => {
         console.log('in getCurrentPosition().then()');
         console.log(resp);
-        this.latitude  = String(resp['coords']['latitude']);
-        this.longitude = String(resp['coords']['longitude']);
+        this.latitude  = resp['coords']['latitude'];
+        this.longitude = resp['coords']['longitude'];
         this.storage.get('system').then((sys : any) => {
           sys['latitude'] = this.latitude;
           sys['longitude'] = this.longitude;
@@ -173,8 +173,8 @@ export class ParametersPage {
                 this.settings.latitude = this.latitude;
                 this.settings.longitude = this.longitude;
               } else {
-                this.settings.latitude = '-1';
-                this.settings.longitude = '-1';
+                this.settings.latitude = null;
+                this.settings.longitude = null;
               }
               console.log(this.settings);
               this.storage.get('system').then((sys : any) => {

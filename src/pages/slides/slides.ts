@@ -59,8 +59,8 @@ export class SlidesPage {
       sensors     : [''],
       serverAddress   : { ip: '192.168.2.118', port: '80'},
       isDataShared: false,
-      latitude: '-1',
-      longitude: '-1'
+      latitude: null,
+      longitude: null
     };
   }
 
@@ -117,7 +117,7 @@ export class SlidesPage {
                 },
               () => {
                 this.spinner.dismiss();
-                this.showToast('param_alertconnection_failed');
+                this.showToast(this.translate.instant('param_alertconnection_failed'));
                 this.isAbleToStart = false;
               });
             } catch (error) {
@@ -175,8 +175,8 @@ export class SlidesPage {
       this.geolocation.getCurrentPosition().then((resp : any) => {
         console.log('in getCurrentPosition().then()');
         console.log(resp);
-        this.newSettings.latitude  = String(resp['coords']['latitude']);
-        this.newSettings.longitude = String(resp['coords']['longitude']);
+        this.newSettings.latitude  = resp['coords']['latitude'];
+        this.newSettings.longitude = resp['coords']['longitude'];
        }).catch((error : any) => {
          console.log('Error getting location', error);
        });

@@ -13,17 +13,20 @@ export class SettingsProvider {
 
   public getConfig(r : AddressServer) :Observable<Settings> {
     const request = 'config.json';
-        return this.http.get<Settings>('http://' + r.ip + ':' + r.port + '/' + request);
+        return this.http.get<Settings>('http://' + r.ip + ':' + r.port + '/' + request)
+        .timeoutWith(2000, Observable.throw(new Error('Timeout Exceeded')));
   }
 
   public setConfig(s : Settings, r : AddressServer) :Observable<Object> {
     const request = 'config.php';
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.put('http://' + r.ip + ':' + r.port + '/' + request, s, {headers});
+    return this.http.put('http://' + r.ip + ':' + r.port + '/' + request, s, {headers})
+    .timeoutWith(2000, Observable.throw(new Error('Timeout Exceeded')));
   }
 
   public getSystem(address : AddressServer) : Observable<any> {
     const requestID = 'SYSTEM?transform=1';
-    return this.http.get<any>('http://' + address.ip + ':' + address.port + '/' + requestID);
+    return this.http.get<any>('http://' + address.ip + ':' + address.port + '/' + requestID)
+    .timeoutWith(2000, Observable.throw(new Error('Timeout Exceeded')));
   }
 }
