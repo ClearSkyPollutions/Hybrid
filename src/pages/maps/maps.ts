@@ -6,30 +6,34 @@ import leaflet from 'leaflet';
 import { DataMapFactorized, DataMapValues } from '../../models/dataMaps.interface';
 import { Storage } from '@ionic/storage';
 import { StoredConf } from '../../models/init-config.interface';
+import { ListCityPage } from '../list-city/list-city';
+
 
 
 @IonicPage()
 @Component({
-  selector   : 'page-maps',
+  selector: 'page-maps',
   templateUrl: 'maps.html',
 })
 export class MapsPage {
-  map   : leaflet.Map;
+  map: leaflet.Map;
   center: leaflet.PointTuple;
   dataMapFactorized: DataMapFactorized[];
+  container = leaflet.DomUtil.create('div');
+  popup: any;
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
-    private translate   : TranslateService,
+    private translate: TranslateService,
     private mapsProvider: MapsProvider,
     private storage: Storage
-    ) {
-      this.storage.get('initConfig').then((val : StoredConf) => {
-        this.mapsProvider.getDataSensorLocation(val.server_ip).subscribe((res: DataMapFactorized[]) => {
-          this.dataMapFactorized = res;
-          console.log(this.dataMapFactorized);
-          this.setMarker();
-        });
+  ) {
+    this.storage.get('initConfig').then((val: StoredConf) => {
+      this.mapsProvider.getDataSensorLocation(val.server_ip).subscribe((res: DataMapFactorized[]) => {
+        this.dataMapFactorized = res;
+        console.log(this.dataMapFactorized);
+        this.setMarker();
       });
+    });
   }
 
   ionViewDidLoad(): void {
@@ -43,9 +47,9 @@ export class MapsPage {
   initMap(): void {
     this.map = leaflet.map('map', {
       center: this.center,
-      zoom       : 6,
+      zoom: 6,
       zoomControl: false,
-      maxZoom    :  12
+      maxZoom: 12
     });
 
     //Add OSM Layer
@@ -58,38 +62,63 @@ export class MapsPage {
     let gps: leaflet.PointTuple;
     const dateTimeOptions = {
       weekday: 'short',
-      year   : 'numeric',
-      month  : 'short',
-      day    : 'numeric',
-      hour   : '2-digit',
-      minute : '2-digit'
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     };
 
     this.dataMapFactorized.forEach((dataMapFactorized: DataMapFactorized) => {
       gps = [dataMapFactorized.latitude, dataMapFactorized.longitude];
       const circle = leaflet.circleMarker(gps, {
-        color      : '#488aff',
-        fillColor  : '#488aff',
+        color: '#488aff',
+        fillColor: '#488aff',
         fillOpacity: 0.5,
-        radius     : 30
+        radius: 30
       }).addTo(this.map);
 
-      let popupContent = '<div align="center"><b>' + dataMapFactorized.system + '</b></div><br>';
+
+      var popupContent = '<div align="center"><b>' + dataMapFactorized.system + '</b></div><br>';
 
       dataMapFactorized.values.forEach((value: DataMapValues) => {
         popupContent += '<div align="left"><b>' + value.pollutant.toUpperCase() + ': </b>' + value.value + ' ' + value.unit + '</div>';
       });
+      popupContent += '<div align="right"><br>Date: ' + dataMapFactorized.date.toLocaleString(this.translate.getBrowserLang(), dateTimeOptions) + '</div>' + '<br>';
+      popupContent += '<button  type="button class="btn btn-primary btn-block" ">Plus</button>';
 
-      popupContent += '<div align="right"><br>Date: ' + dataMapFactorized.date.toLocaleString(this.translate.getBrowserLang(), dateTimeOptions) + '</div>';
+      this.popup = this.createpopup(popupContent, this.container);
 
-      circle.bindPopup(popupContent, {
-          'maxWidth'    : 500,
-          'minWidth'    : 150,
-          'autoPan'     : true,
-          'closeButton' : false,
-          'closeOnClick': true,
-          'className'   : 'popupCustom'
-        });
-  });
+      console.log(this.popup);
+      circle.bindPopup(this.popup, {
+        'maxWidth': 500,
+        'minWidth': 150,
+        'autoPan': true,
+        'closeButton': false,
+        'closeOnClick': true,
+        'className': 'popupCustom'
+      })
+      leaflet.DomEvent.on(this.popup, 'click', () => {
+        this.Moreinfo();
+      });
+
+    });
+
+
+
   }
+
+
+
+  createpopup(label: string, container: any) {
+    var popup = leaflet.DomUtil.create('div', '', container);
+    popup.setAttribute('align', 'center');
+    popup.innerHTML = label;
+    return popup;
+  }
+
+  Moreinfo() {
+    this.navCtrl.setRoot(ListCityPage);
+  }
+
 }
