@@ -2,11 +2,22 @@
 
   <ion-navbar color="primary">
     <ion-title>{{'settings' | translate:user }}</ion-title>
-  </ion-navbar>
+     </ion-navbar>    
+    <ion-segment [(ngModel)]="activeSegment">
+        <ion-segment-button value="Clear_SKY_1_0">
+          ClearSKY 1.0
+        </ion-segment-button>
+        <ion-segment-button value="Clear_SKY_2_0">
+          ClearSKY 2.0
+        </ion-segment-button>
+      </ion-segment>
+ 
 
 </ion-header>
 
 <ion-content padding>
+    <div [ngSwitch]="activeSegment">
+  <ion-list *ngSwitchCase="'Clear_SKY_1_0'" >
   <ion-list>
     <ion-list-header>
       {{'frequency' | translate:user }}
@@ -85,6 +96,16 @@
   <div float-right>
     <button ion-button block (click)="ionViewDidLoad()">{{'reset' | translate:user }}</button>
   </div>
-  
+</ion-list>
+   
+
+
+</div>
+    <div [ngSwitch]="activeSegment">
+        <ion-list *ngSwitchCase="'Clear_SKY_2_0'" >
+       
+         
+      </ion-list>
+          </div>
 
 </ion-content>

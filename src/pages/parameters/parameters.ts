@@ -26,6 +26,7 @@ export class ParametersPage {
   isPositionShared: boolean;
   latitude : number;
   longitude : number;
+  activeSegment: string = 'Clear_SKY_1_0'
 
   constructor(
     public navCtrl          : NavController,
