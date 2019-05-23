@@ -21,6 +21,7 @@
     "@angular/http": "5.2.10",
     "@angular/platform-browser": "5.2.10",
     "@angular/platform-browser-dynamic": "5.2.10",
+    "@ionic-native/bluetooth-serial": "^4.6.0",
     "@ionic-native/core": "4.7.0",
     "@ionic-native/geolocation": "^4.11.0",
     "@ionic-native/local-notifications": "^4.11.0",
@@ -33,11 +34,11 @@
     "@ngx-translate/http-loader": "^3.0.1",
     "chart.js": "^2.7.2",
     "chartjs-plugin-datalabels": "^0.3.0",
-    "cordova-android": "7.0.0",
+    "cordova-android": "^8.0.0",
     "cordova-plugin-badge": "^0.8.8",
+    "cordova-plugin-bluetooth-serial": "^0.4.7",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-geolocation": "^4.0.1",
-    "cordova-plugin-googlemaps": "dummy",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
     "cordova-plugin-ionic-webview": "^1.2.1",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
@@ -80,14 +81,9 @@
       "cordova-sqlite-storage": {},
       "cordova-plugin-local-notification": {},
       "cordova-plugin-statusbar": {},
-      "cordova-plugin-googlemaps": {
-        "API_KEY_FOR_ANDROID": "(API_KEY_FOR_ANDROID)",
-        "API_KEY_FOR_IOS": "(API_KEY_FOR_IOS)"
-      }
+      "cordova-plugin-bluetooth-serial": {}
     },
-    "platforms": [
-      "android"
-    ]
+    "platforms": []
   },
   "config": {
     "ionic_copy": "./config/copy.config.js"

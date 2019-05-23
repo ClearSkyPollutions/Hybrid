@@ -15,6 +15,7 @@ import { ChartProvider } from '../providers/chart/chart.service';
 import { SettingsProvider } from '../providers/settings/settings.service';
 import { AirQualityIndexProvider } from '../providers/air-quality-index/air-quality-index.service';
 import { SqliteProvider } from '../providers/sqlite/sqlite.service';
+import { BluetoothProvider } from '../providers/bluetooth/bluetooth';
 
 /* Native components */
 import { StatusBar } from '@ionic-native/status-bar';
@@ -24,6 +25,10 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { MapsProvider } from '../providers/maps/maps.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Geolocation } from '@ionic-native/geolocation';
+import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
+import { BluetoothConnectionPage } from '../pages/bluetooth-connection/bluetooth-connection';
+
+
 
 
 
@@ -37,7 +42,10 @@ export function createTranslateLoader(http: HttpClient) :TranslateHttpLoader {
 
 @NgModule({
   declarations: [
-    MyApp
+    MyApp,
+    
+
+
   ],
   imports: [
     BrowserModule,
@@ -54,7 +62,10 @@ export function createTranslateLoader(http: HttpClient) :TranslateHttpLoader {
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp
+    MyApp,
+    
+
+
   ],
   providers: [
     StatusBar,
@@ -71,7 +82,11 @@ export function createTranslateLoader(http: HttpClient) :TranslateHttpLoader {
     SettingsProvider,
     SqliteProvider,
     MapsProvider,
-    Geolocation
+    Geolocation,
+    BluetoothSerial,
+    BluetoothProvider,
+
+
   ]
 })
 

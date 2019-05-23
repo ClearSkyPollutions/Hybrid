@@ -88,24 +88,44 @@
     </ion-item>
   </ion-list>
   <ion-row>
-    
+
   </ion-row>
   <div float-right padding-left>
     <button ion-button block (click)="doConfirm()">{{'submit' | translate:user }}</button>
   </div>
   <div float-right>
     <button ion-button block (click)="ionViewDidLoad()">{{'reset' | translate:user }}</button>
+
   </div>
 </ion-list>
-   
+
+
+
 
 
 </div>
     <div [ngSwitch]="activeSegment">
         <ion-list *ngSwitchCase="'Clear_SKY_2_0'" >
-       
-         
-      </ion-list>
+            <button ion-button  (click)="SendPosition()" > envoie position</button>
+      
+            <ion-buttons end> <button ion-button end (click)="GotoBluethooth()">
+          <ion-icon name="bluetooth"></ion-icon>
+            </button> </ion-buttons>
+            <ion-list>
+                <ion-list-header>
+                  {{'frequency' | translate:user }}
+                  <ion-badge item-end>{{Sendfrequency}} {{'measures' | translate:user }}/Jours</ion-badge>
+                </ion-list-header>
+                <ion-item>
+                  {{Sendfrequency}
+                  <ion-range min="1" max="140"   [(ngModel)]="Sendfrequency" (ionChange)="sendfrequency()" debounce="500" >
+                    <ion-label range-left>0</ion-label>
+                    <ion-label range-right>140</ion-label>
+                  </ion-range>
+                </ion-item>
+              </ion-list>
+          </ion-list>
+
           </div>
 
 </ion-content>

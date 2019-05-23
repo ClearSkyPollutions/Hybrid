@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ToastController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, LoadingController, ModalController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
 import { Settings } from '../../models/settings';
@@ -9,6 +9,8 @@ import { AddressServer } from '../../models/addressServer.interface';
 import { StoredConf } from '../../models/init-config.interface';
 import { System } from '../../models/system';
 import { Geolocation } from '@ionic-native/geolocation';
+import { BluetoothProvider } from '../../providers/bluetooth/bluetooth';
+
 
 @IonicPage()
 @Component({
@@ -26,7 +28,9 @@ export class ParametersPage {
   isPositionShared: boolean;
   latitude : number;
   longitude : number;
-  activeSegment: string = 'Clear_SKY_1_0'
+  activeSegment: string = 'Clear_SKY_2_0';
+  Sendfrequency: number;  
+
 
   constructor(
     public navCtrl          : NavController,
@@ -36,7 +40,8 @@ export class ParametersPage {
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private storage: Storage,
-    private geolocation : Geolocation
+    private geolocation : Geolocation,    
+    private bluetoothProvider: BluetoothProvider 
   ) {
     this.raspi = {
       ip: '',
@@ -140,6 +145,8 @@ export class ParametersPage {
         this.storage.get('system').then((sys : any) => {
           sys['latitude'] = this.latitude;
           sys['longitude'] = this.longitude;
+          console.log(this.longitude);
+        console.log(this.latitude);
           this.storage.set('system', sys);
         });
        }).catch((error : any) => {
@@ -208,4 +215,22 @@ export class ParametersPage {
       }]
     }).present();
   }
+
+  SendPosition(){
+    this.isPositionShared=true;
+    this.getPosition();
+   
+    this.bluetoothProvider.sendData(this.latitude);
+    this.bluetoothProvider.sendData(this.longitude);
+
+  }
+
+  GotoBluethooth() {
+    this.navCtrl.push('BluetoothConnectionPage');
+}
+
+sendfrequency(){
+   this.bluetoothProvider.sendData(this.sendfrequency);  
+
+}
 }

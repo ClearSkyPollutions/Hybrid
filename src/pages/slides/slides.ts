@@ -182,6 +182,6 @@ export class SlidesPage {
        });
     }
   }
-
+ 
 
 }
