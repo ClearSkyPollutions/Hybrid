@@ -106,8 +106,10 @@
 </div>
     <div [ngSwitch]="activeSegment">
         <ion-list *ngSwitchCase="'Clear_SKY_2_0'" >
-            <button ion-button  (click)="SendPosition()" > envoie position</button>
-      
+            <button ion-button  (click)="catchPosition()" > Recup position</button>
+            <ion-label>{{latitude}}</ion-label> 
+            <ion-label>{{longitude}}</ion-label> 
+            
             <ion-buttons end> <button ion-button end (click)="GotoBluethooth()">
           <ion-icon name="bluetooth"></ion-icon>
             </button> </ion-buttons>
@@ -118,12 +120,27 @@
                 </ion-list-header>
                 <ion-item>
                   {{Sendfrequency}
-                  <ion-range min="1" max="140"   [(ngModel)]="Sendfrequency" (ionChange)="sendfrequency()" debounce="500" >
+                  <ion-range min="1" max="140"   [(ngModel)]="Sendfrequency" (ionChange)="catchfrequency()" debounce="500" >
                     <ion-label range-left>0</ion-label>
                     <ion-label range-right>140</ion-label>
                   </ion-range>
                 </ion-item>
+                <button ion-button end (click)="Senddata()">
+                    Senddata
+                       </button>
+                       <button ion-button end (click)="sendstata2()">
+                          Senddata22
+                             </button>
+                             <button ion-button end (click)="sendstata3()">
+                                coucou
+                                   </button>
+                                   <button ion-button end (click)="goComparativeChart()">
+                                      Comparative chart
+                                          </button>
+
+                       
               </ion-list>
+
           </ion-list>
 
           </div>

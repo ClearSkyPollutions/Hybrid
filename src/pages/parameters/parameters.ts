@@ -10,7 +10,7 @@ import { StoredConf } from '../../models/init-config.interface';
 import { System } from '../../models/system';
 import { Geolocation } from '@ionic-native/geolocation';
 import { BluetoothProvider } from '../../providers/bluetooth/bluetooth';
-
+import {InitArdnuino } from '../../models/InitArduino';
 
 @IonicPage()
 @Component({
@@ -29,7 +29,9 @@ export class ParametersPage {
   latitude : number;
   longitude : number;
   activeSegment: string = 'Clear_SKY_2_0';
-  Sendfrequency: number;  
+  Sendfrequency: number;
+  initArdnuino: InitArdnuino[]=[ {latitude: 45.188529,longitude:5.724524,frequency:24}];
+ 
 
 
   constructor(
@@ -56,6 +58,7 @@ export class ParametersPage {
       longitude: null
     };
     this.isPositionShared = false;
+   
   }
 
   ionViewDidLoad() :void {
@@ -135,13 +138,14 @@ export class ParametersPage {
   }
 
   getPosition() : void {
+    console.log("la")
     if (this.isPositionShared) {
       console.log('isPositionShared = true');
       this.geolocation.getCurrentPosition().then((resp : any) => {
         console.log('in getCurrentPosition().then()');
         console.log(resp);
         this.latitude  = resp['coords']['latitude'];
-        this.longitude = resp['coords']['longitude'];
+        this.longitude = resp['coords']['longitude'];        
         this.storage.get('system').then((sys : any) => {
           sys['latitude'] = this.latitude;
           sys['longitude'] = this.longitude;
@@ -216,12 +220,12 @@ export class ParametersPage {
     }).present();
   }
 
-  SendPosition(){
-    this.isPositionShared=true;
+  catchPosition(){
+    this.isPositionShared=true,
     this.getPosition();
-   
-    this.bluetoothProvider.sendData(this.latitude);
-    this.bluetoothProvider.sendData(this.longitude);
+    this.initArdnuino[0].latitude= this.latitude;
+    this.initArdnuino[0].longitude =this.longitude;
+
 
   }
 
@@ -229,8 +233,32 @@ export class ParametersPage {
     this.navCtrl.push('BluetoothConnectionPage');
 }
 
-sendfrequency(){
-   this.bluetoothProvider.sendData(this.sendfrequency);  
+catchfrequency(){
+    this.initArdnuino[0].frequency=this.Sendfrequency;
 
 }
+Senddata(){
+
+  // this.bluetoothProvider.sendData(JSON.parse(this.initArdnuino[]));
+  // console.log(JSON.parse(this.initArdnuino));
+}
+
+sendstata2(){
+  const userStr=JSON.stringify(this.initArdnuino);
+ const  test=JSON.parse(userStr);
+ console.log(test);
+
+  // this.bluetoothProvider.sendData(JSON.parse(userStr);
+  // this.bluetoothProvider.sendData(userStr);
+  
+}
+sendstata3(){
+ 
+  this.bluetoothProvider.sendData('coucou');
+  
+}
+goComparativeChart() {
+  this.navCtrl.push('ComparativeChartPage');
+}
+
 }

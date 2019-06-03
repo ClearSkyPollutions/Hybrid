@@ -82,7 +82,7 @@ export class BluetoothProvider { pairedList: pairedlist;
   }
 
   sendData(message) {
-    message+='\n';
+   
     this.showToast(message);
 
     this.bluetoothSerial.write(message).then(success => {

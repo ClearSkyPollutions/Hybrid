@@ -1,0 +1,64 @@
+<!--
+  Generated template for the ComparativeChartPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>comparative_chart</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-item >
+        <ion-label>Capteur 1</ion-label>
+        <ion-select [(ngModel)]="Capteur1">
+          <ion-option *ngFor="let capteur of dataMapFactorized" value={{capteur.system}} >{{capteur.system}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item >
+          <ion-label>Capteur 2</ion-label>
+          <ion-select [(ngModel)]="Capteur2">
+            <ion-option *ngFor="let capteur of dataMapFactorized" >{{capteur.system}}</ion-option>
+          </ion-select>
+        </ion-item>
+  
+        <ion-card class="info-card">
+            <ion-card-content>  
+                <div class="card-title"></div>
+                <!-- {{data?.temphum.date}} -->
+                <!-- <span>{{data?.temphum.temperature}} C°</span> -->
+                <div class="card-pollution-info">
+                  <span >{{aqIndex?.index}} AQI</span>
+                  <span [style.color]="color" >{{aqIndex?.level}}</span>
+                  <span>28 C°</span>
+                      
+                </div>
+            </ion-card-content>    
+          </ion-card>
+     
+  <div #chartsContainer class="chart-container">
+      <div class="chart-card" *ngFor="let c of charts">
+        <p>{{c.type}}</p>
+        <canvas [style.display]="showParams ? 'none' : 'block'" #ch (click)="openChartModal(c.type, c.unit, c.lineColor)"></canvas>
+        <div [style.display]="showParams ? 'block' : 'none'">
+          <button ion-button color="dark" item-start clear icon-only (click)="deleteCard(c)">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+          <button ion-button color="yellow" item-start clear icon-only (click)="favoriteCard(c)">
+            <ion-icon name="star"></ion-icon>
+          </button>
+        </div>
+      </div>
+      </div>
+    <ion-fab bottom right>
+      <button ion-fab [style.display]="showParams ? 'inline-block' : 'none'" icon-only>
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-fab>
+  </ion-content>
+  

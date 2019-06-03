@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Button } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { MapsProvider } from '../../providers/maps/maps.service';
-import leaflet from 'leaflet';
+import leaflet, { divIcon, latLng, LatLng } from 'leaflet';
 import { DataMapFactorized, DataMapValues } from '../../models/dataMaps.interface';
 import { Storage } from '@ionic/storage';
 import { StoredConf } from '../../models/init-config.interface';
@@ -21,6 +21,8 @@ export class MapsPage {
   dataMapFactorized: DataMapFactorized[];
   container = leaflet.DomUtil.create('div');
   popup: any;
+  button:any;
+
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
     private translate: TranslateService,
@@ -85,11 +87,14 @@ export class MapsPage {
         popupContent += '<div align="left"><b>' + value.pollutant.toUpperCase() + ': </b>' + value.value + ' ' + value.unit + '</div>';
       });
       popupContent += '<div align="right"><br>Date: ' + dataMapFactorized.date.toLocaleString(this.translate.getBrowserLang(), dateTimeOptions) + '</div>' + '<br>';
-      popupContent += '<button  type="button class="btn btn-primary btn-block" ">Plus</button>';
-
+      popupContent += '<button  type="button" class="btn btn-primary btn-block" (click)="goComparativeChart()" >Plus</button>';
+     
+      this.button=this.createButton('Start from this location', this.container)
       this.popup = this.createpopup(popupContent, this.container);
 
+      console.log(this.button.innertext);
       console.log(this.popup);
+
       circle.bindPopup(this.popup, {
         'maxWidth': 500,
         'minWidth': 150,
@@ -116,9 +121,28 @@ export class MapsPage {
     popup.innerHTML = label;
     return popup;
   }
+  createButton(label: string, container: any) {
+    var btn = leaflet.DomUtil.create('button', '', container);
+    btn.setAttribute('type', 'button');
+    btn.innerHTML = label;
+    return btn;
+    }
 
   Moreinfo() {
     this.navCtrl.setRoot(ListCityPage);
   }
 
+  goComparativeChart() {
+    this.navCtrl.push('ComparativeChartPage');
+  }
+
+  getinfo(){
+    this.storage.get('initConfig').then((val: StoredConf) => {
+      this.mapsProvider.getDataSensorLocation(val.server_ip).subscribe((res: DataMapFactorized[]) => {
+        this.dataMapFactorized = res;
+        console.log(this.dataMapFactorized);
+        this.setMarker();
+      });
+    });
+  }
 }
