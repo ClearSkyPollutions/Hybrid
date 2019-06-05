@@ -11,6 +11,7 @@ import { System } from '../../models/system';
 import { Geolocation } from '@ionic-native/geolocation';
 import { BluetoothProvider } from '../../providers/bluetooth/bluetooth';
 import {InitArdnuino } from '../../models/InitArduino';
+import { SigFoxDataPage } from '../sigfox-data/sigfox-data';
 
 @IonicPage()
 @Component({
@@ -31,6 +32,49 @@ export class ParametersPage {
   activeSegment: string = 'Clear_SKY_2_0';
   Sendfrequency: number;
   initArdnuino: InitArdnuino[]=[ {latitude: 45.188529,longitude:5.724524,frequency:24}];
+  
+  knobValuesPMS1_0: any = {
+    upper:300,
+    lower:0
+  }
+  
+  knobValuesPMS2_5: any = {
+    upper:300,
+    lower:0
+  }
+  
+  knobValuesGAZPPM: any = {
+    upper:1000,
+    lower:1
+  }
+  
+  knobValuesTemperature: any = {
+    upper:80,
+    lower:-40
+  }
+  knobValuesHumidity: any = {
+    upper:100,
+    lower:0
+  }
+  knobValuesMicro: any = {
+    upper:3.3,
+    lower:0
+  }
+  
+  knobValuesPressure: any = {
+    upper:1100,
+    lower:300
+  }
+  knobValuesAlti: any = {
+    upper:1100,
+    lower:300
+  }
+  knobValuesBattery: any = {
+    upper:100,
+    lower:0
+  }
+
+
  
 
 
@@ -58,6 +102,7 @@ export class ParametersPage {
       longitude: null
     };
     this.isPositionShared = false;
+    
    
   }
 
@@ -237,6 +282,9 @@ catchfrequency(){
     this.initArdnuino[0].frequency=this.Sendfrequency;
 
 }
+
+
+
 Senddata(){
 
   // this.bluetoothProvider.sendData(JSON.parse(this.initArdnuino[]));
@@ -259,6 +307,10 @@ sendstata3(){
 }
 goComparativeChart() {
   this.navCtrl.push('ComparativeChartPage');
+}
+goData(PMS1:any,PMS2:any,Gaz:any,Temperature:any,Humidity:any,Micro:any,Pressure:any,Altitude:any,Battery:any){
+  this.navCtrl.push(SigFoxDataPage,{knobValuesPMS1_0:PMS1,knobValuesPMS2_5:PMS2,knobValuesGAZPPM:Gaz,knobValuesTemperature:Temperature,
+  knobValuesHumidity:Humidity,knobValuesMicro:Micro,knobValuesPressure:Pressure,knobValuesAlti:Altitude,knobValuesBattery:Battery});
 }
 
 }

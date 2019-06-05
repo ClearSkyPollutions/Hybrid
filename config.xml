@@ -3,7 +3,7 @@
     <name>ClearSkyIonic</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.2.114:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -95,4 +95,6 @@
     <allow-navigation href="http://192.168.2.83:8100" />
     <plugin name="cordova-plugin-local-notification" spec="^0.9.0-beta.2" />
     <plugin name="cordova-plugin-bluetooth-serial" spec="^0.4.7" />
+    <allow-navigation href="http://192.168.2.114:8100" sessionid="689a021e" />
+    <allow-navigation href="http://10.65.12.63:8100" sessionid="0f12c77e" />
 </widget>

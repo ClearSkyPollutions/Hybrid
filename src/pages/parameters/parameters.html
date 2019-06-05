@@ -125,23 +125,93 @@
                     <ion-label range-right>140</ion-label>
                   </ion-range>
                 </ion-item>
-                <button ion-button end (click)="Senddata()">
-                    Senddata
+
+                <ion-item>
+                  
+                  <ion-label>PMS1_0 [{{knobValuesPMS1_0.lower}}-{{knobValuesPMS1_0.upper}}]</ion-label>
+                  <ion-range dualKnobs="true" [(ngModel)]="knobValuesPMS1_0" min="0" max="300"  >
+                    <ion-label range-left>0</ion-label>
+                    <ion-label range-right>300</ion-label>
+                  </ion-range>
+                </ion-item>
+                
+                <ion-item>
+                        <ion-label>PMS2_5 [{{knobValuesPMS2_5.lower}}-{{knobValuesPMS2_5.upper}}]</ion-label>
+                        <ion-range dualKnobs="true" [(ngModel)]="knobValuesPMS2_5" min="0" max="300"  >
+                          <ion-label range-left>0</ion-label>
+                          <ion-label range-right>300</ion-label>
+                        </ion-range>
+                      </ion-item>
+                 
+                  <ion-item>
+                          <ion-label>GAZPPM [{{knobValuesGAZPPM.lower}}-{{knobValuesGAZPPM.upper}}]</ion-label>
+                          <ion-range dualKnobs="true" [(ngModel)]="knobValuesGAZPPM" min="1" max="1000"  >
+                            <ion-label range-left>1</ion-label>
+                            <ion-label range-right>1100</ion-label>
+                          </ion-range>
+                  </ion-item>
+
+                  <ion-item>
+                      <ion-label>Temperature [{{knobValuesTemperature.lower}}-{{knobValuesTemperature.upper}}]</ion-label>
+                      <ion-range dualKnobs="true" [(ngModel)]="knobValuesTemperature" min="-40" max="80"  >
+                        <ion-label range-left>-40</ion-label>
+                        <ion-label range-right>80</ion-label>
+                      </ion-range>
+                    </ion-item>
+                    
+                    <ion-item>
+                            <ion-label>Humidity [{{knobValuesHumidity.lower}}-{{knobValuesHumidity.upper}}]</ion-label>
+                            <ion-range dualKnobs="true" [(ngModel)]="knobValuesHumidity" min="0" max="100"  >
+                              <ion-label range-left>0</ion-label>
+                              <ion-label range-right>100</ion-label>
+                            </ion-range>
+                          </ion-item>
+                     
+                      <ion-item>
+                              <ion-label>Micro [{{knobValuesMicro.lower}}-{{knobValuesMicro.upper}}]</ion-label>
+                              <ion-range dualKnobs="true" [(ngModel)]="knobValuesMicro" min="0" max="3.3"  >
+                                <ion-label range-left>0</ion-label>
+                                <ion-label range-right>3.3</ion-label>
+                              </ion-range>
+                      </ion-item>
+
+                      <ion-item>
+                          <ion-label>Altitude [{{knobValuesAlti.lower}}-{{knobValuesAlti.upper}}]</ion-label>
+                          <ion-range dualKnobs="true" [(ngModel)]="knobValuesAlti" min="300" max="1100"  >
+                            <ion-label range-left>300</ion-label>
+                            <ion-label range-right>1100</ion-label>
+                          </ion-range>
+                        </ion-item>
+                        
+                        <ion-item>
+                                <ion-label>Pressure [{{knobValuesPressure.lower}}-{{knobValuesPressure.upper}}]</ion-label>
+                                <ion-range dualKnobs="true" [(ngModel)]="knobValuesPressure" min="300" max="1100"  >
+                                  <ion-label range-left>300</ion-label>
+                                  <ion-label range-right>1100</ion-label>
+                                </ion-range>
+                              </ion-item>
+                         
+                          <ion-item>
+                                  <ion-label>Battery [{{knobValuesBattery.lower}}-{{knobValuesBattery.upper}}]</ion-label>
+                                  <ion-range dualKnobs="true" [(ngModel)]="knobValuesBattery" min="0" max="100"  >
+                                    <ion-label range-left>0</ion-label>
+                                    <ion-label range-right>100%</ion-label>
+                                  </ion-range>
+                          </ion-item>
+                                             
+            
+
+                <button ion-button end (click)="goData(knobValuesPMS1_0,knobValuesPMS2_5,knobValuesGAZPPM,knobValuesTemperature,
+                knobValuesHumidity,knobValuesMicro,knobValuesPressure,knobValuesAlti,knobValuesBattery)">
+                    Save setting
                        </button>
-                       <button ion-button end (click)="sendstata2()">
-                          Senddata22
-                             </button>
-                             <button ion-button end (click)="sendstata3()">
-                                coucou
-                                   </button>
-                                   <button ion-button end (click)="goComparativeChart()">
-                                      Comparative chart
-                                          </button>
+                      
 
                        
               </ion-list>
 
           </ion-list>
+
 
           </div>
 

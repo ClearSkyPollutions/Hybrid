@@ -27,7 +27,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Geolocation } from '@ionic-native/geolocation';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import { BluetoothConnectionPage } from '../pages/bluetooth-connection/bluetooth-connection';
-
+import { SigFoxDataPage } from '../pages/sigfox-data/sigfox-data'
+import { ChartDataSigFoxPage } from '../pages/chart-data-sig-fox/chart-data-sig-fox';
 
 
 
@@ -43,6 +44,8 @@ export function createTranslateLoader(http: HttpClient) :TranslateHttpLoader {
 @NgModule({
   declarations: [
     MyApp,
+    SigFoxDataPage,
+    ChartDataSigFoxPage
     
 
 
@@ -63,6 +66,9 @@ export function createTranslateLoader(http: HttpClient) :TranslateHttpLoader {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    SigFoxDataPage,
+    ChartDataSigFoxPage
+
     
 
 
