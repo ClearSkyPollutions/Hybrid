@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
       <ion-title>
-        Ionic Blank
+        Data
       </ion-title>
       <button ion-button (click) = "openChartModal('pm10','µg/m^3','#046bfe', PMS1_0,PMS2_5)" icon-start large round color="dark"></button>
     </ion-navbar>
@@ -11,94 +11,60 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-      <ion-list >
-          <ion-list-header>
-              <ion-label>PMS1_0</ion-label>
-            </ion-list-header>
-          <ion-item *ngFor="let pms1_0 of PMS1_0">
-            {{pms1_0}}
-          </ion-item>
-        </ion-list>
+      
+        
+          
+              <ion-label>PM1_0</ion-label>
+              <button ion-button (click) = "openChartModal('pm1_0','µg/m^3','#046bfe', PMS1_0)" icon-start >PM1_0</button>
+            
+          
+        
       </ion-col>
       <ion-col>
-      <ion-list >
-            <ion-list-header>
-                <ion-label>PMS2_5</ion-label>
-              </ion-list-header>
-            <ion-item *ngFor="let pms2_5 of PMS2_5">
-              {{pms2_5}}
-            </ion-item>
-        </ion-list>
+      
+           
+                <ion-label>PM2_5</ion-label>
+                <button ion-button (click) = "openChartModal('pm2_5','µg/m^3','#42fe03',PMS2_5)" icon-start >PM2_5</button>
+              
+           
+        
       </ion-col>
       <ion-col>
-          <ion-list >
-              <ion-list-header>
+          
                   <ion-label>gazPPM</ion-label>
-                </ion-list-header>
-              <ion-item *ngFor="let gazppm of gazPPM">
-                {{gazppm}}
-              </ion-item>
-            </ion-list>
+                  <button ion-button (click) = "openChartModal('GazPPM','µg/m^3','#fe0245',gazPPM)" icon-start >GAZPPM</button>
           </ion-col>
           <ion-col>
-          <ion-list >
-                <ion-list-header>
+          
                     <ion-label>Temperature</ion-label>
-                  </ion-list-header>
-                <ion-item *ngFor="let temp of temperature">
-                  {{temp}}
-                </ion-item>
-            </ion-list>
+                    <button ion-button (click) = "openChartModal('Temperature','C°','#fe1b01',temperature)" icon-start >Temperature</button>
           </ion-col>
           <ion-col>
-              <ion-list >
-                  <ion-list-header>
+             
                       <ion-label>humidity</ion-label>
-                    </ion-list-header>
-                  <ion-item *ngFor="let hum of humidity">
-                    {{hum}}
-                  </ion-item>
-                </ion-list>
+                      <button ion-button (click) = "openChartModal('Humidity','%','#b2fe00',humidity)" icon-start >Humidity</button>
+                   
               </ion-col>
               <ion-col>
-              <ion-list >
-                    <ion-list-header>
+             
                         <ion-label>Micro</ion-label>
-                      </ion-list-header>
-                    <ion-item *ngFor="let mic of micAnalog">
-                      {{mic}}
-                    </ion-item>
-                </ion-list>
+                        <button ion-button (click) = "openChartModal('Pollution sonore','V','#1d00fe',micAnalog)" icon-start >Pollution Sonore</button>
               </ion-col>
               <ion-col>
-                  <ion-list >
-                      <ion-list-header>
+                  
                           <ion-label>Pressure</ion-label>
-                        </ion-list-header>
-                      <ion-item *ngFor="let press of Pressure">
-                        {{press}}
-                      </ion-item>
-                    </ion-list>
+                          <button ion-button (click) = "openChartModal('Pressure','hPa','#9800fe',Pressure)" icon-start >Pressure</button>
+                        
                   </ion-col>
                   <ion-col>
-                  <ion-list >
-                        <ion-list-header>
+              
                             <ion-label>Altitude</ion-label>
-                          </ion-list-header>
-                        <ion-item *ngFor="let alt of altitude">
-                          {{alt}}
-                        </ion-item>
-                    </ion-list>
+                            <button ion-button (click) = "openChartModal('Altitude','hPa','#ed00fe',altitude)" icon-start >Altitude</button>
                   </ion-col>
                   <ion-col>
-                      <ion-list >
-                          <ion-list-header>
+                     
                               <ion-label>Batterie</ion-label>
-                            </ion-list-header>
-                          <ion-item *ngFor="let batt of lvlBattery">
-                            {{batt}}
-                          </ion-item>
-                        </ion-list>
+                              <button ion-button (click) = "openChartModal('Altitude','%','#feb100',lvlBattery)" icon-start >Battery</button>
                       </ion-col>
                    
       

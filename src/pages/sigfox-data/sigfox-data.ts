@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { PLATFORM_WORKER_APP_ID } from '@angular/common/src/platform_id';
 import { ChartOptions } from '../../models/chartInfo.interface';
+import { Data } from '../../models/data.interface';
+import { Data_SigFox } from '../../models/data.sigfox';
 
 
 @Component({
@@ -14,8 +16,8 @@ import { ChartOptions } from '../../models/chartInfo.interface';
 })
 export class SigFoxDataPage implements OnInit{
 
-  posts :any = null;
-  PMS1_0 : Number[] = [];
+  posts : Data_SigFox[] = null;
+  PMS1_0 : Data_SigFox[] = [];
   PMS2_5 : Number[] = [];
   gazPPM : Number[] = [];
   temperature : Number[] = [];
@@ -53,12 +55,15 @@ export class SigFoxDataPage implements OnInit{
     this.http
     .get('https://cors-anywhere.herokuapp.com/https://backend.sigfox.com/api/devices/1D91CA/messages',httpOptions)
     .subscribe(data  => {
+    console.log('data: ', data.data[0]["time"]);
     this.posts = data.data;
-    this.posts = this.posts.map(element => {
+
+    this.posts = this.posts.map((element:any) => {
      // console.log('element1: ', element);
      // console.log('element["data"]: ', element["data"]);
-        element = this.hex_to_dec(element["data"]);
-        //console.log('element: ', element);
+        element.data = this.hex_to_dec(element["data"]);
+        element.date = element["time"];
+        console.log('element: ', element);
         return element;
        
       
@@ -116,6 +121,7 @@ export class SigFoxDataPage implements OnInit{
      //console.log('data ', this.HexToBin("F"));
      this.SortData();
      this.PMS1_0 = this.convert(this.PMS1_0,this.PMS1_Range.lower,this.PMS1_Range.upper);
+     console.log('this.PMS1_02: ', this.PMS1_0);
      this.PMS2_5 = this.convert(this.PMS2_5,this.PMS2_Range.lower,this.PMS2_Range.upper);
      this.gazPPM = this.convert(this.gazPPM,this.gazPPM_Range.lower,this.gazPPM_Range.upper);
      this.temperature =  this.convert(this.temperature,this.Temperature_Range.lower,this.Temperature_Range.upper);
@@ -152,7 +158,7 @@ SortData(){
  //console.log("postatb" + this.posts);
   this.posts.forEach(element => {
 
-    for (let index = 0; index < element.length; index++) {
+    for (let index = 0; index < element.value.length; index++) {
       switch (index) {
         case 0: this.PMS1_0.push(element[index]); 
           
@@ -190,6 +196,7 @@ SortData(){
     }
     
   });
+  console.log('this.PMS1_01: ', this.PMS1_0.values);
   //console.log("PMS1tab " + this.PMS1_0);
   //console.log("temperature " + this.temperature);
 }
@@ -252,13 +259,13 @@ hex_to_dec(str1)
 
   }
 
-  openChartModal(pollutant: string, unit: string, color: string,tabPMS1:any,tabPMS2:any) :void {
+  openChartModal(pollutant: string, unit: string, color: string,tabPMS1:any) :void {
     const chartOptions : ChartOptions = {
       pollutant: pollutant,
       unit: unit,
       color: color
     };
-    this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions, PMS1_0:tabPMS1,PMS2_5:tabPMS2 }, {
+    this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions, PMS1_0:tabPMS1 }, {
       cssClass: 'inset-modal',
       
     } )

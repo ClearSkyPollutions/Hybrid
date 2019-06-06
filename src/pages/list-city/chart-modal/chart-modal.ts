@@ -22,6 +22,9 @@ export class ChartModalPage {
   chartLabels: any[] = [];
   chartValues: any[] = [];
   chartValues2: any[] = [];
+  chartValuesGaz: any[] = [];
+  chartValuesTemp: any[] = [];
+ 
   options: any;
 
 
@@ -41,7 +44,8 @@ export class ChartModalPage {
     
     //this.grap2();
     this.chartProvider.initChart(this.lineChart);
-    
+    //let date = this.dateForChartLabel("1559145997");
+    //console.log('date: ', date);
     this.drawLineChart();
     //this.chartProvider.createLineChart(this.lineChart,["poule","nouille"],this.chartValues,[1,2,3,4,],this.chartOptions.color);
   }
@@ -50,16 +54,16 @@ export class ChartModalPage {
   private drawLineChart(): void {
     
     this.chartValues = this.navParams.get('PMS1_0');
-    this.chartValues2 = this.navParams.get('PMS2_5');
+    
     this.chartLabels =  ["Janvier", "Fevrier", "Mars", "Mai", "Juin", "Juillet","Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
     let charValBis = [];
     this.chartValues.map(elem => {
-      console.log('round(elem) ', round(elem));
-      console.log('Math.round(elem) ', Math.round(elem));
+      //console.log('round(elem) ', round(elem));
+      //console.log('Math.round(elem) ', Math.round(elem));
       charValBis.push(round(elem));
     })
     this.chartValues = charValBis;
-    console.log('this.chartValues: ', this.chartValues);
+   // console.log('this.chartValues: ', this.chartValues);
 
     /*this.sqliteProvider.requestDataForChart(this.scale, this.chartOptions.pollutant).then((res :any) => {
       // loop through res in reverse order
