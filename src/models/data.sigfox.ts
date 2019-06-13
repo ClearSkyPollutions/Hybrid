@@ -1,15 +1,17 @@
-import { Data_SigFox2 } from "./data.sigfox.2";
-
-export class Data_SigFox {
-    
-    name:string;
-    data:Data_SigFox2[];
-    time:string;
-
-    constructor(name:string,data:Data_SigFox2[],time:string) {
-        this.name = name;
-        this.data = data;
-        this.time= time;
-        
+export class Data_Sigfox {
+    forEach(arg0: (element: any) => void) {
+      throw new Error("Method not implemented.");
     }
-  }
+      number: number;
+      data: Number[];
+      date:string;
+    length: number;
+      
+  
+      constructor(data: Number[],date:string) {
+          this.number = 0;
+         this.date = date;
+          this.data = data;
+       
+      }
+    }

@@ -55,6 +55,7 @@ export class HomePage  {
     public events       : Events,
     private storage: Storage
   ) {
+
     this.city = this.navParams.get('location');
     //@TODO: load data from somewhere
     this.charts.push({ type: 'pm10', unit: 'µg/m^3', lineColor: '#046bfe', chartView: '' });
@@ -145,6 +146,7 @@ export class HomePage  {
     return date.getHours() + ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
   }
 
+
   private drawLineChart(chart: ChartInfo) :Promise<void> {
     const chartLabels :string[] = [];
     const chartValues :string[] = [];
@@ -165,7 +167,9 @@ export class HomePage  {
             chart.lineColor
           );
         } else {
+          
           this.drawLineChart(chart);
+
         }
       }
     });

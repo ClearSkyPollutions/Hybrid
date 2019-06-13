@@ -15,7 +15,7 @@
         
           
               <ion-label>PM1_0</ion-label>
-              <button ion-button (click) = "openChartModal('pm1_0','µg/m^3','#046bfe', PMS1_0)" icon-start >PM1_0</button>
+              <button ion-button (click) = "openChartModal('pm1_0','µg/m^3','#046bfe', PMS1_0,posts)" icon-start >PM1_0</button>
             
           
         
@@ -24,7 +24,7 @@
       
            
                 <ion-label>PM2_5</ion-label>
-                <button ion-button (click) = "openChartModal('pm2_5','µg/m^3','#42fe03',PMS2_5)" icon-start >PM2_5</button>
+                <button ion-button (click) = "openChartModal('pm2_5','µg/m^3','#42fe03',PMS2_5,posts)" icon-start >PM2_5</button>
               
            
         
@@ -32,39 +32,40 @@
       <ion-col>
           
                   <ion-label>gazPPM</ion-label>
-                  <button ion-button (click) = "openChartModal('GazPPM','µg/m^3','#fe0245',gazPPM)" icon-start >GAZPPM</button>
+                  <button ion-button (click) = "openChartModal('GazPPM','µg/m^3','#fe0245',gazPPM,posts)" icon-start >GAZPPM</button>
           </ion-col>
           <ion-col>
           
+            
                     <ion-label>Temperature</ion-label>
-                    <button ion-button (click) = "openChartModal('Temperature','C°','#fe1b01',temperature)" icon-start >Temperature</button>
+                    <button ion-button (click) = "openChartModal('Temperature','C°','#fe1b01',temperature,posts)" icon-start >Temperature</button>
           </ion-col>
           <ion-col>
              
                       <ion-label>humidity</ion-label>
-                      <button ion-button (click) = "openChartModal('Humidity','%','#b2fe00',humidity)" icon-start >Humidity</button>
+                      <button ion-button (click) = "openChartModal('Humidity','%','#b2fe00',humidity,posts)" icon-start >Humidity</button>
                    
               </ion-col>
               <ion-col>
              
                         <ion-label>Micro</ion-label>
-                        <button ion-button (click) = "openChartModal('Pollution sonore','V','#1d00fe',micAnalog)" icon-start >Pollution Sonore</button>
+                        <button ion-button (click) = "openChartModal('Pollution sonore','V','#1d00fe',micAnalog,posts)" icon-start >Pollution Sonore</button>
               </ion-col>
               <ion-col>
                   
                           <ion-label>Pressure</ion-label>
-                          <button ion-button (click) = "openChartModal('Pressure','hPa','#9800fe',Pressure)" icon-start >Pressure</button>
+                          <button ion-button (click) = "openChartModal('Pressure','hPa','#9800fe',Pressure,posts)" icon-start >Pressure</button>
                         
                   </ion-col>
                   <ion-col>
               
                             <ion-label>Altitude</ion-label>
-                            <button ion-button (click) = "openChartModal('Altitude','hPa','#ed00fe',altitude)" icon-start >Altitude</button>
+                            <button ion-button (click) = "openChartModal('Altitude','hPa','#ed00fe',altitude,posts)" icon-start >Altitude</button>
                   </ion-col>
                   <ion-col>
                      
                               <ion-label>Batterie</ion-label>
-                              <button ion-button (click) = "openChartModal('Altitude','%','#feb100',lvlBattery)" icon-start >Battery</button>
+                              <button ion-button (click) = "openChartModal('Altitude','%','#feb100',lvlBattery,posts)" icon-start >Battery</button>
                       </ion-col>
                    
       

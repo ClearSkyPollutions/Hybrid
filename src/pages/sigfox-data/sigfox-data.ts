@@ -7,7 +7,8 @@ import { HttpHeaders } from '@angular/common/http';
 import { PLATFORM_WORKER_APP_ID } from '@angular/common/src/platform_id';
 import { ChartOptions } from '../../models/chartInfo.interface';
 import { Data } from '../../models/data.interface';
-import { Data_SigFox } from '../../models/data.sigfox';
+import { Data_Sigfox } from '../../models/data.sigfox';
+
 
 
 @Component({
@@ -16,8 +17,8 @@ import { Data_SigFox } from '../../models/data.sigfox';
 })
 export class SigFoxDataPage implements OnInit{
 
-  posts : Data_SigFox[] = null;
-  PMS1_0 : Data_SigFox[] = [];
+  posts : Data_Sigfox[] = null;
+  PMS1_0 : Number[] = [];
   PMS2_5 : Number[] = [];
   gazPPM : Number[] = [];
   temperature : Number[] = [];
@@ -55,17 +56,28 @@ export class SigFoxDataPage implements OnInit{
     this.http
     .get('https://cors-anywhere.herokuapp.com/https://backend.sigfox.com/api/devices/1D91CA/messages',httpOptions)
     .subscribe(data  => {
-    console.log('data: ', data.data[0]["time"]);
+    //console.log('data: ', data.data["time"]);
     this.posts = data.data;
 
     this.posts = this.posts.map((element:any) => {
      // console.log('element1: ', element);
      // console.log('element["data"]: ', element["data"]);
-        element.data = this.hex_to_dec(element["data"]);
-        element.date = element["time"];
-        console.log('element: ', element);
+
+     var t = new Date( element["time"] * 1000);
+     let formatted =  t.getUTCDate() + 'j';
+     //console.log('date: ', formatted);
+
+     element = new Data_Sigfox(this.hex_to_dec(element["data"]),element["time"]);
+     
+    
+     
+
+
+
+        //console.log('element: ', element);
         return element;
        
+
       
 
     });
@@ -121,7 +133,7 @@ export class SigFoxDataPage implements OnInit{
      //console.log('data ', this.HexToBin("F"));
      this.SortData();
      this.PMS1_0 = this.convert(this.PMS1_0,this.PMS1_Range.lower,this.PMS1_Range.upper);
-     console.log('this.PMS1_02: ', this.PMS1_0);
+     //console.log('this.PMS1_02: ', this.PMS1_0);
      this.PMS2_5 = this.convert(this.PMS2_5,this.PMS2_Range.lower,this.PMS2_Range.upper);
      this.gazPPM = this.convert(this.gazPPM,this.gazPPM_Range.lower,this.gazPPM_Range.upper);
      this.temperature =  this.convert(this.temperature,this.Temperature_Range.lower,this.Temperature_Range.upper);
@@ -158,33 +170,33 @@ SortData(){
  //console.log("postatb" + this.posts);
   this.posts.forEach(element => {
 
-    for (let index = 0; index < element.value.length; index++) {
+    for (let index = 0; index < element.data.length; index++) {
       switch (index) {
-        case 0: this.PMS1_0.push(element[index]); 
+        case 0: this.PMS1_0.push(element.data[index]); 
           
           break;
-        case 1: this.PMS2_5.push(element[index]); 
+        case 1: this.PMS2_5.push(element.data[index]); 
           
           break;
-        case 2: this.gazPPM.push(element[index]); 
+        case 2: this.gazPPM.push(element.data[index]); 
           
           break;
-        case 3: this.temperature.push(element[index]); 
+        case 3: this.temperature.push(element.data[index]); 
           
           break;
-        case 4: this.humidity.push(element[index]); 
+        case 4: this.humidity.push(element.data[index]); 
           
           break;
-        case 5: this.micAnalog.push(element[index]); 
+        case 5: this.micAnalog.push(element.data[index]); 
           
           break;
-        case 6: this.Pressure.push(element[index]); 
+        case 6: this.Pressure.push(element.data[index]); 
           
           break;
-        case 7: this.altitude.push(element[index]); 
+        case 7: this.altitude.push(element.data[index]); 
           
           break;
-        case 8: this.lvlBattery.push(element[index]); 
+        case 8: this.lvlBattery.push(element.data[index]); 
           
           break;
       
@@ -236,11 +248,15 @@ hex_to_dec(str1)
     
   }
 
+  
+
+
  // console.log('TAB: ', tab);
     return tab;
     
 
 }
+
 
 
   ngOnInit() {
@@ -259,13 +275,13 @@ hex_to_dec(str1)
 
   }
 
-  openChartModal(pollutant: string, unit: string, color: string,tabPMS1:any) :void {
+  openChartModal(pollutant: string, unit: string, color: string,tabPMS1:any,post) :void {
     const chartOptions : ChartOptions = {
       pollutant: pollutant,
       unit: unit,
       color: color
     };
-    this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions, PMS1_0:tabPMS1 }, {
+    this.modalCtrl.create('ChartModalPage', { chartOptions: chartOptions, PMS1_0:tabPMS1,Post:post }, {
       cssClass: 'inset-modal',
       
     } )

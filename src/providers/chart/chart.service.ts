@@ -108,7 +108,7 @@ export class ChartProvider {
   public updateLineChart (htmlElement: any, chartLabels: any, chartValues: any, color: string) :void {
     this.chart.data.labels = chartLabels;
     this.chart.data.datasets[0].data = chartValues;
-    console.log('this.chart.data.datasets[0].data: ', this.chart.data.datasets[0].data);
+   // console.log('this.chart.data.datasets[0].data: ', this.chart.data.datasets[0].data);
     this.chart.data.datasets[0].borderColor = color;
     this.chart.options.scales.xAxes[0] = {
         ticks: {

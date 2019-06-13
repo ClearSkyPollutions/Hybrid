@@ -34,7 +34,7 @@ export class ChartDataSigFoxPage {
 
   ionViewDidLoad(): void {
     console.log("poulet braisé2");
-    this.chartProvider.initChart(this.lineChart,this.chartValues);
+    this.chartProvider.initChart(this.lineChart);
     console.log("poulet braisé3");
     this.drawLineChart();
   }
