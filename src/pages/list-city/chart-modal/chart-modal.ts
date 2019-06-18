@@ -79,5 +79,7 @@ export class ChartModalPage {
     this.navCtrl.pop();
   }
 
+  
+
 
 }
